@@ -1,0 +1,14 @@
+{
+  "name": "Spirit Hand Focus",
+  "icon": "goety_spillage:spirit_hand_focus",
+  "category": "goety:spillage/focus",
+  "pages": [
+    {
+      "type": "goety:ritual",
+      "recipe": "goety_spillage:focus/spirit_hand_focus"
+    }
+  ],
+  "extra_recipe_mappings": {
+    "goety_spillage:spirit_hand_focus": 1
+  }
+}

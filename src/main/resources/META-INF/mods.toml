@@ -1,0 +1,35 @@
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+[[mods]]
+modId="goety_spillage"
+version="${mod_version}"
+displayName="${mod_name}"
+#logoFile="examplemod.png" #optional
+#credits="" #optional
+authors="${mod_authors}"
+description='''${mod_description}'''
+[[dependencies.goety_spillage]]
+modId="forge"
+mandatory=true
+versionRange="${forge_version_range}"
+ordering="NONE"
+side="BOTH"
+[[dependencies.goety_spillage]]
+modId="minecraft"
+mandatory=true
+versionRange="${minecraft_version_range}"
+ordering="NONE"
+side="BOTH"
+[[dependencies.goety_spillage]]
+modId="goety"
+mandatory=true
+versionRange="[2.40.2,)"
+ordering="NONE"
+side="BOTH"
+[[dependencies.goety_spillage]]
+modId="illageandspillage"
+mandatory=true
+versionRange="[1.2.4,)"
+ordering="NONE"
+side="BOTH"

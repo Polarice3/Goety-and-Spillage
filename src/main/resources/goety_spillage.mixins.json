@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "package": "com.Polarice3.goety_spillage.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "minVersion": "0.8",
+  "refmap": "goety_spillage.refmap.json",
+  "mixins": [
+    "ItemMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "client": [
+  ]
+}

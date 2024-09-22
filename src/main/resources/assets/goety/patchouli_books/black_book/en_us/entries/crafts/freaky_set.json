@@ -1,0 +1,31 @@
+{
+  "name": "Freaky Set",
+  "icon": "goety_spillage:freaky_robe",
+  "category": "goety:spillage/crafts",
+  "advancement": "goety_spillage:obtain_bag_of_horrors",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The Bag of Horrors has made you feel a little bit... freaky. So, like any rational being, you've decided to replicate the garments of the Freakager and wear them."
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety_spillage:freaky_robe"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety_spillage:freaky_hat"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The robes doesn't just make you look freaky, but also not only allows you to use the Bag of Horrors without needing to hold it (by pressing the same key as opening the Witches Robe's brewing menu), but also makes you proficient at throwing Iron Axes (and only Iron Axes and not other kinds unfortunately)."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The hat is not only snazzy but your Iron Axe doesn't get used up when thrown, only losing durability instead. Also, if you've somehow rode a Ragno, damage inflicted on you becomes halved."
+    }
+  ],
+  "extra_recipe_mappings": {
+    "goety_spillage:freaky_robe": 1
+  }
+}

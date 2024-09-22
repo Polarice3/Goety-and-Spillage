@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "goety:skulls"
+    },
+    {
+      "item": "goety:ectoplasm"
+    },
+    {
+      "tag": "minecraft:soul_fire_base_blocks"
+    },
+    {
+      "item": "minecraft:tnt"
+    }
+  ],
+  "result": {
+    "item": "goety_spillage:skull_bomb",
+    "count": 1
+  }
+}

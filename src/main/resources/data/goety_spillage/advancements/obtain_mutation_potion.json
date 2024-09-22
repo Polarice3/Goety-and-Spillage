@@ -1,0 +1,36 @@
+{
+  "parent": "goety_spillage:obtain_dark_potion",
+  "display": {
+    "icon": {
+      "item": "goety_spillage:mutation_potion"
+    },
+    "title": {
+      "translate": "advancements.goety_spillage.obtain_mutation_potion.title"
+    },
+    "description": {
+      "translate": "advancements.goety_spillage.obtain_mutation_potion.description"
+    },
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden" : true
+  },
+  "criteria": {
+    "item": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "goety_spillage:mutation_potion"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "item"
+    ]
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "parent": "goety_spillage:root",
+  "display": {
+    "icon": {
+      "item": "minecraft:potion",
+      "nbt": "{Potion: \"illageandspillage:mutation\"}"
+    },
+    "title": {
+      "translate": "advancements.goety_spillage.obtain_dark_potion.title"
+    },
+    "description": {
+      "translate": "advancements.goety_spillage.obtain_dark_potion.description"
+    },
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden" : false
+  },
+  "criteria": {
+    "item": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:potion"
+            ],
+            "potion": "illageandspillage:mutation"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "item"
+    ]
+  ]
+}

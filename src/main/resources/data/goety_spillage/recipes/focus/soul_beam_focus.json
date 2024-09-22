@@ -1,0 +1,39 @@
+{
+  "type": "goety:ritual",
+  "ritual_type": "goety:craft",
+  "activation_item": {
+    "item": "goety:soul_bolt_focus"
+  },
+  "craftType": "expert_nether",
+  "soulCost": 100,
+  "duration": 10,
+  "ingredients": [
+    {
+      "item": "minecraft:phantom_membrane"
+    },
+    {
+      "item": "goety:magic_emerald"
+    },
+    {
+      "item": "goety:mystic_core"
+    },
+    {
+      "item": "minecraft:fire_charge"
+    },
+    {
+      "tag": "minecraft:soul_fire_base_blocks"
+    },
+    {
+      "tag": "minecraft:soul_fire_base_blocks"
+    },
+    {
+      "item": "goety:ectoplasm"
+    },
+    {
+      "item": "goety:ectoplasm"
+    }
+  ],
+  "result": {
+    "item": "goety_spillage:soul_beam_focus"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    " f ",
+    "fef",
+    "fcf"
+  ],
+  "key":
+  {
+    "f":
+    {
+      "item": "goety:dark_fabric"
+    },
+    "c":
+    {
+      "item": "minecraft:carved_pumpkin"
+    },
+    "e":
+    {
+      "item": "goety:soul_emerald"
+    }
+  },
+  "result":
+  {
+    "item": "goety_spillage:freaky_hat",
+    "count": 1
+  }
+}

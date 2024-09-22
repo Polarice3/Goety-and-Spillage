@@ -1,0 +1,25 @@
+{
+  "name": "Bound Freakager",
+  "icon": "illageandspillage:bag_of_horrors",
+  "category": "goety:spillage/summons",
+  "advancement": "goety_spillage:obtain_bag_of_horrors",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The bag dropped by that fiendish illager turns out to also be holding their soul, powering the bag's magic to throw endless amounts of bombs, treats and other spooky implements with some cooldown."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Well, not wanting to waste such a soul, you've decided to help this poor biologist by bringing them back from the dead... with some bindings."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:bound_freakager",
+      "scale": 0.75
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Much like other bound illagers, the returned Freakager can float above ground and is unaffected by gravity. Despite their spiritual looks, they cannot phase through walls and can still be harmed with conventional weaponry. The bound soul can be healed by right-clicking on them with Ectoplasm."
+    }
+  ]
+}

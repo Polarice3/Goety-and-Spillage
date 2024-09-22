@@ -1,0 +1,40 @@
+{
+  "name": "Ragno",
+  "icon": "goety_spillage:mutation_potion",
+  "category": "goety:spillage/summons",
+  "advancement": "goety_spillage:obtain_bag_of_horrors",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The most horrible creation spawned by the illagers, this tormented creature is spawned from feeding a Villager with a mutative potion that you've successfully uncovered."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:ragno_servant",
+      "scale": 0.5
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety_spillage:mutation_potion"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Once you've obtain this abominable brew, simply shove it down some Villager's throat (right-clicking it on them) and watch the fireworks."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The Ragno only has three attacks, two if ridden. One has it stomp its legs before leaping at their target, the other has it shoot multiple webs at them. When not ridden, they will quickly burrow into the ground, tunnel towards their target, before revealing itself and damaging nearby non-allies."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Giving the Ragno a Bag of Horrors, or dropping one upon death while riding the beast, will cause it to devour it and gain all kinds of new abilities. Not only can it use the bag to spawn pumpkin bombs or treats, but it can also charge at their foes, knocking away non-allied creatures in its path."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Getting the bag back from the horror can be done by simply right-clicking on it while crouching and when it's not attacking. The Ragno can be healed by feeding it meat."
+    }
+  ],
+  "extra_recipe_mappings": {
+    "goety_spillage:mutation_potion": 3
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "goety:brewing",
+  "ingredient": {
+    "item": "goety_spillage:mutated_flesh"
+  },
+  "effect": "illageandspillage:mutation",
+  "soulCost": 25,
+  "capacityExtra": 0,
+  "duration": 600
+}

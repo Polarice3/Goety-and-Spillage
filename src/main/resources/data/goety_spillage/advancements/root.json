@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "item": "illageandspillage:spellbound_book"
+    },
+    "title": {
+      "translate": "advancements.goety_spillage.root.title"
+    },
+    "description": {
+      "translate": "advancements.goety_spillage.root.description"
+    },
+    "background": "goety_spillage:textures/gui/advancement_bg.png",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden" : false
+  },
+  "criteria": {
+    "tick": {
+      "trigger": "minecraft:tick"
+    }
+  }
+}

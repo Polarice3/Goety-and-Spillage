@@ -1,0 +1,42 @@
+{
+  "type": "goety:ritual",
+  "ritual_type": "goety:craft",
+  "activation_item": {
+    "type": "forge:nbt",
+    "item": "minecraft:potion",
+    "nbt": "{\"Potion\": \"illageandspillage:mutation\"}"
+  },
+  "craftType": "magic",
+  "soulCost": 5,
+  "duration": 30,
+  "research": "ravaging",
+  "ingredients": [
+    {
+      "item": "goety:spider_nest"
+    },
+    {
+      "item": "minecraft:rotten_flesh"
+    },
+    {
+      "item": "minecraft:wither_rose"
+    },
+    {
+      "item": "minecraft:carved_pumpkin"
+    },
+    {
+      "item": "goety:shadow_essence"
+    },
+    {
+      "item": "minecraft:crying_obsidian"
+    },
+    {
+      "item": "goety:raging_matter"
+    },
+    {
+      "item": "goety:poison_quill_seed"
+    }
+  ],
+  "result": {
+    "item": "goety_spillage:mutation_potion"
+  }
+}

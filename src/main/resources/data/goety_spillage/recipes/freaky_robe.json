@@ -1,0 +1,39 @@
+{
+  "type": "goety:ritual",
+  "ritual_type": "goety:craft",
+  "activation_item": {
+    "item": "illageandspillage:bag_of_horrors"
+  },
+  "craftType": "magic",
+  "soulCost": 5,
+  "duration": 10,
+  "ingredients": [
+    {
+      "item": "goety:dark_fabric"
+    },
+    {
+      "item": "goety_spillage:pumpkin_bomb"
+    },
+    {
+      "item": "goety:dark_fabric"
+    },
+    {
+      "item": "goety_spillage:mutated_flesh"
+    },
+    {
+      "item": "goety:dark_fabric"
+    },
+    {
+      "item": "goety_spillage:mutated_flesh"
+    },
+    {
+      "item": "goety:dark_fabric"
+    },
+    {
+      "item": "goety_spillage:skull_bomb"
+    }
+  ],
+  "result": {
+    "item": "goety_spillage:freaky_robe"
+  }
+}

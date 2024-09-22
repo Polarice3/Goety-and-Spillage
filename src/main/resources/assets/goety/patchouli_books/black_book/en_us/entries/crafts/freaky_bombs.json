@@ -1,0 +1,16 @@
+{
+  "name": "Freaky Bombs",
+  "icon": "goety_spillage:skull_bomb",
+  "category": "goety:spillage/crafts",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "You've discovered ways to make specialized living bombs that after a while, will explode in a non-destructive ways."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety_spillage:skull_bomb",
+      "recipe2": "goety_spillage:pumpkin_bomb"
+    }
+  ]
+}

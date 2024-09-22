@@ -1,0 +1,42 @@
+package com.Polarice3.goety_spillage.common.items;
+
+import com.Polarice3.Goety.Goety;
+import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
+import com.Polarice3.goety_spillage.common.entities.projectiles.GSPumpkinBomb;
+import com.Polarice3.goety_spillage.common.entities.projectiles.GSSkullBomb;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+
+public class PumpkinBombItem extends Item {
+    public PumpkinBombItem() {
+        super(new Properties()
+                .stacksTo(16)
+                .tab(Goety.TAB));
+    }
+
+    public InteractionResultHolder<ItemStack> use(Level p_41128_, Player p_41129_, InteractionHand p_41130_) {
+        ItemStack itemstack = p_41129_.getItemInHand(p_41130_);
+        p_41128_.playSound(null, p_41129_.getX(), p_41129_.getY(), p_41129_.getZ(), SoundEvents.EGG_THROW, SoundSource.PLAYERS, 0.5F, 0.4F / (p_41128_.getRandom().nextFloat() * 0.4F + 0.8F));
+        if (!p_41128_.isClientSide) {
+            GSPumpkinBomb bomb = new GSPumpkinBomb(GSEntityTypes.PUMPKIN_BOMB.get(), p_41128_);
+            bomb.setPos(p_41129_.getX(), p_41129_.getEyeY() - (double)0.1F, p_41129_.getZ());
+            bomb.setTrueOwner(p_41129_);
+            bomb.shootFromRotation(p_41129_, p_41129_.getXRot(), p_41129_.getYRot(), 0.0F, 1.0F, 1.0F);
+            p_41128_.addFreshEntity(bomb);
+        }
+
+        p_41129_.awardStat(Stats.ITEM_USED.get(this));
+        if (!p_41129_.getAbilities().instabuild) {
+            itemstack.shrink(1);
+        }
+        p_41129_.getCooldowns().addCooldown(itemstack.getItem(), 100);
+        return InteractionResultHolder.sidedSuccess(itemstack, p_41128_.isClientSide());
+    }
+}
