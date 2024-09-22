@@ -25,6 +25,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -595,8 +596,8 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
         }
     }
 
-    public boolean hurt(DamageSource p_37849_, float p_37850_) {
-        return p_37849_ != DamageSource.IN_WALL && super.hurt(p_37849_, p_37850_);
+    public boolean hurt(DamageSource source, float p_37850_) {
+        return !source.is(DamageTypes.IN_WALL) && super.hurt(source, p_37850_);
     }
 
     protected SoundEvent getAmbientSound() {

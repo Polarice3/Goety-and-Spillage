@@ -19,6 +19,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
@@ -135,9 +136,9 @@ public class VillagerVictim extends Summoned implements VillagerDataHolder {
                 this.level.addFreshEntity(lightning);
                 CameraShakeEntity.cameraShake(this.level, this.position(), 50.0F, 0.2F, 0, 10);
                 if (!this.level.isClientSide) {
-                    ExplosionUtil.lootExplode(this.level, this, this.getX(), this.getY(), this.getZ(), 4.0F, false, Explosion.BlockInteraction.NONE, LootingExplosion.Mode.LOOT);
-                    ExplosionUtil.lootExplode(this.level, this, this.getX(), this.getY(), this.getZ(), 4.0F, false, Explosion.BlockInteraction.NONE, LootingExplosion.Mode.LOOT);
-                    ExplosionUtil.lootExplode(this.level, this, this.getX(), this.getY(), this.getZ(), 4.0F, false, Explosion.BlockInteraction.NONE, LootingExplosion.Mode.LOOT);
+                    ExplosionUtil.lootExplode(this.level, this, this.getX(), this.getY(), this.getZ(), 4.0F, false, Explosion.BlockInteraction.KEEP, LootingExplosion.Mode.LOOT);
+                    ExplosionUtil.lootExplode(this.level, this, this.getX(), this.getY(), this.getZ(), 4.0F, false, Explosion.BlockInteraction.KEEP, LootingExplosion.Mode.LOOT);
+                    ExplosionUtil.lootExplode(this.level, this, this.getX(), this.getY(), this.getZ(), 4.0F, false, Explosion.BlockInteraction.KEEP, LootingExplosion.Mode.LOOT);
                 }
             }
 
@@ -202,7 +203,7 @@ public class VillagerVictim extends Summoned implements VillagerDataHolder {
     }
 
     public boolean hurt(DamageSource pSource, float pAmount) {
-        return pSource.isBypassInvul();
+        return pSource.is(DamageTypeTags.BYPASSES_INVULNERABILITY);
     }
 
     public int getVillagerFace() {

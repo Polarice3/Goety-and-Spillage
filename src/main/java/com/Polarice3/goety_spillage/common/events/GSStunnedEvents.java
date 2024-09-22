@@ -1,11 +1,8 @@
 package com.Polarice3.goety_spillage.common.events;
 
-import com.Polarice3.Goety.common.effects.GoetyEffects;
-import com.Polarice3.Goety.utils.SEHelper;
 import com.Polarice3.goety_spillage.GoetySpillage;
 import com.Polarice3.goety_spillage.common.capabilities.spillage.SpillageCapHelper;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;

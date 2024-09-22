@@ -8,6 +8,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -129,7 +130,7 @@ public abstract class MobProjectile extends Mob {
         float f2 = Mth.cos(p_234612_3_ * 0.017453292F) * Mth.cos(p_234612_2_ * 0.017453292F);
         this.shoot((double)f, (double)f1, (double)f2, p_234612_5_, p_234612_6_);
         Vec3 vector3d = p_234612_1_.getDeltaMovement();
-        this.setDeltaMovement(this.getDeltaMovement().add(vector3d.x, p_234612_1_.isOnGround() ? 0.0 : vector3d.y, vector3d.z));
+        this.setDeltaMovement(this.getDeltaMovement().add(vector3d.x, p_234612_1_.onGround() ? 0.0 : vector3d.y, vector3d.z));
         this.accelerationX = this.getDeltaMovement().x;
         this.accelerationY = this.getDeltaMovement().y;
         this.accelerationZ = this.getDeltaMovement().z;
@@ -152,7 +153,7 @@ public abstract class MobProjectile extends Mob {
     }
 
     public boolean hurt(DamageSource source, float amount) {
-        return source == DamageSource.OUT_OF_WORLD && super.hurt(source, amount);
+        return (source.is(DamageTypes.FELL_OUT_OF_WORLD) || source.is(DamageTypes.GENERIC_KILL)) && super.hurt(source, amount);
     }
 
     public boolean canCollideWith(Entity entity) {

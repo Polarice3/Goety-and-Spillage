@@ -4,22 +4,16 @@ import com.Polarice3.Goety.api.entities.IOwned;
 import com.Polarice3.Goety.utils.MobUtil;
 import com.Polarice3.Goety.utils.ModDamageSource;
 import com.Polarice3.goety_spillage.common.entities.ally.undead.bound.BoundFreakager;
-import com.yellowbrossproductions.illageandspillage.packet.PacketHandler;
-import com.yellowbrossproductions.illageandspillage.packet.ParticlePacket;
 import com.yellowbrossproductions.illageandspillage.util.IllageAndSpillageSoundEvents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.IndirectEntityDamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.PacketDistributor;
 
 import java.util.List;
 
@@ -45,11 +39,7 @@ public class FreakyScythe extends MobProjectile {
             if (entity instanceof LivingEntity living) {
                 boolean canHurt = attacker instanceof Mob ? !MobUtil.areAllies(living, attacker) : living != this.shooter;
                 if (canHurt && entity.isAlive() && !entity.isInvulnerable() && !entity.isSpectator()) {
-                    DamageSource damageSource = DamageSource.mobAttack(attacker).setProjectile();
-                    if (this.shooter instanceof IOwned owned && owned.getTrueOwner() != null){
-                        damageSource = ModDamageSource.summonAttack(attacker, owned.getTrueOwner()).setProjectile();
-                    }
-                    living.hurt(damageSource, this.getDamage());
+                    living.hurt(this.damageSources().thrown(living, attacker), 5.0F);
                 }
             }
         }

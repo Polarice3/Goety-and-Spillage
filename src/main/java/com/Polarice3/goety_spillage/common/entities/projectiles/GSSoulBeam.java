@@ -5,6 +5,7 @@ import com.Polarice3.goety_spillage.config.GSSpellConfig;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -89,7 +90,7 @@ public class GSSoulBeam extends Entity {
         pCompound.putInt("Duration", this.getDuration());
     }
 
-    public Packet<?> getAddEntityPacket() {
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
@@ -220,7 +221,7 @@ public class GSSoulBeam extends Entity {
         List<LivingEntity> hit = this.raytraceEntities(this.level, new Vec3(this.getX(), this.getY(), this.getZ()), new Vec3(this.endPosX, this.endPosY, this.endPosZ), true).getEntities();
         if (!this.level.isClientSide) {
             for (LivingEntity target : hit) {
-                target.hurt(DamageSource.indirectMagic(this, this.caster), GSSpellConfig.SoulBeamDamage.get().floatValue() + (float) this.power);
+                target.hurt(this.damageSources().indirectMagic(this, this.caster), GSSpellConfig.SoulBeamDamage.get().floatValue() + (float) this.power);
                 target.hurtMarked = true;
                 target.setDeltaMovement(0.0D, 0.0D, 0.0D);
                 target.lerpMotion(0.0D, 0.0D, 0.0D);

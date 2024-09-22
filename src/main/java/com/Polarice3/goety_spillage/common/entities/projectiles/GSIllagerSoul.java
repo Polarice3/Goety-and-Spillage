@@ -14,6 +14,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.EntityType;
@@ -103,7 +104,7 @@ public class GSIllagerSoul extends Owned implements IAttackMyOwner {
 
             if (this.getX() - this.targetX < 1.0 && this.getX() - this.targetX > -1.0 && this.getY() - this.targetY < 1.0 && this.getY() - this.targetY > -1.0 && this.getZ() - this.targetZ < 1.0 && this.getZ() - this.targetZ > -1.0 || this.chargeTime > 60) {
                 if (!this.level.isClientSide) {
-                    ExplosionUtil.lootExplode(this.level, this, this.getX(), this.getY(), this.getZ(), 2.0F, false, Explosion.BlockInteraction.NONE, lootMode);
+                    ExplosionUtil.lootExplode(this.level, this, this.getX(), this.getY(), this.getZ(), 2.0F, false, Explosion.BlockInteraction.KEEP, lootMode);
                 }
 
                 this.kill();
@@ -117,7 +118,7 @@ public class GSIllagerSoul extends Owned implements IAttackMyOwner {
 
         if (this.tickCount > 140) {
             if (!this.level.isClientSide) {
-                ExplosionUtil.lootExplode(this.level, this, this.getX(), this.getY(), this.getZ(), 2.0F, false, Explosion.BlockInteraction.NONE, lootMode);
+                ExplosionUtil.lootExplode(this.level, this, this.getX(), this.getY(), this.getZ(), 2.0F, false, Explosion.BlockInteraction.KEEP, lootMode);
             }
 
             this.kill();
@@ -182,8 +183,8 @@ public class GSIllagerSoul extends Owned implements IAttackMyOwner {
         return true;
     }
 
-    public boolean hurt(DamageSource p_21016_, float p_21017_) {
-        return p_21016_ == DamageSource.OUT_OF_WORLD && super.hurt(p_21016_, p_21017_);
+    public boolean hurt(DamageSource source, float p_21017_) {
+        return (source.is(DamageTypes.FELL_OUT_OF_WORLD) || source.is(DamageTypes.GENERIC_KILL)) && super.hurt(source, p_21017_);
     }
 
     public void die(DamageSource p_21014_) {

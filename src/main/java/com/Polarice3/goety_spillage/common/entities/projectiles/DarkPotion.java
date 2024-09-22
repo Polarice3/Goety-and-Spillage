@@ -77,12 +77,12 @@ public class DarkPotion extends ThrownPotion {
 
     private void applyWater() {
         AABB aabb = this.getBoundingBox().inflate(4.0D, 2.0D, 4.0D);
-        List<LivingEntity> list = this.level.getEntitiesOfClass(LivingEntity.class, aabb, WATER_SENSITIVE);
+        List<LivingEntity> list = this.level.getEntitiesOfClass(LivingEntity.class, aabb, WATER_SENSITIVE_OR_ON_FIRE);
         if (!list.isEmpty()) {
             for(LivingEntity livingentity : list) {
                 double d0 = this.distanceToSqr(livingentity);
                 if (d0 < 16.0D && livingentity.isSensitiveToWater()) {
-                    livingentity.hurt(DamageSource.indirectMagic(this, this.getOwner()), 1.0F);
+                    livingentity.hurt(this.damageSources().indirectMagic(this, this.getOwner()), 1.0F);
                 }
             }
         }

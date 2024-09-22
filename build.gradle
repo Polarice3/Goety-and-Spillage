@@ -2,8 +2,8 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '5.1.+'
-    id 'org.spongepowered.mixin' version '0.7-SNAPSHOT'
+    id 'net.neoforged.gradle' version '[6.0.18,6.2)'
+    id 'org.spongepowered.mixin' version '0.7.+'
 }
 
 version = mod_version
@@ -23,7 +23,9 @@ println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty '
 minecraft {
     mappings channel: mapping_channel, version: mapping_version
 
-    // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+    copyIdeResources = true
+
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     runs {
         configureEach {
@@ -93,7 +95,7 @@ repositories {
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    minecraft "net.neoforged:forge:${minecraft_version}-${neo_version}"
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     //JEI
@@ -107,31 +109,31 @@ dependencies {
     runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
 
     //Curios
-    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${minecraft_version}-${curio_version}:api")
-    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${minecraft_version}-${curio_version}")
+    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curio_version}+${minecraft_version}:api")
+    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curio_version}+${minecraft_version}")
 
     //Patchouli
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:${minecraft_version}-${patchouli_version}:api")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${minecraft_version}-${patchouli_version}")
 
     //Jade
-    implementation fg.deobf("curse.maven:jade-324717:4914105")
+    implementation fg.deobf("curse.maven:jade-324717:5672013")
 
     //Compat
-    implementation fg.deobf("curse.maven:goety-586095:5732964")
-    implementation fg.deobf("curse.maven:illage-and-spillage-576368:4263798")
+    implementation fg.deobf("curse.maven:goety-586095:5732970")
+    implementation fg.deobf("curse.maven:illage-and-spillage-finally-ported-1079714:5630627")
 
     //Testing Only
-    runtimeOnly fg.deobf("curse.maven:kiwi-303657:4937343")
-    runtimeOnly fg.deobf("curse.maven:yeetus-635427:3909789")
-    runtimeOnly fg.deobf("curse.maven:mob-battle-mod-268746:3952789")
-    runtimeOnly fg.deobf("curse.maven:configured-457570:4462837")
+    runtimeOnly fg.deobf("curse.maven:kiwi-303657:5603816")
+    runtimeOnly fg.deobf("curse.maven:yeetusexperimentus-635427:4680832")
+    runtimeOnly fg.deobf("curse.maven:mob-battle-mod-268746:5300817")
+    runtimeOnly fg.deobf("curse.maven:configured-457570:5180900")
 }
 
 tasks.named('processResources', ProcessResources).configure {
     var replaceProperties = [
             minecraft_version: minecraft_version, minecraft_version_range: minecraft_version_range,
-            forge_version: forge_version, forge_version_range: forge_version_range,
+            neo_version         : neo_version, neo_version_range: neo_version_range,
             loader_version_range: loader_version_range,
             mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
             mod_authors: mod_authors, mod_description: mod_description,

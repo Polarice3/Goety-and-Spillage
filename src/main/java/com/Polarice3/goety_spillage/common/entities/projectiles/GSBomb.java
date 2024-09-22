@@ -5,6 +5,7 @@ import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.yellowbrossproductions.illageandspillage.entities.IllagerAttack;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -55,8 +56,8 @@ public abstract class GSBomb extends Owned implements IllagerAttack {
         return Mth.lerp(p_32321_, (float)this.oldSwell, (float)this.swell) / (float)(this.getMaxSwell() - 2);
     }
 
-    public boolean hurt(DamageSource p_21016_, float p_21017_) {
-        return p_21016_ == DamageSource.OUT_OF_WORLD && super.hurt(p_21016_, p_21017_);
+    public boolean hurt(DamageSource source, float amount) {
+        return (source.is(DamageTypes.FELL_OUT_OF_WORLD) || source.is(DamageTypes.GENERIC_KILL)) && super.hurt(source, amount);
     }
 
     public void die(DamageSource p_21014_) {
@@ -80,7 +81,7 @@ public abstract class GSBomb extends Owned implements IllagerAttack {
         float f2 = Mth.cos(p_37254_ * ((float)Math.PI / 180F)) * Mth.cos(p_37253_ * ((float)Math.PI / 180F));
         this.shoot((double)f, (double)f1, (double)f2, p_37256_, p_37257_);
         Vec3 vec3 = p_37252_.getDeltaMovement();
-        this.setDeltaMovement(this.getDeltaMovement().add(vec3.x, p_37252_.isOnGround() ? 0.0D : vec3.y, vec3.z));
+        this.setDeltaMovement(this.getDeltaMovement().add(vec3.x, p_37252_.onGround() ? 0.0D : vec3.y, vec3.z));
     }
 
     @Override

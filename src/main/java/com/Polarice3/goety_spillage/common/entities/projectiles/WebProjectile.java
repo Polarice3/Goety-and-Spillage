@@ -33,7 +33,7 @@ public class WebProjectile extends MobProjectile implements IllagerAttack, ItemS
     public void tick() {
         LivingEntity attacker = this.shooter != null ? this.shooter : this;
 
-        DamageSource damageSource = DamageSource.mobAttack(attacker);
+        DamageSource damageSource = this.damageSources().mobAttack(attacker);
         if (this.shooter instanceof IOwned owned && owned.getTrueOwner() != null){
             damageSource = ModDamageSource.summonAttack(attacker, owned.getTrueOwner());
         }

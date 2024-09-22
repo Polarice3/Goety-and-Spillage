@@ -12,6 +12,7 @@ import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
 import com.Polarice3.goety_spillage.common.entities.projectiles.GSPumpkinBomb;
 import com.Polarice3.goety_spillage.common.entities.projectiles.WebProjectile;
 import com.Polarice3.goety_spillage.common.network.GSNetwork;
+import com.Polarice3.goety_spillage.common.network.client.CSetDeltaMovement;
 import com.Polarice3.goety_spillage.common.network.server.SSetDeltaMovement;
 import com.Polarice3.goety_spillage.config.GSAttributesConfig;
 import com.yellowbrossproductions.illageandspillage.client.model.animation.ICanBeAnimated;
@@ -34,11 +35,13 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -123,7 +126,7 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
     public int attacksUsed;
     public int stunTick;
     private boolean isBurrowing = false;
-    public DamageSource deathBlow = DamageSource.GENERIC;
+    public DamageSource deathBlow = this.damageSources().generic();
 
     public RagnoServant(EntityType<? extends Owned> type, Level worldIn) {
         super(type, worldIn);
@@ -372,24 +375,7 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
     }
 
     public boolean isControlledByLocalInstance() {
-        return super.isControlledByLocalInstance()
-                && this.notClientAttacking()
-                && (this.getControllingPassenger() == null
-                || (!this.isAutonomous() && this.getControllingPassenger() instanceof Player)
-                || this.getControllingPassenger() instanceof Mob);
-    }
-
-    @Override
-    public boolean isVehicle() {
-        if (this.getControllingPassenger() instanceof Mob){
-            return super.isVehicle();
-        } else {
-            if (this.level.isClientSide){
-                return super.isVehicle() && this.notClientAttacking();
-            } else {
-                return super.isVehicle() && this.isNotAttacking();
-            }
-        }
+        return this.isEffectiveAi();
     }
 
     public boolean hasPassenger(){
@@ -564,6 +550,7 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
                 && !this.isPlayingIntro()
                 && this.getTarget() != null
                 && !this.isStaying()
+                && this.getControllingPassenger() == null
                 && !this.isStunned()) {
             this.circleTarget(this.getTarget(), 10.0F, 0.8F, true, this.circleTick, 0.0F, 1.0F);
             this.lookAt(this.getTarget(), 100.0F, 100.0F);
@@ -591,7 +578,8 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
                 && this.isAlive()
                 && (double)this.distanceTo(this.getTarget()) < 8.0D * ((double)this.getTarget().getBbWidth() + 0.4D)
                 && this.getAttackType() == 0
-                && this.isOnGround()
+                && this.onGround()
+                && this.getControllingPassenger() == null
                 && !this.isStaying()
                 && !this.isStunned()
                 && !this.isPlayingIntro()) {
@@ -617,13 +605,15 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
     public void setDeltaMovement(double p_20335_, double p_20336_, double p_20337_) {
         super.setDeltaMovement(p_20335_, p_20336_, p_20337_);
         if (!this.level.isClientSide){
-            GSNetwork.sentToTrackingEntity(this, new SSetDeltaMovement(this.getId(), p_20335_, p_20336_, p_20337_));
+            if (this.isAttacking()) {
+                GSNetwork.sentToTrackingEntity(this, new SSetDeltaMovement(this.getId(), p_20335_, p_20336_, p_20337_));
+            }
         }
     }
 
     public void attackAI(){
         if (this.isAlive()) {
-            DamageSource damageSource = DamageSource.mobAttack(this);
+            DamageSource damageSource = this.damageSources().mobAttack(this);
             if (this.getTrueOwner() != null){
                 damageSource = ModDamageSource.summonAttack(this, this.getTrueOwner());
             }
@@ -880,6 +870,10 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
         return this.getAttackType() <= 0;
     }
 
+    public boolean isAttacking(){
+        return this.getAttackType() > 0;
+    }
+
     public boolean notClientAttacking(){
         return !this.clientAttacking;
     }
@@ -927,7 +921,7 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
             }
         }
 
-        if ((this.deathTime == 200 || (this.deathTime == 40 && this.deathBlow == DamageSource.OUT_OF_WORLD)) && !this.level.isClientSide()) {
+        if ((this.deathTime == 200 || (this.deathTime == 40 && (this.deathBlow.is(DamageTypes.FELL_OUT_OF_WORLD)) || this.deathBlow.is(DamageTypes.GENERIC_KILL))) && !this.level.isClientSide()) {
             super.die(this.deathBlow);
             if (this.isCrazy()){
                 if (this.level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
@@ -1035,10 +1029,10 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
         } else if (this.isBurrowed()) {
             return false;
         } else {
-            if (this.isAlive() && pSource != DamageSource.OUT_OF_WORLD) {
+            if (this.isAlive() && !pSource.is(DamageTypes.FELL_OUT_OF_WORLD) && !pSource.is(DamageTypes.GENERIC_KILL) && EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(pSource.getEntity())) {
                 boolean source;
                 if (!this.isCrazy() && !this.isStunned()) {
-                    source = !pSource.isBypassArmor();
+                    source = !pSource.is(DamageTypeTags.BYPASSES_ARMOR);
                     if (source && this.blockTicks < 1 && (this.entityData.get(ANIMATION_STATE) == 0 || (Integer)this.entityData.get(ANIMATION_STATE) == 3)) {
                         this.playSound(IllageAndSpillageSoundEvents.ENTITY_RAGNO_BLOCK.get(), 2.0F, 1.0F);
                         this.setAnimationState(0);
@@ -1054,7 +1048,7 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
                 }
 
                 if (!this.isStunned()) {
-                    source = !pSource.isBypassArmor();
+                    source = !pSource.is(DamageTypeTags.BYPASSES_ARMOR);
                     if (source && this.getAttackType() == 0) {
                         if (this.blockTicks < 1 && (this.entityData.get(ANIMATION_STATE) == 0 || (Integer)this.entityData.get(ANIMATION_STATE) == 3)) {
                             this.playSound(IllageAndSpillageSoundEvents.ENTITY_RAGNO_BLOCK.get(), 2.0F, 1.0F);
@@ -1074,7 +1068,7 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
                 }
             }
 
-            return pSource != DamageSource.IN_WALL && super.hurt(pSource, pAmount);
+            return !pSource.is(DamageTypes.IN_WALL) && super.hurt(pSource, pAmount);
         }
     }
 
@@ -1200,7 +1194,7 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
     }
 
     public boolean doesAttackMeetNormalRequirements() {
-        return this.getAttackType() == 0
+        return this.isNotAttacking()
                 && this.getTarget() != null
                 && this.hasLineOfSight(this.getTarget())
                 && this.attackCooldown < 1
@@ -1248,27 +1242,11 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
                     }
                 }
 
-                if (this.playerJumpPendingScale > 0.0F && !this.isJumping()) {
-                    float f2 = rider.xxa * 0.5F;
-                    float f3 = rider.zza;
-                    if (f3 <= 0.0F) {
-                        f3 *= 0.25F;
-                    }
-
-                    Vec3 vec3 = new Vec3(f2, 0.0D, f3);
-                    this.executeRidersJump(this.playerJumpPendingScale, vec3);
-                }
-
                 this.setSpeed((float) this.getAttributeValue(Attributes.MOVEMENT_SPEED));
                 super.travel(new Vec3(f, pTravelVector.y, f1));
                 this.lerpSteps = 0;
 
-                if (this.onGround) {
-                    this.playerJumpPendingScale = 0.0F;
-                    this.setIsJumping(false);
-                }
-
-                this.calculateEntityAnimation(this, false);
+                this.calculateEntityAnimation(false);
             } else {
                 super.travel(pTravelVector);
             }
@@ -1382,7 +1360,7 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
         if (this.killChance <= 0){
             this.warnKill(player);
         } else {
-            this.hurt(DamageSource.STARVE, Float.MAX_VALUE);
+            this.hurt(this.damageSources().starve(), Float.MAX_VALUE);
         }
     }
 
@@ -1394,18 +1372,35 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
         this.isJumping = jumping;
     }
 
+    protected void tickRidden(Player p_278233_, Vec3 p_275693_) {
+        super.tickRidden(p_278233_, p_275693_);
+        if (p_278233_.isLocalPlayer()) {
+            if (this.onGround()) {
+                this.setIsJumping(false);
+                if (this.playerJumpPendingScale > 0.0F && !this.isJumping()) {
+                    this.executeRidersJump(this.playerJumpPendingScale, p_275693_);
+                }
+
+                this.playerJumpPendingScale = 0.0F;
+            }
+        }
+    }
+
     protected void executeRidersJump(float p_248808_, Vec3 p_275435_) {
         double d0 = 1.0D * (double)p_248808_ * (double)this.getBlockJumpFactor();
         double d1 = d0 + this.getJumpBoostPower();
         Vec3 vec3 = this.getDeltaMovement();
         this.setDeltaMovement(vec3.x, d1, vec3.z);
+        GSNetwork.sendToServer(new CSetDeltaMovement(this.getId(), vec3.x, d1, vec3.z));
         this.setIsJumping(true);
         this.hasImpulse = true;
         net.minecraftforge.common.ForgeHooks.onLivingJump(this);
         if (p_275435_.z > 0.0D) {
             float f = Mth.sin(this.getYRot() * ((float)Math.PI / 180F));
             float f1 = Mth.cos(this.getYRot() * ((float)Math.PI / 180F));
-            this.setDeltaMovement(this.getDeltaMovement().add(-0.4F * f * p_248808_, 0.0D, 0.4F * f1 * p_248808_));
+            Vec3 vec31 = this.getDeltaMovement().add(-0.4F * f * p_248808_, 0.0D, 0.4F * f1 * p_248808_);
+            this.setDeltaMovement(vec31);
+            GSNetwork.sendToServer(new CSetDeltaMovement(this.getId(), vec31.x, vec31.y, vec31.z));
         }
 
     }
@@ -1538,7 +1533,7 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
         }
 
         public boolean canContinueToUse() {
-            return (RagnoServant.this.attackTicks <= 40 || !RagnoServant.this.isOnGround()) && RagnoServant.this.getAttackType() == RagnoServant.this.LEAP_ATTACK;
+            return (RagnoServant.this.attackTicks <= 40 || !RagnoServant.this.onGround()) && RagnoServant.this.getAttackType() == RagnoServant.this.LEAP_ATTACK;
         }
 
         public void tick() {

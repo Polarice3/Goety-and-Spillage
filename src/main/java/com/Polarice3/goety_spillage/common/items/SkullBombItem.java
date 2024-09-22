@@ -18,8 +18,7 @@ import net.minecraft.world.level.Level;
 public class SkullBombItem extends Item {
     public SkullBombItem() {
         super(new Item.Properties()
-                .stacksTo(16)
-                .tab(Goety.TAB));
+                .stacksTo(16));
     }
 
     public InteractionResultHolder<ItemStack> use(Level p_41128_, Player p_41129_, InteractionHand p_41130_) {

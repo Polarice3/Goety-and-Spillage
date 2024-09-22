@@ -57,7 +57,7 @@ public class ThrownAxe extends MobProjectile implements IllagerAttack, ItemSuppl
         for (Entity entity : list) {
             if (entity instanceof LivingEntity living) {
                 if (!MobUtil.areAllies(living, attacker) && entity.isAlive() && !entity.isInvulnerable() && !entity.isSpectator()) {
-                    DamageSource damageSource = DamageSource.thrown(this, attacker);
+                    DamageSource damageSource = this.damageSources().thrown(this, attacker);
                     living.hurt(damageSource, 8.0F);
                     living.invulnerableTime = 0;
                     EntityUtil.disableShield(living, 200);
@@ -67,7 +67,7 @@ public class ThrownAxe extends MobProjectile implements IllagerAttack, ItemSuppl
                 }
             }
         }
-        HitResult result = ProjectileUtil.getHitResult(this, this::canHitEntity);
+        HitResult result = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
         if (result.getType() == HitResult.Type.BLOCK) {
             this.onHit();
         }

@@ -3,9 +3,6 @@ package com.Polarice3.goety_spillage.client.render;
 import com.Polarice3.goety_spillage.common.entities.projectiles.GSSoulBeam;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix3f;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Quaternion;
 import com.yellowbrossproductions.illageandspillage.client.render.ISRenderType;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -15,6 +12,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 
 import java.util.Random;
 
@@ -78,7 +78,7 @@ public class GSSoulBeamRenderer extends EntityRenderer<GSSoulBeam> {
 
     private void renderStart(int frame, PoseStack matrixStackIn, VertexConsumer builder, int packedLightIn) {
         matrixStackIn.pushPose();
-        Quaternion quat = this.entityRenderDispatcher.cameraOrientation();
+        Quaternionf quat = this.entityRenderDispatcher.cameraOrientation();
         matrixStackIn.mulPose(quat);
         this.renderFlatQuad(frame, matrixStackIn, builder, packedLightIn);
         matrixStackIn.popPose();
@@ -86,14 +86,14 @@ public class GSSoulBeamRenderer extends EntityRenderer<GSSoulBeam> {
 
     private void renderEnd(int frame, Direction side, PoseStack matrixStackIn, VertexConsumer builder, int packedLightIn) {
         matrixStackIn.pushPose();
-        Quaternion quat = this.entityRenderDispatcher.cameraOrientation();
+        Quaternionf quat = this.entityRenderDispatcher.cameraOrientation();
         matrixStackIn.mulPose(quat);
         this.renderFlatQuad(frame, matrixStackIn, builder, packedLightIn);
         matrixStackIn.popPose();
         if (side != null) {
             matrixStackIn.pushPose();
-            Quaternion sideQuat = side.getRotation();
-            sideQuat.mul(new Quaternion(90.0F, 0.0F, 0.0F, true));
+            Quaternionf sideQuat = new Quaternionf(side.getRotation());
+            sideQuat.mul((new Quaternionf()).rotateXYZ((float)Math.toRadians(90.0), 0.0F, 0.0F));
             matrixStackIn.mulPose(sideQuat);
             matrixStackIn.translate(0.0, 0.0, -0.009999999776482582);
             this.renderFlatQuad(frame, matrixStackIn, builder, packedLightIn);
@@ -117,9 +117,9 @@ public class GSSoulBeamRenderer extends EntityRenderer<GSSoulBeam> {
 
     private void renderBeam(int frame, float length, float yaw, float pitch, PoseStack matrixStackIn, VertexConsumer builder, int packedLightIn) {
         matrixStackIn.pushPose();
-        matrixStackIn.mulPose(new Quaternion(90.0F, 0.0F, 0.0F, true));
-        matrixStackIn.mulPose(new Quaternion(0.0F, 0.0F, yaw - 90.0F, true));
-        matrixStackIn.mulPose(new Quaternion(-pitch, 0.0F, 0.0F, true));
+        matrixStackIn.mulPose((new Quaternionf()).rotateXYZ((float)Math.toRadians(90.0), 0.0F, 0.0F));
+        matrixStackIn.mulPose((new Quaternionf()).rotateXYZ(0.0F, 0.0F, (float)Math.toRadians((double)(yaw - 90.0F))));
+        matrixStackIn.mulPose((new Quaternionf()).rotateXYZ((float)Math.toRadians((double)(-pitch)), 0.0F, 0.0F));
         matrixStackIn.pushPose();
         this.drawBeam(frame, length, matrixStackIn, builder, packedLightIn);
         matrixStackIn.popPose();

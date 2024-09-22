@@ -41,6 +41,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraftforge.event.entity.living.*;
@@ -187,18 +188,18 @@ public class GSEvents {
         if (killed.level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
             if (killed instanceof RagnoEntity ragno) {
                 if (ragno.level.getServer() != null) {
-                    LootTable loottable = ragno.level.getServer().getLootTables().get(GSLootTables.RAGNO_EXTRA);
-                    LootContext.Builder lootcontext$builder = MobUtil.createLootContext(event.getSource(), ragno);
-                    LootContext ctx = lootcontext$builder.create(LootContextParamSets.ENTITY);
+                    LootTable loottable = ragno.level.getServer().getLootData().getLootTable(GSLootTables.RAGNO_EXTRA);
+                    LootParams.Builder lootcontext$builder = MobUtil.createLootContext(event.getSource(), ragno);
+                    LootParams ctx = lootcontext$builder.create(LootContextParamSets.ENTITY);
                     loottable.getRandomItems(ctx).forEach((loot) -> event.getDrops().add(ItemHelper.itemEntityDrop(ragno, loot)));
                 }
             }
             if (killed instanceof LivingEntity livingEntity) {
                 if (killed instanceof FreakagerEntity || killed instanceof RagnoEntity || killed instanceof MagispellerEntity || killed instanceof SpiritcallerEntity) {
                     if (livingEntity.level.getServer() != null) {
-                        LootTable loottable = livingEntity.level.getServer().getLootTables().get(GSLootTables.ILLAGER_BOSS_EXTRA);
-                        LootContext.Builder lootcontext$builder = MobUtil.createLootContext(event.getSource(), livingEntity);
-                        LootContext ctx = lootcontext$builder.create(LootContextParamSets.ENTITY);
+                        LootTable loottable = livingEntity.level.getServer().getLootData().getLootTable(GSLootTables.ILLAGER_BOSS_EXTRA);
+                        LootParams.Builder lootcontext$builder = MobUtil.createLootContext(event.getSource(), livingEntity);
+                        LootParams ctx = lootcontext$builder.create(LootContextParamSets.ENTITY);
                         loottable.getRandomItems(ctx).forEach((loot) -> event.getDrops().add(ItemHelper.itemEntityDrop(livingEntity, loot)));
                     }
                 }

@@ -19,7 +19,6 @@ import net.minecraft.world.level.Level;
 public class MutationPotion extends Item {
     public MutationPotion() {
         super(new Item.Properties()
-                .tab(Goety.TAB)
                 .rarity(Rarity.EPIC)
                 .craftRemainder(Items.GLASS_BOTTLE)
                 .setNoRepair()

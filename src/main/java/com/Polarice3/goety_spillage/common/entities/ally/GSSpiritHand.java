@@ -12,6 +12,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -170,7 +171,7 @@ public class GSSpiritHand extends Summoned implements IAttackMyOwner {
                             this.setAttacking(false);
                             if (!this.level.isClientSide) {
                                 this.setAttackType(0);
-                                ExplosionUtil.lootExplode(this.level, this.getTrueOwner(), this.getX(), this.getY(), this.getZ(), 2.5F, false, Explosion.BlockInteraction.NONE, lootMode);
+                                ExplosionUtil.lootExplode(this.level, this.getTrueOwner(), this.getX(), this.getY(), this.getZ(), 2.5F, false, Explosion.BlockInteraction.KEEP, lootMode);
                             }
                         }
                     }
@@ -201,7 +202,7 @@ public class GSSpiritHand extends Summoned implements IAttackMyOwner {
                         this.setAttacking(false);
                         if (!this.level.isClientSide) {
                             this.setAttackType(0);
-                            ExplosionUtil.lootExplode(this.level, this.getTrueOwner(), this.getX(), this.getY(), this.getZ(), 2.5F, false, Explosion.BlockInteraction.NONE, lootMode);
+                            ExplosionUtil.lootExplode(this.level, this.getTrueOwner(), this.getX(), this.getY(), this.getZ(), 2.5F, false, Explosion.BlockInteraction.KEEP, lootMode);
                         }
 
                         this.setCharge(0.0, 0.0, 0.0);
@@ -307,8 +308,8 @@ public class GSSpiritHand extends Summoned implements IAttackMyOwner {
     public void push(Entity entityIn) {
     }
 
-    public boolean hurt(DamageSource p_21016_, float p_21017_) {
-        return p_21016_ == DamageSource.OUT_OF_WORLD && super.hurt(p_21016_, p_21017_);
+    public boolean hurt(DamageSource source, float amount) {
+        return (source.is(DamageTypes.FELL_OUT_OF_WORLD) || source.is(DamageTypes.GENERIC_KILL)) && super.hurt(source, amount);
     }
 
     protected SoundEvent getDeathSound() {

@@ -58,13 +58,13 @@ public class GSPumpkinBomb extends GSBomb {
         }
 
         if (this.tickCount > 20) {
-            if (this.isOnGround()) {
+            if (this.onGround()) {
                 ++this.jumpTicks;
             }
 
             if (this.getTarget() != null) {
                 this.getLookControl().setLookAt(this.getTarget(), 30.0F, 30.0F);
-                if (this.jumpTicks % 20 == 0 && this.isOnGround()) {
+                if (this.jumpTicks % 20 == 0 && this.onGround()) {
                     this.playSound(IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_PUMPKINBOMB_BOING.get(), 1.0F, 1.0F);
                     if (!this.level.isClientSide) {
                         this.setDeltaMovement((this.getTarget().getX() - this.getX()) * 0.4 * 0.16, 0.5, (this.getTarget().getZ() - this.getZ()) * 0.4 * 0.16);
@@ -87,7 +87,7 @@ public class GSPumpkinBomb extends GSBomb {
             this.dead = true;
             boolean loot = CuriosFinder.hasWanting(this.getMasterOwner());
             LootingExplosion.Mode lootMode = loot ? LootingExplosion.Mode.LOOT : LootingExplosion.Mode.REGULAR;
-            ExplosionUtil.lootExplode(this.level, this.getTrueOwner(), this.getX(), this.getY(), this.getZ(), 4.0F, false, Explosion.BlockInteraction.NONE, lootMode);
+            ExplosionUtil.lootExplode(this.level, this.getTrueOwner(), this.getX(), this.getY(), this.getZ(), 4.0F, false, Explosion.BlockInteraction.KEEP, lootMode);
             this.discard();
         }
 

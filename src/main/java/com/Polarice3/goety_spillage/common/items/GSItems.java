@@ -31,7 +31,7 @@ public class GSItems {
 
     public static final FoodProperties MUTATED_FLESH_FOOD = (new FoodProperties.Builder()).nutrition(4).saturationMod(0.1F).effect(() -> new MobEffectInstance(EffectRegisterer.MUTATION.get(), 600, 0), 1.0F).meat().build();
 
-    public static RegistryObject<Item> MUTATED_FLESH = ITEMS.register("mutated_flesh", () -> new Item(new Item.Properties().tab(Goety.TAB).food(MUTATED_FLESH_FOOD)));
+    public static RegistryObject<Item> MUTATED_FLESH = ITEMS.register("mutated_flesh", () -> new Item(new Item.Properties().food(MUTATED_FLESH_FOOD)));
 
     public static RegistryObject<Item> PUMPKIN_BOMB = ITEMS.register("pumpkin_bomb", PumpkinBombItem::new);
     public static RegistryObject<Item> SKULL_BOMB = ITEMS.register("skull_bomb", SkullBombItem::new);

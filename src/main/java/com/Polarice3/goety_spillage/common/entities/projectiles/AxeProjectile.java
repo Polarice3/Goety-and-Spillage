@@ -1,18 +1,15 @@
 package com.Polarice3.goety_spillage.common.entities.projectiles;
 
 import com.Polarice3.Goety.api.entities.IOwned;
-import com.Polarice3.Goety.common.entities.ModEntityType;
-import com.Polarice3.Goety.common.entities.hostile.Irk;
 import com.Polarice3.Goety.common.entities.projectiles.SwordProjectile;
 import com.Polarice3.Goety.utils.MobUtil;
-import com.Polarice3.Goety.utils.ModDamageSource;
-import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
 import net.minecraft.Util;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -24,7 +21,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ItemSupplier;
@@ -141,7 +137,7 @@ public class AxeProjectile extends AbstractArrow implements ItemSupplier {
         if (target instanceof LivingEntity livingentity) {
             f += EnchantmentHelper.getDamageBonus(this.getItem(), livingentity.getMobType());
         }
-        DamageSource damageSource = DamageSource.thrown(this, (entity1 == null ? this : entity1));
+        DamageSource damageSource = this.damageSources().thrown(this, (entity1 == null ? this : entity1));
         if (target.hurt(damageSource, f)) {
             if (target instanceof LivingEntity livingentity1) {
                 if (entity1 instanceof LivingEntity) {
@@ -189,7 +185,7 @@ public class AxeProjectile extends AbstractArrow implements ItemSupplier {
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 

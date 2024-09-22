@@ -1,20 +1,17 @@
 package com.Polarice3.goety_spillage.client.gui.overlay;
 
-import com.Polarice3.Goety.config.MainConfig;
 import com.Polarice3.Goety.utils.CuriosFinder;
 import com.Polarice3.goety_spillage.GoetySpillage;
 import com.Polarice3.goety_spillage.common.items.curios.FreakyRobeItem;
 import com.Polarice3.goety_spillage.config.GSMainConfig;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 
-public class FreakyRobeGui extends GuiComponent {
+public class FreakyRobeGui {
     public static final IGuiOverlay OVERLAY = FreakyRobeGui::drawHUD;
     private static final Minecraft minecraft = Minecraft.getInstance();
 
@@ -22,7 +19,7 @@ public class FreakyRobeGui extends GuiComponent {
         return minecraft.player != null && CuriosFinder.hasCurio(minecraft.player, item -> item.getItem() instanceof FreakyRobeItem);
     }
 
-    public static void drawHUD(ForgeGui gui, PoseStack ms, float partialTicks, int screenWidth, int screenHeight) {
+    public static void drawHUD(ForgeGui gui, GuiGraphics ms, float partialTicks, int screenWidth, int screenHeight) {
         if(!shouldDisplayBar()) {
             return;
         }
@@ -51,7 +48,6 @@ public class FreakyRobeGui extends GuiComponent {
             }
         }
 
-        RenderSystem.setShaderTexture(0, location);
-        blit(ms, i, j, 0, 0, 16,16, 16, 16);
+        ms.blit(location, i, j, 0, 0, 16,16, 16, 16);
     }
 }

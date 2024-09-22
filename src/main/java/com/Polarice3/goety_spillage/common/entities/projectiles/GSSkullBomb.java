@@ -50,7 +50,7 @@ public class GSSkullBomb extends GSBomb {
             this.explode();
         }
 
-        if (this.isOnGround()) {
+        if (this.onGround()) {
             this.setDeltaMovement((-0.5D + this.random.nextDouble()) * 0.6D, 0.3D, (-0.5D + this.random.nextDouble()) * 0.6D);
         }
 
@@ -62,7 +62,7 @@ public class GSSkullBomb extends GSBomb {
             this.dead = true;
             boolean loot = CuriosFinder.hasWanting(this.getMasterOwner());
             LootingExplosion.Mode lootMode = loot ? LootingExplosion.Mode.LOOT : LootingExplosion.Mode.REGULAR;
-            ExplosionUtil.lootExplode(this.level, this.getTrueOwner(), this.getX(), this.getY(), this.getZ(), f, false, Explosion.BlockInteraction.NONE, lootMode);
+            ExplosionUtil.lootExplode(this.level, this.getTrueOwner(), this.getX(), this.getY(), this.getZ(), f, false, Explosion.BlockInteraction.KEEP, lootMode);
             if (!this.isSmall()) {
                 for (int i = 0; i < 4; ++i){
                     GSSkullBomb skullBomb = GSEntityTypes.SKULL_BOMB.get().create(this.level);

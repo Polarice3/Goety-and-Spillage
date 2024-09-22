@@ -11,6 +11,8 @@ import com.Polarice3.goety_spillage.common.items.GSItems;
 import com.Polarice3.goety_spillage.common.network.GSNetwork;
 import com.Polarice3.goety_spillage.compat.GSOtherModCompat;
 import com.Polarice3.goety_spillage.config.*;
+import com.Polarice3.goety_spillage.init.GSCreativeTab;
+import com.mojang.logging.LogUtils;
 import com.yellowbrossproductions.illageandspillage.util.PotionRegisterer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.alchemy.Potions;
@@ -28,14 +30,22 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
-import net.minecraftforge.fml.loading.FileUtils;
+import org.slf4j.Logger;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotTypeMessage;
 import top.theillusivec4.curios.api.SlotTypePreset;
 
+import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+import static net.minecraftforge.fml.loading.LogMarkers.CORE;
+
 @Mod(GoetySpillage.MOD_ID)
 public class GoetySpillage {
     public static final String MOD_ID = "goety_spillage";
+    public static final Logger LOGGER = LogUtils.getLogger();
 
     public static ResourceLocation location(String path) {
         return new ResourceLocation(MOD_ID, path);
@@ -45,12 +55,13 @@ public class GoetySpillage {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         GSEntityTypes.ENTITY_TYPE.register(modEventBus);
+        GSCreativeTab.CREATIVE_MODE_TABS.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::setupEntityAttributeCreation);
         modEventBus.addListener(this::enqueueIMC);
 
-        FileUtils.getOrCreateDirectory(FMLPaths.CONFIGDIR.get().resolve("goety_spillage"), "goety_spillage");
+        getOrCreateDirectory(FMLPaths.CONFIGDIR.get().resolve("goety_spillage"), "goety_spillage");
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GSMainConfig.SPEC, "goety_spillage/goety_spillage.toml");
         GSMainConfig.loadConfig(GSMainConfig.SPEC, FMLPaths.CONFIGDIR.get().resolve("goety_spillage/goety_spillage.toml").toString());
 
@@ -68,6 +79,30 @@ public class GoetySpillage {
 
         MinecraftForge.EVENT_BUS.register(this);
         GSItems.init();
+    }
+
+    public static Path getOrCreateDirectory(Path dirPath, String dirLabel) {
+        if (!Files.isDirectory(dirPath.getParent())) {
+            getOrCreateDirectory(dirPath.getParent(), "parent of "+dirLabel);
+        }
+        if (!Files.isDirectory(dirPath))
+        {
+            LOGGER.debug(CORE, "Making {} directory : {}", dirLabel, dirPath);
+            try {
+                Files.createDirectory(dirPath);
+            } catch (IOException e) {
+                if (e instanceof FileAlreadyExistsException) {
+                    LOGGER.error(CORE, "Failed to create {} directory - there is a file in the way", dirLabel);
+                } else {
+                    LOGGER.error(CORE, "Problem with creating {} directory (Permissions?)", dirLabel, e);
+                }
+                throw new RuntimeException("Problem creating directory", e);
+            }
+            LOGGER.debug(CORE, "Created {} directory : {}", dirLabel, dirPath);
+        } else {
+            LOGGER.debug(CORE, "Found existing {} directory : {}", dirLabel, dirPath);
+        }
+        return dirPath;
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
