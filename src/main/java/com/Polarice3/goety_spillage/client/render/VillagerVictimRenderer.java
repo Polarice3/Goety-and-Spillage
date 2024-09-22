@@ -20,7 +20,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.npc.VillagerDataHolder;
-import net.minecraft.world.entity.npc.WanderingTrader;
 
 public class VillagerVictimRenderer extends MobRenderer<VillagerVictim, VillagerVictimModel<VillagerVictim>> {
     private static final ResourceLocation TEXTURE = GoetySpillage.location("textures/entity/servants/villager_victim/victim.png");

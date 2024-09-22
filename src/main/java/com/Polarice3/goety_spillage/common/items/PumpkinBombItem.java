@@ -1,9 +1,7 @@
 package com.Polarice3.goety_spillage.common.items;
 
-import com.Polarice3.Goety.Goety;
 import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
 import com.Polarice3.goety_spillage.common.entities.projectiles.GSPumpkinBomb;
-import com.Polarice3.goety_spillage.common.entities.projectiles.GSSkullBomb;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;

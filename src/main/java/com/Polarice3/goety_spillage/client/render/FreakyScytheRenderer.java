@@ -2,7 +2,6 @@ package com.Polarice3.goety_spillage.client.render;
 
 import com.Polarice3.goety_spillage.common.entities.projectiles.FreakyScythe;
 import com.yellowbrossproductions.illageandspillage.client.model.ScytheModel;
-import com.yellowbrossproductions.illageandspillage.entities.projectile.ScytheEntity;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.core.BlockPos;

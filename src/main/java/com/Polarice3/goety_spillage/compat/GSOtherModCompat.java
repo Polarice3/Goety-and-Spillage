@@ -1,7 +1,6 @@
 package com.Polarice3.goety_spillage.compat;
 
 import com.Polarice3.Goety.compat.ICompatable;
-import com.Polarice3.Goety.compat.patchouli.PatchouliIntegration;
 import com.Polarice3.goety_spillage.compat.curios.GSCuriosIntegration;
 import com.google.common.collect.ImmutableMap;
 import net.minecraftforge.fml.ModList;

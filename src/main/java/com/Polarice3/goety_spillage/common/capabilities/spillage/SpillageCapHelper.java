@@ -3,10 +3,6 @@ package com.Polarice3.goety_spillage.common.capabilities.spillage;
 import com.Polarice3.goety_spillage.common.network.GSNetwork;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.goal.GoalSelector;
-import net.minecraft.world.entity.ai.goal.WrappedGoal;
-
-import java.util.ArrayList;
 
 public class SpillageCapHelper {
     public static ISpillage getCapability(LivingEntity livingEntity) {

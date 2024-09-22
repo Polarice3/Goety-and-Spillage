@@ -1,9 +1,6 @@
 package com.Polarice3.goety_spillage.common.items;
 
-import com.Polarice3.Goety.Goety;
 import com.Polarice3.Goety.common.items.curios.SingleStackItem;
-import com.Polarice3.Goety.common.items.curios.WitchHatItem;
-import com.Polarice3.Goety.common.items.curios.WitchRobeItem;
 import com.Polarice3.Goety.common.items.magic.MagicFocus;
 import com.Polarice3.goety_spillage.GoetySpillage;
 import com.Polarice3.goety_spillage.common.items.curios.FreakyHatItem;
@@ -14,7 +11,6 @@ import com.Polarice3.goety_spillage.common.magic.spells.SoulBeamSpell;
 import com.Polarice3.goety_spillage.common.magic.spells.SpiritHandSpell;
 import com.yellowbrossproductions.illageandspillage.util.EffectRegisterer;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;

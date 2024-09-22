@@ -1,8 +1,5 @@
 package com.Polarice3.goety_spillage.common.items;
 
-import com.Polarice3.Goety.Goety;
-import com.Polarice3.Goety.common.entities.projectiles.IllBomb;
-import com.Polarice3.Goety.common.items.ModItems;
 import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
 import com.Polarice3.goety_spillage.common.entities.projectiles.GSSkullBomb;
 import net.minecraft.sounds.SoundEvents;

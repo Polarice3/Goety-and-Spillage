@@ -2,9 +2,7 @@ package com.Polarice3.goety_spillage.client.render;
 
 import com.Polarice3.goety_spillage.client.render.model.RagnoServantModel;
 import com.Polarice3.goety_spillage.common.entities.ally.RagnoServant;
-import com.yellowbrossproductions.illageandspillage.client.model.RagnoModel;
 import com.yellowbrossproductions.illageandspillage.config.IllageAndSpillageConfig;
-import com.yellowbrossproductions.illageandspillage.entities.RagnoEntity;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
