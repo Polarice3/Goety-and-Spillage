@@ -5,8 +5,8 @@ license="${mod_license}"
 modId="goety_spillage"
 version="${mod_version}"
 displayName="${mod_name}"
-#logoFile="examplemod.png" #optional
-#credits="" #optional
+logoFile="logo.png"
+credits="YellowbrossProduction for making Illage and Spillage, and TheDarkPeasant for the 1.20 port/continuation."
 authors="${mod_authors}"
 description='''${mod_description}'''
 [[dependencies.goety_spillage]]

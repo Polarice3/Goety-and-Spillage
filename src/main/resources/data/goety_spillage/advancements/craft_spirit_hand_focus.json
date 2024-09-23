@@ -1,0 +1,36 @@
+{
+  "parent": "goety_spillage:root",
+  "display": {
+    "icon": {
+      "item": "goety_spillage:spirit_hand_focus"
+    },
+    "title": {
+      "translate": "advancements.goety_spillage.craft_spirit_hand_focus.title"
+    },
+    "description": {
+      "translate": "advancements.goety_spillage.craft_spirit_hand_focus.description"
+    },
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden" : false
+  },
+  "criteria": {
+    "item": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "goety_spillage:spirit_hand_focus"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "item"
+    ]
+  ]
+}
