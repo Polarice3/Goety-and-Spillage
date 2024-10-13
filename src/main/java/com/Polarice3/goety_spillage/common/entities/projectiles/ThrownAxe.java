@@ -9,6 +9,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -28,6 +29,7 @@ public class ThrownAxe extends MobProjectile implements IllagerAttack, ItemSuppl
 
     public ThrownAxe(EntityType<? extends MobProjectile> p_21683_, Level p_21684_) {
         super(p_21683_, p_21684_);
+        this.setItemInHand(InteractionHand.MAIN_HAND, Items.IRON_AXE.getDefaultInstance());
         this.damage = 8.0F;
     }
 

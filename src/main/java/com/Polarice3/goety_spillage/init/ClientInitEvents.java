@@ -3,10 +3,7 @@ package com.Polarice3.goety_spillage.init;
 import com.Polarice3.goety_spillage.GoetySpillage;
 import com.Polarice3.goety_spillage.client.gui.overlay.FreakyRobeGui;
 import com.Polarice3.goety_spillage.client.render.*;
-import com.Polarice3.goety_spillage.client.render.model.BoundFreakagerModel;
-import com.Polarice3.goety_spillage.client.render.model.FreakyHatModel;
-import com.Polarice3.goety_spillage.client.render.model.RagnoServantModel;
-import com.Polarice3.goety_spillage.client.render.model.VillagerVictimModel;
+import com.Polarice3.goety_spillage.client.render.model.*;
 import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraftforge.api.distmarker.Dist;
@@ -29,6 +26,7 @@ public class ClientInitEvents {
     public static void onRegisterLayers(EntityRenderersEvent.RegisterLayerDefinitions event){
         event.registerLayerDefinition(FreakyHatModel.LAYER_LOCATION, FreakyHatModel::createBodyLayer);
         event.registerLayerDefinition(VillagerVictimModel.LAYER_LOCATION, VillagerVictimModel::createBodyLayer);
+        event.registerLayerDefinition(ThrownItemModel.LAYER_LOCATION, ThrownItemModel::createBodyLayer);
         event.registerLayerDefinition(BoundFreakagerModel.LAYER_LOCATION, BoundFreakagerModel::createBodyLayer);
         event.registerLayerDefinition(RagnoServantModel.LAYER_LOCATION, RagnoServantModel::createBodyLayer);
     }

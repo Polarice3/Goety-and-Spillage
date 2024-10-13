@@ -1029,6 +1029,9 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
         } else if (this.isBurrowed()) {
             return false;
         } else {
+            if (pSource.is(DamageTypes.STARVE)){
+                return super.hurt(pSource, pAmount);
+            }
             if (this.isAlive() && !pSource.is(DamageTypes.FELL_OUT_OF_WORLD) && !pSource.is(DamageTypes.GENERIC_KILL) && EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(pSource.getEntity())) {
                 boolean source;
                 if (!this.isCrazy() && !this.isStunned()) {
