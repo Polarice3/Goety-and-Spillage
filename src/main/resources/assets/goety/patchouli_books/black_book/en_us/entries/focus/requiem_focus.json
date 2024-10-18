@@ -4,6 +4,10 @@
   "category": "goety:spillage/focus",
   "pages": [
     {
+      "type": "patchouli:text",
+      "text": "From the damned souls of the Nether and the lost souls of the next world, this spell has you slowly summon one by one before they rush towards your foe with a cackling scream."
+    },
+    {
       "type": "goety:ritual",
       "recipe": "goety_spillage:focus/requiem_focus"
     }

@@ -4,6 +4,10 @@
   "category": "goety:spillage/focus",
   "pages": [
     {
+      "type": "patchouli:text",
+      "text": "The focus allows you to shoot out a beam of concentrated soul energy, dealing magical damage to any non-allied creatures along its path."
+    },
+    {
       "type": "goety:ritual",
       "recipe": "goety_spillage:focus/soul_beam_focus"
     }

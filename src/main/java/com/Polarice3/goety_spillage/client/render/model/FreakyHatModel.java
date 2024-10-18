@@ -24,10 +24,10 @@ public class FreakyHatModel extends HumanoidModel<LivingEntity> {
 
         PartDefinition head = partdefinition.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition hat = head.addOrReplaceChild("hat", CubeListBuilder.create().texOffs(0, 34).addBox(-4.0F, -9.0F, -3.0F, 8.0F, 5.0F, 8.0F, new CubeDeformation(0.5F))
+        PartDefinition hat = head.addOrReplaceChild("hat", CubeListBuilder.create().texOffs(0, 34).addBox(-4.0F, -9.0F, -3.0F, 8.0F, 5.0F, 8.0F, new CubeDeformation(0.52F))
                 .texOffs(0, 47).addBox(-8.0F, -4.0F, -7.0F, 16.0F, 1.0F, 16.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -2.0F, 0.0F, 0.1745F, 0.0F, 0.0F));
 
-        PartDefinition brim2 = hat.addOrReplaceChild("brim2", CubeListBuilder.create().texOffs(24, 34).addBox(-1.5F, -5.0F, 0.0F, 3.0F, 5.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -9.0F, 0.0F, -0.5236F, 0.0F, 0.0F));
+        PartDefinition brim2 = hat.addOrReplaceChild("brim2", CubeListBuilder.create().texOffs(24, 34).addBox(-1.5F, -5.0F, 0.0F, 3.0F, 5.0F, 3.0F, new CubeDeformation(0.02F)), PartPose.offsetAndRotation(0.0F, -9.0F, 0.0F, -0.5236F, 0.0F, 0.0F));
 
         return LayerDefinition.create(meshdefinition, 64, 64);
     }

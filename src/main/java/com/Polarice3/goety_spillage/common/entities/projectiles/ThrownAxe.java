@@ -29,7 +29,6 @@ public class ThrownAxe extends MobProjectile implements IllagerAttack, ItemSuppl
 
     public ThrownAxe(EntityType<? extends MobProjectile> p_21683_, Level p_21684_) {
         super(p_21683_, p_21684_);
-        this.setItemInHand(InteractionHand.MAIN_HAND, Items.IRON_AXE.getDefaultInstance());
         this.damage = 8.0F;
     }
 
@@ -60,7 +59,7 @@ public class ThrownAxe extends MobProjectile implements IllagerAttack, ItemSuppl
             if (entity instanceof LivingEntity living) {
                 if (!MobUtil.areAllies(living, attacker) && entity.isAlive() && !entity.isInvulnerable() && !entity.isSpectator()) {
                     DamageSource damageSource = this.damageSources().thrown(this, attacker);
-                    living.hurt(damageSource, 8.0F);
+                    living.hurt(damageSource, this.getDamage());
                     living.invulnerableTime = 0;
                     EntityUtil.disableShield(living, 200);
                     if (!this.level.isClientSide) {

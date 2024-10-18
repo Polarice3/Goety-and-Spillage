@@ -1,8 +1,11 @@
 package com.Polarice3.goety_spillage.common.items;
 
+import com.Polarice3.Goety.common.items.ModSpawnEggItem;
+import com.Polarice3.Goety.common.items.ModSpawnEggs;
 import com.Polarice3.Goety.common.items.curios.SingleStackItem;
 import com.Polarice3.Goety.common.items.magic.MagicFocus;
 import com.Polarice3.goety_spillage.GoetySpillage;
+import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
 import com.Polarice3.goety_spillage.common.items.curios.FreakyHatItem;
 import com.Polarice3.goety_spillage.common.items.curios.FreakyRobeItem;
 import com.Polarice3.goety_spillage.common.magic.spells.ImpSpell;
@@ -44,4 +47,8 @@ public class GSItems {
     public static RegistryObject<Item> SPIRIT_HAND_FOCUS = ITEMS.register("spirit_hand_focus", () -> new MagicFocus(new SpiritHandSpell()));
     public static RegistryObject<Item> REQUIEM_FOCUS = ITEMS.register("requiem_focus", () -> new MagicFocus(new RequiemSpell()));
     public static RegistryObject<Item> SOUL_BEAM_FOCUS = ITEMS.register("soul_beam_focus", () -> new MagicFocus(new SoulBeamSpell()));
+
+    public static final RegistryObject<ModSpawnEggItem> BOUND_FREAKAGER_SPAWN_EGG = ITEMS.register("bound_freakager_spawn_egg",
+            () -> new ModSpawnEggItem(GSEntityTypes.BOUND_FREAKAGER, 0x202226, 0x3b3e47, ModSpawnEggs.egg()));
+
 }

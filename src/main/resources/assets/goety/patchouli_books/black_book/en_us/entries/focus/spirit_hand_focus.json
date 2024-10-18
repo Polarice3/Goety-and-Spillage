@@ -4,6 +4,10 @@
   "category": "goety:spillage/focus",
   "pages": [
     {
+      "type": "patchouli:text",
+      "text": "You're able to create two hands made from soul energy that will aid you independently in battle."
+    },
+    {
       "type": "goety:ritual",
       "recipe": "goety_spillage:focus/spirit_hand_focus"
     }

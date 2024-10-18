@@ -26,7 +26,6 @@ public class ClientInitEvents {
     public static void onRegisterLayers(EntityRenderersEvent.RegisterLayerDefinitions event){
         event.registerLayerDefinition(FreakyHatModel.LAYER_LOCATION, FreakyHatModel::createBodyLayer);
         event.registerLayerDefinition(VillagerVictimModel.LAYER_LOCATION, VillagerVictimModel::createBodyLayer);
-        event.registerLayerDefinition(ThrownItemModel.LAYER_LOCATION, ThrownItemModel::createBodyLayer);
         event.registerLayerDefinition(BoundFreakagerModel.LAYER_LOCATION, BoundFreakagerModel::createBodyLayer);
         event.registerLayerDefinition(RagnoServantModel.LAYER_LOCATION, RagnoServantModel::createBodyLayer);
     }

@@ -92,20 +92,11 @@ public class GSEvents {
                     mob.setLastHurtByMob(null);
                 }
             }
-            if (mob.getTarget() instanceof IAttackMyOwner victim && EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(victim.getTrueOwner())){
-                if (victim.getTrueOwner() != null){
+            if (mob.getTarget() instanceof IAttackMyOwner victim){
+                if (victim.getTrueOwner() != null && EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(victim.getTrueOwner())){
                     mob.setTarget(victim.getTrueOwner());
                 } else {
                     mob.setTarget(null);
-                }
-            }
-            if (mob instanceof VillagerSoulEntity soul){
-                if (soul.isCharging()) {
-                    if (soul.getTarget() instanceof Player player) {
-                        if (soul.distanceToSqr(player) <= 4.0F) {
-                            SEHelper.increaseSouls(player, 25);
-                        }
-                    }
                 }
             }
             if (mob instanceof Villager villager){

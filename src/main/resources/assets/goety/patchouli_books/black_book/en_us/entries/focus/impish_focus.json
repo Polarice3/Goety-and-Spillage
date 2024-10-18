@@ -4,6 +4,10 @@
   "category": "goety:spillage/focus",
   "pages": [
     {
+      "type": "patchouli:text",
+      "text": "The focus allows you to call upon the fiery souls of the Nether making them fly out of the underworld before they are forced back to damnation."
+    },
+    {
       "type": "goety:ritual",
       "recipe": "goety_spillage:focus/impish_focus"
     }
