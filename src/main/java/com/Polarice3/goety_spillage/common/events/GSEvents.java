@@ -106,17 +106,6 @@ public class GSEvents {
                     mob.setTarget(null);
                 }
             }
-            if (mob instanceof TrickOrTreatEntity treat){
-                if (treat.getOwner() instanceof IOwned || treat.getOwner() instanceof Player){
-                    Entity convert = MobUtil.convertTo(treat, GSEntityTypes.TRICK_OR_TREAT.get(), false, null);
-                    if (convert instanceof GSTot gsTot){
-                        gsTot.setTrueOwner(treat.getOwner());
-                        gsTot.circleTime = treat.circleTime;
-                        gsTot.bounceTime = treat.bounceTime;
-                        gsTot.setTreat(treat.getTreat());
-                    }
-                }
-            }
             if (mob instanceof Villager villager){
                 if (!villager.level.isClientSide) {
                     Brain<?> brain = villager.getBrain();

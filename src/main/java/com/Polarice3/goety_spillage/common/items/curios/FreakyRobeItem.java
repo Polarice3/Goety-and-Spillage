@@ -455,10 +455,6 @@ public class FreakyRobeItem extends SingleStackItem {
                     entity.setTarget(getTarget(wearer));
                     entity.setFlying(true);
                     entity.setDeltaMovement((double) (-2 + wearer.getRandom().nextInt(5)) * 0.4, 0.6, (double) (-2 + wearer.getRandom().nextInt(5)) * 0.4);
-                    if (wearer.getTeam() != null) {
-                        wearer.level.getScoreboard().addPlayerToTeam(entity.getStringUUID(), wearer.level.getScoreboard().getPlayerTeam(wearer.getTeam().getName()));
-                    }
-
                     wearer.level.addFreshEntity(entity);
                 }
             } else {
@@ -469,10 +465,6 @@ public class FreakyRobeItem extends SingleStackItem {
                     entity.setTarget(getTarget(wearer));
                     entity.setFlying(true);
                     entity.setDeltaMovement((double) (-2 + wearer.getRandom().nextInt(5)) * 0.4, 0.6, (double) (-2 + wearer.getRandom().nextInt(5)) * 0.4);
-                    if (wearer.getTeam() != null) {
-                        wearer.level.getScoreboard().addPlayerToTeam(entity.getStringUUID(), wearer.level.getScoreboard().getPlayerTeam(wearer.getTeam().getName()));
-                    }
-
                     wearer.level.addFreshEntity(entity);
                 }
             }

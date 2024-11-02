@@ -52,6 +52,7 @@ public class ClientInitEvents {
         event.registerEntityRenderer(GSEntityTypes.FREAKY_SCYTHE.get(), FreakyScytheRenderer::new);
         event.registerEntityRenderer(GSEntityTypes.DARK_POTION.get(), (p_174064_) -> new ThrownItemRenderer<>(p_174064_, 0.75F, true));
         event.registerEntityRenderer(GSEntityTypes.WEB.get(), (p_174064_) -> new ThrownItemRenderer<>(p_174064_, 1.5F, true));
+        event.registerEntityRenderer(GSEntityTypes.WEB_NET.get(), GSWebNetRenderer::new);
         event.registerEntityRenderer(GSEntityTypes.TRICK_OR_TREAT.get(), GSTotRenderer::new);
     }
 

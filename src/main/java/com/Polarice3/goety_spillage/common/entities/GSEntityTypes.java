@@ -89,6 +89,10 @@ public class GSEntityTypes {
             EntityType.Builder.of(WebProjectile::new, MobCategory.MONSTER)
                     .sized(0.2F, 0.2F));
 
+    public static final RegistryObject<EntityType<GSWebNet>> WEB_NET = register("web_net",
+            EntityType.Builder.of(GSWebNet::new, MobCategory.MONSTER)
+                    .sized(0.2F, 0.2F));
+
     public static final RegistryObject<EntityType<GSTot>> TRICK_OR_TREAT = register("trick_or_treat",
             EntityType.Builder.of(GSTot::new, MobCategory.MONSTER)
                     .sized(1.0F, 1.8F));

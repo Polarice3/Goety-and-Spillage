@@ -10,6 +10,7 @@ import com.Polarice3.Goety.utils.MobUtil;
 import com.Polarice3.Goety.utils.ModDamageSource;
 import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
 import com.Polarice3.goety_spillage.common.entities.projectiles.GSPumpkinBomb;
+import com.Polarice3.goety_spillage.common.entities.projectiles.GSWebNet;
 import com.Polarice3.goety_spillage.common.entities.projectiles.WebProjectile;
 import com.Polarice3.goety_spillage.common.entities.util.DarkEffectCloud;
 import com.Polarice3.goety_spillage.common.network.GSNetwork;
@@ -21,7 +22,6 @@ import com.yellowbrossproductions.illageandspillage.entities.CameraShakeEntity;
 import com.yellowbrossproductions.illageandspillage.entities.FreakagerEntity;
 import com.yellowbrossproductions.illageandspillage.entities.FunnyboneEntity;
 import com.yellowbrossproductions.illageandspillage.entities.VillagerSoulEntity;
-import com.yellowbrossproductions.illageandspillage.entities.projectile.WebNetEntity;
 import com.yellowbrossproductions.illageandspillage.init.ModEntityTypes;
 import com.yellowbrossproductions.illageandspillage.particle.ParticleRegisterer;
 import com.yellowbrossproductions.illageandspillage.util.*;
@@ -994,8 +994,7 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
                 if (this.getAttackTicks() == 15 && this.getTarget() != null) {
                     this.playSound(IllageAndSpillageSoundEvents.ENTITY_RAGNO_WEB.get(), 2.0F, 1.0F);
                     this.waitingForWeb = true;
-                    WebNetEntity webNet = ModEntityTypes.WebNet.get().create(this.level);
-
+                    GSWebNet webNet = GSEntityTypes.WEB_NET.get().create(this.level);
                     if (webNet != null){
                         webNet.setPos(this.getX(), this.getY() + 1.5, this.getZ());
                         webNet.setYHeadRot(this.getYHeadRot());

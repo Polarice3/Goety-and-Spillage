@@ -134,6 +134,7 @@ public class GoetySpillage {
         event.put(GSEntityTypes.PUMPKIN_BOMB.get(), GSPumpkinBomb.setCustomAttributes().build());
         event.put(GSEntityTypes.FREAKY_SCYTHE.get(), FreakyScythe.setCustomAttributes().build());
         event.put(GSEntityTypes.WEB.get(), WebProjectile.setCustomAttributes().build());
+        event.put(GSEntityTypes.WEB_NET.get(), GSWebNet.setCustomAttributes().build());
         event.put(GSEntityTypes.TRICK_OR_TREAT.get(), GSTot.setCustomAttributes().build());
     }
 
