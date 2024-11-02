@@ -10,6 +10,7 @@ import com.Polarice3.goety_spillage.common.items.curios.FreakyHatItem;
 import com.Polarice3.goety_spillage.common.items.curios.FreakyRobeItem;
 import com.Polarice3.goety_spillage.config.GSAttributesConfig;
 import com.yellowbrossproductions.illageandspillage.util.IllageAndSpillageSoundEvents;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
@@ -58,32 +59,28 @@ public abstract class ItemMixin {
         if (!worldIn.isClientSide) {
             if (CuriosFinder.hasCurio(entityLiving, item -> item.getItem() instanceof FreakyRobeItem)) {
                 if (stack.is(Items.IRON_AXE)) {
-                    ThrownAxe projectile = GSEntityTypes.THROWN_AXE.get().create(worldIn);
-                    if (projectile != null) {
-                        Vec3 vector3d = entityLiving.getViewVector(1.0F);
-                        projectile.setPos(entityLiving.getX() + vector3d.x / 2, entityLiving.getY() + 1.0D, entityLiving.getZ() + vector3d.z / 2);
-                        projectile.setYHeadRot(entityLiving.getYHeadRot());
-                        projectile.setYRot(entityLiving.getYHeadRot());
-                        float power = 3.5F;
-                        double motionX = (vector3d.x * (double) power * 0.2D);
-                        double motionY = (vector3d.y * (double) power * 0.2D);
-                        double motionZ = (vector3d.z * (double) power * 0.2D);
-                        projectile.setAcceleration(motionX, motionY, motionZ);
-                        projectile.setShooter(entityLiving);
-                        projectile.setDamage(GSAttributesConfig.BoundFreakagerAxeDamage.get().floatValue());
-                        if (worldIn.addFreshEntity(projectile)) {
-                            ModNetwork.sentToTrackingEntityAndPlayer(entityLiving, new SPlayWorldSoundPacket(entityLiving.blockPosition(), IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_SCYTHE_SPIN.get(), 2.0F, entityLiving.getVoicePitch()));
-                            entityLiving.playSound(IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_SCYTHE_SPIN.get(), 2.0F, entityLiving.getVoicePitch());
-                            if (CuriosFinder.hasCurio(entityLiving, item -> item.getItem() instanceof FreakyHatItem)){
-                                ItemHelper.hurtAndBreak(stack, 1, entityLiving);
-                            } else {
-                                stack.setCount(0);
-                            }
-                            if (entityLiving instanceof Player player){
-                                player.getCooldowns().addCooldown(Items.IRON_AXE, 20);
-                            }
-                            cir.setReturnValue(stack);
+                    Vec3 vector3d = entityLiving.getViewVector(1.0F);
+                    float power = 3.5F;
+                    Vec3 vec3 = vector3d.multiply(power, power, power);
+                    ThrownAxe projectile = new ThrownAxe(entityLiving.getX() + vector3d.x / 2, entityLiving.getY() + 1.0D, entityLiving.getZ() + vector3d.z / 2, vec3.x, vec3.y, vec3.z, worldIn);
+                    projectile.setYHeadRot(entityLiving.getYHeadRot());
+                    projectile.setYRot(entityLiving.getYHeadRot());
+                    CompoundTag tag = entityLiving.getPersistentData().getCompound("Rotation");
+                    projectile.readAdditionalSaveData(tag);
+                    projectile.setOwner(entityLiving);
+                    projectile.setDamage(GSAttributesConfig.BoundFreakagerAxeDamage.get().floatValue());
+                    if (worldIn.addFreshEntity(projectile)) {
+                        ModNetwork.sentToTrackingEntityAndPlayer(entityLiving, new SPlayWorldSoundPacket(entityLiving.blockPosition(), IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_SCYTHE_SPIN.get(), 2.0F, entityLiving.getVoicePitch()));
+                        entityLiving.playSound(IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_SCYTHE_SPIN.get(), 2.0F, entityLiving.getVoicePitch());
+                        if (CuriosFinder.hasCurio(entityLiving, item -> item.getItem() instanceof FreakyHatItem)){
+                            ItemHelper.hurtAndBreak(stack, 1, entityLiving);
+                        } else {
+                            stack.setCount(0);
                         }
+                        if (entityLiving instanceof Player player){
+                            player.getCooldowns().addCooldown(Items.IRON_AXE, 20);
+                        }
+                        cir.setReturnValue(stack);
                     }
                 }
             }

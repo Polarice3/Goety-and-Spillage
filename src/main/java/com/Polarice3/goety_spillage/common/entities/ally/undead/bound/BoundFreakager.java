@@ -1,16 +1,19 @@
 package com.Polarice3.goety_spillage.common.entities.ally.undead.bound;
 
+import com.Polarice3.Goety.api.entities.ally.IServant;
 import com.Polarice3.Goety.common.entities.ally.undead.bound.AbstractBoundIllager;
 import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.Polarice3.Goety.utils.BlockFinder;
 import com.Polarice3.Goety.utils.MobUtil;
 import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
+import com.Polarice3.goety_spillage.common.entities.ally.GSEyesore;
+import com.Polarice3.goety_spillage.common.entities.ally.GSTot;
 import com.Polarice3.goety_spillage.common.entities.ally.RagnoServant;
+import com.Polarice3.goety_spillage.common.entities.ally.undead.GSFunnybone;
 import com.Polarice3.goety_spillage.common.entities.projectiles.*;
 import com.Polarice3.goety_spillage.config.GSAttributesConfig;
 import com.yellowbrossproductions.illageandspillage.client.model.animation.ICanBeAnimated;
-import com.yellowbrossproductions.illageandspillage.entities.TrickOrTreatEntity;
-import com.yellowbrossproductions.illageandspillage.init.ModEntityTypes;
+import com.yellowbrossproductions.illageandspillage.util.EffectRegisterer;
 import com.yellowbrossproductions.illageandspillage.util.IllageAndSpillageSoundEvents;
 import com.yellowbrossproductions.illageandspillage.util.ItemRegisterer;
 import com.yellowbrossproductions.illageandspillage.util.PotionRegisterer;
@@ -26,6 +29,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -34,7 +38,6 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.warden.AngerLevel;
 import net.minecraft.world.entity.monster.warden.Warden;
@@ -45,6 +48,7 @@ import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -56,29 +60,41 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
     private static final EntityDataAccessor<Integer> ANIMATION_STATE = SynchedEntityData.defineId(BoundFreakager.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> SHOW_ARMS = SynchedEntityData.defineId(BoundFreakager.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> SCYTHE = SynchedEntityData.defineId(BoundFreakager.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> FREAKAGER_FACE = SynchedEntityData.defineId(BoundFreakager.class, EntityDataSerializers.INT);
+    public AnimationState laughAnimationState = new AnimationState();
     public AnimationState bombsAnimationState = new AnimationState();
-    public AnimationState axesAnimationState = new AnimationState();
-    public AnimationState fastaxesAnimationState = new AnimationState();
+    public AnimationState minionsAnimationState = new AnimationState();
+    public AnimationState intro1AnimationState = new AnimationState();
+    public AnimationState intro2AnimationState = new AnimationState();
+    public AnimationState intro3AnimationState = new AnimationState();
+    public AnimationState axesStartAnimationState = new AnimationState();
+    public AnimationState axesNormalAnimationState = new AnimationState();
+    public AnimationState angryAxesAnimationState = new AnimationState();
     public AnimationState potionsAnimationState = new AnimationState();
     public AnimationState scytheAnimationState = new AnimationState();
+    public AnimationState catchAnimationState = new AnimationState();
     public AnimationState trickortreatAnimationState = new AnimationState();
+    public AnimationState phaseAnimationState = new AnimationState();
     private int attackType;
     private int attackTicks;
     private int attackCooldown;
-    private final int BOMBS_ATTACK = 1;
-    private final int AXES_ATTACK = 2;
-    private final int FAST_AXES_ATTACK = 3;
-    private final int POTIONS_ATTACK = 4;
-    private final int SCYTHE_ATTACK = 5;
-    private final int TOT_ATTACK = 6;
+    private static final int BOMBS_ATTACK = 1;
+    private static final int AXES_ATTACK = 2;
+    private static final int ANGRY_AXES_ATTACK = 3;
+    private static final int POTIONS_ATTACK = 4;
+    private static final int SCYTHE_ATTACK = 5;
+    private static final int TRICKORTREAT_ATTACK = 6;
+    private static final int MINIONS_ATTACK = 7;
     private int bombsCooldown;
+    private int minionsCooldown;
     private int axesCooldown;
     private int potionsCooldown;
     private int scytheCooldown;
     private int trickOrTreatCooldown;
     private double potionThrowDistance;
     public boolean waitingForScythe;
-    private final List<TrickOrTreatEntity> treats = new ArrayList<>();
+    public int catchTicks;
+    private final List<GSTot> treats = new ArrayList<>();
 
     public BoundFreakager(EntityType<? extends Owned> type, Level worldIn) {
         super(type, worldIn);
@@ -89,9 +105,10 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
         this.goalSelector.addGoal(0, new TrickOrTreatGoal());
         this.goalSelector.addGoal(0, new ScytheGoal());
         this.goalSelector.addGoal(0, new PotionsGoal());
-        this.goalSelector.addGoal(0, new FastAxesGoal());
+        this.goalSelector.addGoal(0, new AngryAxesGoal());
         this.goalSelector.addGoal(0, new AxesGoal());
         this.goalSelector.addGoal(0, new ThrowBombsGoal());
+        this.goalSelector.addGoal(0, new ThrowMinionsGoal());
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new AlwaysWatchTargetGoal());
         this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.0, false));
@@ -120,6 +137,7 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(ANIMATION_STATE, 0);
+        this.entityData.define(FREAKAGER_FACE, 0);
         this.entityData.define(SHOW_ARMS, false);
         this.entityData.define(SCYTHE, false);
     }
@@ -127,6 +145,7 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
     public void addAdditionalSaveData(CompoundTag pCompound) {
         super.addAdditionalSaveData(pCompound);
         pCompound.putInt("AttackCoolDown", this.attackCooldown);
+        pCompound.putInt("MinionsCoolDown", this.minionsCooldown);
         pCompound.putInt("BombsCoolDown", this.bombsCooldown);
         pCompound.putInt("PotionsCoolDown", this.potionsCooldown);
         pCompound.putInt("ScytheCoolDown", this.scytheCooldown);
@@ -137,6 +156,9 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
         super.readAdditionalSaveData(pCompound);
         if (pCompound.contains("AttackCoolDown")) {
             this.attackCooldown = pCompound.getInt("AttackCoolDown");
+        }
+        if (pCompound.contains("MinionsCoolDown")) {
+            this.minionsCooldown = pCompound.getInt("MinionsCoolDown");
         }
         if (pCompound.contains("BombsCoolDown")) {
             this.bombsCooldown = pCompound.getInt("BombsCoolDown");
@@ -152,11 +174,34 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
         }
     }
 
+    public boolean canBeAffected(MobEffectInstance effectInstance) {
+        return effectInstance.getEffect() != EffectRegisterer.MUTATION.get() && super.canBeAffected(effectInstance);
+    }
+
+    public boolean halfHealth() {
+        return this.getHealth() <= this.getMaxHealth() / 2.0F;
+    }
+
+    public boolean hasFewEnoughMinions() {
+        List<LivingEntity> list = this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(100.0), (predicate) -> {
+            return predicate.isAlive() && predicate instanceof IServant servant && (servant instanceof GSEyesore || servant instanceof GSFunnybone) && servant.getTrueOwner() == this;
+        });
+        return list.size() < 3;
+    }
+
     public void onSyncedDataUpdated(EntityDataAccessor<?> p_21104_) {
-        if (ANIMATION_STATE.equals(p_21104_) && this.level.isClientSide) {
+        if (ANIMATION_STATE.equals(p_21104_) && this.level().isClientSide) {
             switch (this.entityData.get(ANIMATION_STATE)) {
-                case 0, 1, 2:
+                case 0:
                     this.stopAllAnimationStates();
+                    break;
+                case 1:
+                    this.stopAllAnimationStates();
+                    this.minionsAnimationState.start(this.tickCount);
+                    break;
+                case 2:
+                    this.stopAllAnimationStates();
+                    this.laughAnimationState.start(this.tickCount);
                     break;
                 case 3:
                     this.stopAllAnimationStates();
@@ -164,11 +209,11 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
                     break;
                 case 4:
                     this.stopAllAnimationStates();
-                    this.axesAnimationState.start(this.tickCount);
+                    this.axesNormalAnimationState.start(this.tickCount);
                     break;
                 case 5:
                     this.stopAllAnimationStates();
-                    this.fastaxesAnimationState.start(this.tickCount);
+                    this.angryAxesAnimationState.start(this.tickCount);
                     break;
                 case 6:
                     this.stopAllAnimationStates();
@@ -181,6 +226,30 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
                 case 8:
                     this.stopAllAnimationStates();
                     this.trickortreatAnimationState.start(this.tickCount);
+                    break;
+                case 9:
+                    this.stopAllAnimationStates();
+                    this.intro1AnimationState.start(this.tickCount);
+                    break;
+                case 10:
+                    this.stopAllAnimationStates();
+                    this.intro2AnimationState.start(this.tickCount);
+                    break;
+                case 11:
+                    this.stopAllAnimationStates();
+                    this.intro3AnimationState.start(this.tickCount);
+                    break;
+                case 12:
+                    this.stopAllAnimationStates();
+                    this.axesStartAnimationState.start(this.tickCount);
+                    break;
+                case 13:
+                    this.stopAllAnimationStates();
+                    this.catchAnimationState.start(this.tickCount);
+                    break;
+                case 14:
+                    this.stopAllAnimationStates();
+                    this.phaseAnimationState.start(this.tickCount);
             }
         }
 
@@ -188,12 +257,20 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
     }
 
     public void stopAllAnimationStates() {
+        this.intro1AnimationState.stop();
+        this.intro2AnimationState.stop();
+        this.intro3AnimationState.stop();
+        this.laughAnimationState.stop();
         this.bombsAnimationState.stop();
-        this.axesAnimationState.stop();
-        this.fastaxesAnimationState.stop();
+        this.minionsAnimationState.stop();
+        this.axesStartAnimationState.stop();
+        this.axesNormalAnimationState.stop();
+        this.angryAxesAnimationState.stop();
         this.potionsAnimationState.stop();
         this.scytheAnimationState.stop();
+        this.catchAnimationState.stop();
         this.trickortreatAnimationState.stop();
+        this.phaseAnimationState.stop();
     }
 
     public float getVoicePitch() {
@@ -211,6 +288,7 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
                 this.level.addParticle(ParticleTypes.CLOUD, this.getRandomX(0.5), this.getY() + 0.5, this.getRandomZ(0.5), (0.5 - this.random.nextDouble()) * 0.15, 0.009999999776482582, (0.5 - this.random.nextDouble()) * 0.15);
             }
         }
+
         if (this.attackType > 0) {
             ++this.attackTicks;
         }
@@ -222,6 +300,10 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
         if (this.attackType < 1) {
             if (this.bombsCooldown > 0) {
                 --this.bombsCooldown;
+            }
+
+            if (this.minionsCooldown > 0 && this.hasFewEnoughMinions()) {
+                --this.minionsCooldown;
             }
 
             if (this.axesCooldown > 0) {
@@ -240,9 +322,14 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
                 --this.trickOrTreatCooldown;
             }
         }
+
+        this.setYRot(this.getYHeadRot());
+        this.yBodyRot = this.getYRot();
+
         this.updateTreatList();
         this.distractAttackers();
         this.attackAI();
+
         if (this.getTarget() != null
                 && !this.isPassenger()
                 && !this.isStaying()
@@ -261,154 +348,244 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
 
     public void attackAI(){
         if (this.isAlive()) {
-            if (this.attackType == this.BOMBS_ATTACK && this.attackTicks == 20) {
-                double throwSpeed = 0.7D;
-                this.playSound(IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_CYMBAL.get(), 1.0F, 1.0F);
+            if (this.attackType == 1) {
+                if (this.attackTicks == 20) {
+                    double y = 0.7;
+                    this.playSound(IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_CYMBAL.get(), 1.0F, 1.0F);
+                    this.setFreakagerFace(1);
 
-                for(int i = 0; i < 4; ++i) {
-                    if (this.getHealth() < this.getMaxHealth() / 2.0F) {
-                        GSSkullBomb bomb = GSEntityTypes.SKULL_BOMB.get().create(this.level);
-                        if (bomb != null) {
-                            bomb.setPos(this.getX(), this.getY() + 0.25D, this.getZ());
-                            bomb.setTrueOwner(this);
-                            if (i == 0) {
-                                bomb.setDeltaMovement(-throwSpeed, 0.5D, -throwSpeed);
-                            } else if (i == 1) {
-                                bomb.setDeltaMovement(-throwSpeed, 0.5D, throwSpeed);
-                            } else if (i == 2) {
-                                bomb.setDeltaMovement(throwSpeed, 0.5D, -throwSpeed);
-                            } else {
-                                bomb.setDeltaMovement(throwSpeed, 0.53D, throwSpeed);
+                    for(int i = 0; i < 4; ++i) {
+                        if (this.halfHealth()) {
+                            GSSkullBomb s1 = GSEntityTypes.SKULL_BOMB.get().create(this.level);
+                            if (s1 != null) {
+                                s1.setPos(this.getX(), this.getY() + 0.25, this.getZ());
+                                s1.setTrueOwner(this);
+                                if (i == 0) {
+                                    s1.setDeltaMovement(-y, 0.5, -y);
+                                } else if (i == 1) {
+                                    s1.setDeltaMovement(-y, 0.5, y);
+                                } else if (i == 2) {
+                                    s1.setDeltaMovement(y, 0.5, -y);
+                                } else {
+                                    s1.setDeltaMovement(y, 0.53, y);
+                                }
+                                this.level.addFreshEntity(s1);
                             }
+                        } else {
+                            GSPumpkinBomb s1 = GSEntityTypes.PUMPKIN_BOMB.get().create(this.level);
+                            if (s1 != null) {
+                                s1.setPos(this.getX(), this.getY() + 0.25, this.getZ());
+                                s1.setTrueOwner(this);
+                                s1.setTarget(this.getTarget());
+                                if (i == 0) {
+                                    s1.setDeltaMovement(-y, 0.3, -y);
+                                } else if (i == 1) {
+                                    s1.setDeltaMovement(-y, 0.3, y);
+                                } else if (i == 2) {
+                                    s1.setDeltaMovement(y, 0.3, -y);
+                                } else {
+                                    s1.setDeltaMovement(y, 0.3, y);
+                                }
 
-                            this.level.addFreshEntity(bomb);
+                                if (this.getTeam() != null) {
+                                    this.level.getScoreboard().addPlayerToTeam(s1.getStringUUID(), this.level.getScoreboard().getPlayerTeam(this.getTeam().getName()));
+                                }
+
+                                this.level.addFreshEntity(s1);
+                            }
                         }
-                    } else {
-                        GSPumpkinBomb bomb = GSEntityTypes.PUMPKIN_BOMB.get().create(this.level);
-                        if (bomb != null) {
-                            bomb.setPos(this.getX(), this.getY() + 0.25D, this.getZ());
-                            bomb.setTrueOwner(this);
-                            bomb.setTarget(this.getTarget());
-                            if (i == 0) {
-                                bomb.setDeltaMovement(-throwSpeed, 0.3D, -throwSpeed);
-                            } else if (i == 1) {
-                                bomb.setDeltaMovement(-throwSpeed, 0.3D, throwSpeed);
-                            } else if (i == 2) {
-                                bomb.setDeltaMovement(throwSpeed, 0.3D, -throwSpeed);
-                            } else {
-                                bomb.setDeltaMovement(throwSpeed, 0.3D, throwSpeed);
-                            }
-
-                            if (this.getTeam() != null) {
-                                this.level.getScoreboard().addPlayerToTeam(bomb.getStringUUID(), this.level.getScoreboard().getPlayerTeam(this.getTeam().getName()));
-                            }
-
-                            this.level.addFreshEntity(bomb);
-                        }
                     }
+                }
+
+                if (this.attackTicks == 30) {
+                    this.setFreakagerFace(0);
                 }
             }
 
-            if (this.attackType == this.AXES_ATTACK) {
-                if (this.attackTicks % 28 == 0) {
-                    this.setAnimationState(0);
-                    this.setAnimationState(4);
-                }
-
-                if (this.attackTicks % 28 == 2) {
-                    this.playSound(IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_THROW.get(), 2.0F, this.getVoicePitch());
-                }
-
-                if (this.getTarget() != null && this.attackTicks % 28 == 6) {
-                    this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
-                    if (!this.level.isClientSide) {
-                        this.throwAxe(true);
-                    }
-                }
-
-                if (this.attackTicks % 28 == 14) {
-                    this.setItemSlot(EquipmentSlot.MAINHAND, Items.IRON_AXE.getDefaultInstance());
-                    this.setLeftHanded(true);
-                }
-
-                if (this.attackTicks % 28 == 16) {
-                    this.playSound(IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_THROW.get(), 2.0F, this.getVoicePitch());
-                }
-
-                if (this.getTarget() != null && this.attackTicks % 28 == 22) {
-                    this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
-                    if (!this.level.isClientSide) {
-                        this.throwAxe();
-                    }
-                }
-
-                if (this.attackTicks % 28 == 27) {
-                    this.setItemSlot(EquipmentSlot.MAINHAND, Items.IRON_AXE.getDefaultInstance());
-                    this.setLeftHanded(false);
-                }
-            }
-
-            if (this.attackType == this.FAST_AXES_ATTACK) {
-                if (this.attackTicks % 12 == 0) {
-                    this.setAnimationState(0);
-                    this.setAnimationState(5);
-                }
-
-                if (this.attackTicks % 12 == 1) {
-                    this.playSound(IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_THROW.get(), 2.0F, this.getVoicePitch());
-                }
-
-                if (this.getTarget() != null && this.attackTicks % 12 == 3) {
-                    this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
-                    if (!this.level.isClientSide) {
-                        this.throwAxe();
-                    }
-                }
-
-                if (this.attackTicks % 12 == 6) {
-                    this.setItemSlot(EquipmentSlot.MAINHAND, Items.IRON_AXE.getDefaultInstance());
-                    this.setLeftHanded(true);
-                }
-
-                if (this.attackTicks % 12 == 7) {
-                    this.playSound(IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_THROW.get(), 2.0F, this.getVoicePitch());
-                }
-
-                if (this.getTarget() != null && this.attackTicks % 12 == 10) {
-                    this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
-                    if (!this.level.isClientSide) {
-                        this.throwAxe();
-                    }
-                }
-
-                if (this.attackTicks % 12 == 11) {
-                    this.setItemSlot(EquipmentSlot.MAINHAND, Items.IRON_AXE.getDefaultInstance());
-                    this.setLeftHanded(false);
-                }
-            }
-
-            if (this.attackType == this.POTIONS_ATTACK) {
+            if (this.attackType == 7) {
                 if (this.attackTicks == 10) {
+                    this.setFreakagerFace(1);
+                }
+
+                if (this.attackTicks == 25) {
+                    this.setFreakagerFace(0);
+                }
+
+                if (this.attackTicks == 40) {
+                    this.playSound(IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_CYMBAL.get(), 1.0F, 1.0F);
+                    this.setFreakagerFace(1);
+
+                    for(int i = 0; i < 5; ++i) {
+                        if (this.halfHealth()) {
+                            GSEyesore entity = GSEntityTypes.EYESORE.get().create(this.level);
+                            if (entity != null) {
+                                entity.setPos(this.getX(), this.getY() + 0.25, this.getZ());
+                                entity.setTrueOwner(this);
+                                entity.setTarget(this.getTarget());
+                                entity.setFlying(true);
+                                entity.setDeltaMovement((double) (-2 + this.random.nextInt(5)) * 0.4, 0.6, (double) (-2 + this.random.nextInt(5)) * 0.4);
+                                if (this.getTeam() != null) {
+                                    this.level.getScoreboard().addPlayerToTeam(entity.getStringUUID(), this.level.getScoreboard().getPlayerTeam(this.getTeam().getName()));
+                                }
+
+                                this.level.addFreshEntity(entity);
+                            }
+                        } else {
+                            GSFunnybone entity = GSEntityTypes.FUNNYBONE.get().create(this.level);
+                            if (entity != null) {
+                                entity.setPos(this.getX(), this.getY() + 0.25, this.getZ());
+                                entity.setTrueOwner(this);
+                                entity.setTarget(this.getTarget());
+                                entity.setFlying(true);
+                                entity.setDeltaMovement((double) (-2 + this.random.nextInt(5)) * 0.4, 0.6, (double) (-2 + this.random.nextInt(5)) * 0.4);
+                                if (this.getTeam() != null) {
+                                    this.level.getScoreboard().addPlayerToTeam(entity.getStringUUID(), this.level.getScoreboard().getPlayerTeam(this.getTeam().getName()));
+                                }
+
+                                this.level.addFreshEntity(entity);
+                            }
+                        }
+                    }
+                }
+
+                if (this.attackTicks == 45) {
+                    this.setFreakagerFace(0);
+                }
+            }
+
+            if (this.attackType == 2) {
+                if (this.attackTicks == 4) {
+                    this.setItemSlot(EquipmentSlot.MAINHAND, Items.IRON_AXE.getDefaultInstance());
+                    this.setItemSlot(EquipmentSlot.OFFHAND, Items.IRON_AXE.getDefaultInstance());
+                    this.playSound(IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_AXE_DRAW.get(), 2.0F, 1.0F);
+                    this.setFreakagerFace(1);
+                }
+
+                if (this.attackTicks >= 21) {
+                    this.setFreakagerFace(0);
+                    int trueAttackTicks = this.attackTicks - 21;
+                    if (trueAttackTicks % 26 == 0) {
+                        this.setAnimationState(0);
+                        this.setAnimationState(4);
+                    }
+
+                    if (trueAttackTicks % 26 == 0 || trueAttackTicks % 26 == 12) {
+                        this.playSound(IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_THROW.get(), 2.0F, this.getVoicePitch());
+                    }
+
+                    if (trueAttackTicks % 26 == 0 || trueAttackTicks % 26 == 12) {
+                        if (trueAttackTicks % 26 == 12) {
+                            this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+                        } else {
+                            this.setItemSlot(EquipmentSlot.OFFHAND, ItemStack.EMPTY);
+                        }
+
+                        if (!this.level.isClientSide && this.getTarget() != null) {
+                            double x = this.getX() - this.getTarget().getX();
+                            double y = this.getY() + 1.0 - (this.getTarget().getY() + (double)(this.getTarget().getEyeHeight() / 2.0F));
+                            double z = this.getZ() - this.getTarget().getZ();
+                            ThrownAxe projectile = new ThrownAxe(this.level, this, -x, -y, -z);
+                            projectile.moveTo(this.getX(), this.getY() + 1.0, this.getZ());
+                            CompoundTag tag = this.getPersistentData().getCompound("Rotation");
+                            projectile.readAdditionalSaveData(tag);
+                            projectile.setOwner(this);
+                            projectile.setDamage(GSAttributesConfig.BoundFreakagerAxeDamage.get().floatValue());
+                            this.level.addFreshEntity(projectile);
+                        }
+                    }
+
+                    if (trueAttackTicks % 26 == 6 || trueAttackTicks % 26 == 18) {
+                        if (trueAttackTicks % 26 == 6) {
+                            this.setItemSlot(EquipmentSlot.MAINHAND, Items.IRON_AXE.getDefaultInstance());
+                        } else {
+                            this.setItemSlot(EquipmentSlot.OFFHAND, Items.IRON_AXE.getDefaultInstance());
+                        }
+                    }
+                }
+            }
+            if (this.attackType == 3) {
+                if (this.attackTicks == 4) {
+                    this.setItemSlot(EquipmentSlot.MAINHAND, Items.IRON_AXE.getDefaultInstance());
+                    this.setItemSlot(EquipmentSlot.OFFHAND, Items.IRON_AXE.getDefaultInstance());
+                    this.playSound(IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_AXE_DRAW.get(), 2.0F, 1.0F);
+                    this.playSound(IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_ANGRYAXES.get(), 4.0F, this.getVoicePitch());
+                    this.setFreakagerFace(3);
+                }
+
+                if (this.attackTicks >= 40 && this.attackTicks < 96) {
+                    this.setFreakagerFace(4);
+                    if ((this.attackTicks - 40) % 7 == 0) {
+                        this.playSound(IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_VILLAGERWAVE.get(), 3.0F, this.getVoicePitch());
+                    }
+
+                    if (!this.level.isClientSide && this.getTarget() != null) {
+                        float f = this.yBodyRot * 0.017453292F * 0.25F;
+                        float f1 = Mth.cos(f);
+                        float f2 = Mth.sin(f);
+                        Vec3 vec3;
+                        if (this.attackTicks % 2 == 0) {
+                            vec3 = new Vec3(this.getX() + (double)f1 * 0.6, this.getY() + 0.7, this.getZ() + (double)f2 * 0.6);
+                        } else {
+                            vec3 = new Vec3(this.getX() - (double)f1 * 0.6, this.getY() + 0.7, this.getZ() - (double)f2 * 0.6);
+                        }
+
+                        double x = vec3.x - this.getTarget().getX();
+                        double y = vec3.y - (this.getTarget().getY() + (double)(this.getTarget().getEyeHeight() / 2.0F));
+                        double z = vec3.z - this.getTarget().getZ();
+                        ThrownAxe projectile = new ThrownAxe(this.level, this, -x, -y, -z);
+                        projectile.moveTo(vec3);
+                        CompoundTag tag = this.getPersistentData().getCompound("Rotation");
+                        projectile.readAdditionalSaveData(tag);
+                        projectile.shoot(-x, -y, -z, 1.0F, 20.0F);
+                        projectile.setOwner(this);
+                        projectile.setDamage(GSAttributesConfig.BoundFreakagerAxeDamage.get().floatValue());
+                        this.level.addFreshEntity(projectile);
+                    }
+                }
+
+                if (this.attackTicks == 96) {
+                    this.setFreakagerFace(3);
+                    this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+                    this.setItemSlot(EquipmentSlot.OFFHAND, ItemStack.EMPTY);
+                }
+
+                if (this.attackTicks == 110) {
+                    this.setFreakagerFace(2);
+                }
+            }
+
+            if (this.attackType == 4) {
+                if (this.attackTicks == 5) {
+                    this.playSound(IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_REVEAL.get(), 2.0F, this.getVoicePitch());
+                    this.setFreakagerFace(1);
+                }
+
+                if (this.attackTicks == 20) {
                     this.playSound(IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_SPIN.get(), 2.0F, 1.0F);
-                    this.potionThrowDistance = 0.0D;
+                    this.setFreakagerFace(0);
+                    this.potionThrowDistance = 0.0;
                 }
 
-                if (this.attackTicks >= 10 && this.attackTicks <= 50) {
+                if (this.attackTicks >= 20 && this.attackTicks <= 60) {
                     this.makePotionParticles();
-                }
+                    this.potionThrowDistance += 0.02;
 
-                if (this.attackTicks >= 20 && this.attackTicks <= 50) {
-                    this.potionThrowDistance += 0.02D;
-
-                    for(int i = 0; i < 2; ++i) {
+                    for(int trueAttackTicks = 0; trueAttackTicks < 2; ++trueAttackTicks) {
                         if (!this.level.isClientSide) {
                             DarkPotion potion = GSEntityTypes.DARK_POTION.get().create(this.level);
                             if (potion != null) {
-                                potion.setPos(this.getX(), this.getY() + 2.0D, this.getZ());
+                                potion.setPos(this.getX(), this.getY() + 2.0, this.getZ());
                                 potion.setOwner(this);
-                                potion.setItem(PotionUtils.setPotion(new ItemStack(Items.SPLASH_POTION), PotionRegisterer.MUTATION.get()));
+                                int lingerChance = this.halfHealth() ? this.getRandom().nextInt(0, 15) : 1;
+                                potion.setItem(PotionUtils.setPotion(new ItemStack(lingerChance == 0 ? ItemRegisterer.DARK_LINGER.get() : ItemRegisterer.DARK_SPLASH.get()), PotionRegisterer.MUTATION.get()));
                                 potion.setXRot(-20.0F);
-                                potion.setDeltaMovement((-2.0D + this.random.nextDouble() + this.random.nextDouble() + this.random.nextDouble() + this.random.nextDouble()) * (this.potionThrowDistance / 4.0D), 1.0, (-2.0D + this.random.nextDouble() + this.random.nextDouble() + this.random.nextDouble() + this.random.nextDouble()) * (this.potionThrowDistance / 4.0D));
+                                if (this.halfHealth()) {
+                                    potion.shoot(-2.0 + this.random.nextDouble() + this.random.nextDouble() + this.random.nextDouble() + this.random.nextDouble(), 5.0 + this.random.nextDouble() + this.random.nextDouble(), -2.0 + this.random.nextDouble() + this.random.nextDouble() + this.random.nextDouble() + this.random.nextDouble(), 0.75F, 10.0F);
+                                    potion.setDeltaMovement(potion.getDeltaMovement().add(0.0, 0.5, 0.0));
+                                } else {
+                                    potion.setDeltaMovement((-2.0 + this.random.nextDouble() + this.random.nextDouble() + this.random.nextDouble() + this.random.nextDouble()) * (this.potionThrowDistance / 4.0), 1.0, (-2.0 + this.random.nextDouble() + this.random.nextDouble() + this.random.nextDouble() + this.random.nextDouble()) * (this.potionThrowDistance / 4.0));
+                                }
+
                                 this.level.addFreshEntity(potion);
                             }
                         }
@@ -416,115 +593,103 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
                 }
             }
 
-            if (this.attackType == this.SCYTHE_ATTACK) {
-                if (this.getTarget() != null) {
-                    if (this.attackTicks == 14) {
-                        this.playSound(IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_THROW.get(), 2.0F, this.getVoicePitch());
+            if (this.attackType == 5) {
+                if (this.attackTicks == 3) {
+                    this.setShowScythe(true);
+                    this.setFreakagerFace(1);
+                    this.playSound(IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_AXE_DRAW.get(), 2.0F, 1.0F);
+                }
+
+                if (this.attackTicks == 13) {
+                    this.setFreakagerFace(0);
+                }
+
+                if (this.attackTicks == 21) {
+                    this.playSound(IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_THROW.get(), 2.0F, this.getVoicePitch());
+                }
+
+                if (this.attackTicks == 23 && this.getTarget() != null) {
+                    this.waitingForScythe = true;
+                    if (!this.level.isClientSide) {
+                        this.setShowScythe(false);
                     }
 
-                    if (this.attackTicks == 16) {
-                        this.waitingForScythe = true;
-                        if (!this.level.isClientSide) {
-                            this.setShowScythe(false);
-                        }
-
-                        FreakyScythe scythe = GSEntityTypes.FREAKY_SCYTHE.get().create(this.level);
-                        if (scythe != null) {
-                            scythe.setPos(this.getX(), this.getY() + 1.5D, this.getZ());
-                            double x = scythe.getX() - this.getTarget().getX();
-                            double y = scythe.getY() - this.getTarget().getY();
-                            double z = scythe.getZ() - this.getTarget().getZ();
-                            double d = Math.sqrt(x * x + y * y + z * z);
-                            float power = 3.0F;
-                            double motionX = -(x / d * (double) power * 0.2D);
-                            double motionY = -(y / d * (double) power * 0.2D);
-                            double motionZ = -(z / d * (double) power * 0.2D);
-                            scythe.setAcceleration(motionX, motionY, motionZ);
-                            scythe.halfHP = this.getHealth() < this.getMaxHealth() / 2.0F;
-                            scythe.setGoFor(this.getTarget());
-                            scythe.setShooter(this);
-                            scythe.setDamage(GSAttributesConfig.BoundFreakagerScytheDamage.get().floatValue());
-                            this.level.addFreshEntity(scythe);
-                        }
+                    FreakyScythe scythe = GSEntityTypes.FREAKY_SCYTHE.get().create(this.level);
+                    if (scythe != null){
+                        scythe.setPos(this.getX(), this.getY() + 1.5, this.getZ());
+                        double x = scythe.getX() - this.getTarget().getX();
+                        double y = scythe.getY() - (this.getTarget().getY() + 1.0);
+                        double z = scythe.getZ() - this.getTarget().getZ();
+                        double d = Math.sqrt(x * x + y * y + z * z);
+                        float power = 3.0F;
+                        double motionX = -(x / d * (double)power * 0.2);
+                        double motionY = -(y / d * (double)power * 0.2);
+                        double motionZ = -(z / d * (double)power * 0.2);
+                        scythe.setAcceleration(motionX, motionY, motionZ);
+                        scythe.halfHP = this.halfHealth();
+                        scythe.setGoFor(this.getTarget());
+                        scythe.setShooter(this);
+                        scythe.setDamage(GSAttributesConfig.BoundFreakagerScytheDamage.get().floatValue());
+                        this.level.addFreshEntity(scythe);
                     }
+                }
+
+                if (this.attackTicks > 23 && !this.waitingForScythe) {
+                    if (this.getAnimationState() != 13) {
+                        this.setAnimationState(13);
+                        this.setShowScythe(true);
+                        this.playSound(IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_SCYTHE_CATCH.get(), 1.5F, this.getVoicePitch());
+                    }
+
+                    ++this.catchTicks;
+                }
+
+                if (this.catchTicks == 9) {
+                    this.setShowScythe(false);
+                }
+
+                if (this.attackTicks >= 314) {
+                    this.waitingForScythe = false;
                 }
             }
 
-            if (this.attackType == this.TOT_ATTACK && this.attackTicks == 21) {
-                this.playSound(IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_CYMBAL.get(), 2.0F, 1.0F);
-                int amount = 7;
+            if (this.attackType == 6) {
+                if (this.attackTicks == 21) {
+                    this.setFreakagerFace(1);
+                    this.playSound(IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_CYMBAL.get(), 2.0F, 1.0F);
+                    int amount = 7;
 
-                for(int i = 0; i < amount; ++i) {
-                    TrickOrTreatEntity treat = ModEntityTypes.TrickOrTreat.get().create(this.level);
-                    if (treat != null) {
-                        treat.circleTime = i * 20;
-                        treat.bounceTime = i;
-                        treat.setPos(this.getX(), this.getY(), this.getZ());
-                        treat.setOwner(this);
-                        treat.setTreat(this.random.nextInt(5) + 1);
-                        if (this.getTeam() != null) {
-                            this.level.getScoreboard().addPlayerToTeam(treat.getStringUUID(), this.level.getScoreboard().getPlayerTeam(this.getTeam().getName()));
+                    for(int i = 0; i < amount; ++i) {
+                        GSTot treat = GSEntityTypes.TRICK_OR_TREAT.get().create(this.level);
+                        if (treat != null) {
+                            treat.circleTime = i * 20;
+                            treat.bounceTime = i;
+                            treat.setPos(this.getX(), this.getY(), this.getZ());
+                            treat.setTrueOwner(this);
+                            treat.setTreat(this.random.nextInt(6) + 1);
+                            this.circleTreat(treat, i, amount);
+                            this.level.addFreshEntity(treat);
+                            this.treats.add(treat);
                         }
-
-                        this.circleTreat(treat, i, amount);
-                        this.level.addFreshEntity(treat);
-                        this.treats.add(treat);
                     }
                 }
-            }
-        }
-    }
 
-    public void throwAxe(){
-        this.throwAxe(false);
-    }
-
-    public void throwAxe(boolean first){
-        if (this.getTarget() != null) {
-            ThrownAxe projectile = GSEntityTypes.THROWN_AXE.get().create(this.level);
-            if (projectile != null) {
-                projectile.setPos(this.getX(), this.getY() + 1.0D, this.getZ());
-                projectile.setYHeadRot(this.getYHeadRot());
-                projectile.setYRot(this.getYHeadRot());
-                double x = projectile.getX() - this.getTarget().getX();
-                double y = projectile.getY() - this.getTarget().getY();
-                if (first){
-                    y = projectile.getY() - (this.getTarget().getY() + 1.5D);
+                if (this.attackTicks == 31) {
+                    this.setFreakagerFace(0);
                 }
-                double z = projectile.getZ() - this.getTarget().getZ();
-                double d = Math.sqrt(x * x + y * y + z * z);
-                float power = 3.5F;
-                double motionX = -(x / d * (double) power * 0.2D);
-                double motionY = -(y / d * (double) power * 0.2D);
-                double motionZ = -(z / d * (double) power * 0.2D);
-                projectile.setAcceleration(motionX, motionY, motionZ);
-                projectile.setShooter(this);
-                projectile.setDamage(GSAttributesConfig.BoundFreakagerAxeDamage.get().floatValue());
-                this.level.addFreshEntity(projectile);
             }
         }
     }
 
     public void die(DamageSource p_37847_) {
         if (!this.treats.isEmpty()) {
-            for (TrickOrTreatEntity treat : this.treats) {
+            for (GSTot treat : this.treats) {
                 treat.kill();
             }
         }
 
         if (this.getVehicle() instanceof RagnoServant ragno && ragno.isAlive()) {
-            ItemEntity bag = EntityType.ITEM.create(this.level);
-            if (bag != null) {
-                bag.setItem(ItemRegisterer.BAG_OF_HORRORS.get().getDefaultInstance());
-                bag.setPos(this.getX(), this.getY(), this.getZ());
-                bag.setDeltaMovement(0.0D, 0.6D, 0.0D);
-                bag.setNeverPickUp();
-                bag.setUnlimitedLifetime();
-                bag.noPhysics = true;
-                this.level.addFreshEntity(bag);
-                ragno.item = bag;
-                ragno.goCrazy();
-            }
+            ragno.goCrazy();
         } else {
             if (this.level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
                 this.spawnAtLocation(ItemRegisterer.BAG_OF_HORRORS.get().getDefaultInstance());
@@ -532,6 +697,17 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
         }
 
         super.die(p_37847_);
+    }
+
+    public int getFreakagerFace() {
+        return this.entityData.get(FREAKAGER_FACE);
+    }
+
+    public void setFreakagerFace(int face) {
+        if (!this.level.isClientSide) {
+            this.entityData.set(FREAKAGER_FACE, face);
+        }
+
     }
 
     private void circleTreat(Entity entity, int number, int amount) {
@@ -547,7 +723,7 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
     public void updateTreatList() {
         if (!this.treats.isEmpty()) {
             for(int i = 0; i < this.treats.size(); ++i) {
-                TrickOrTreatEntity clone = this.treats.get(i);
+                GSTot clone = this.treats.get(i);
                 if (!clone.isAlive()) {
                     this.treats.remove(i);
                     --i;
@@ -562,7 +738,7 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
             List<Mob> list = this.level.getEntitiesOfClass(Mob.class, this.getBoundingBox().inflate(100.0));
 
             for (Mob attacker : list) {
-                TrickOrTreatEntity treat = this.treats.get(this.random.nextInt(this.treats.size()));
+                GSTot treat = this.treats.get(this.random.nextInt(this.treats.size()));
                 if (attacker.getLastHurtByMob() == this) {
                     attacker.setLastHurtByMob(treat);
                 }
@@ -596,8 +772,12 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
         }
     }
 
-    public boolean hurt(DamageSource source, float p_37850_) {
-        return !source.is(DamageTypes.IN_WALL) && super.hurt(source, p_37850_);
+    public boolean hurt(DamageSource source, float amount) {
+        if (source.isIndirect()) {
+            amount /= 2.0F;
+        }
+
+        return !source.is(DamageTypes.IN_WALL) && super.hurt(source, amount);
     }
 
     protected SoundEvent getAmbientSound() {
@@ -616,19 +796,39 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
         this.entityData.set(ANIMATION_STATE, input);
     }
 
+    public int getAnimationState() {
+        return this.entityData.get(ANIMATION_STATE);
+    }
+
     public AnimationState getAnimationState(String input) {
-        if (Objects.equals(input, "bombs")) {
+        if (Objects.equals(input, "intro1")) {
+            return this.intro1AnimationState;
+        } else if (Objects.equals(input, "intro2")) {
+            return this.intro2AnimationState;
+        } else if (Objects.equals(input, "intro3")) {
+            return this.intro3AnimationState;
+        } else if (Objects.equals(input, "axes_start")) {
+            return this.axesStartAnimationState;
+        } else if (Objects.equals(input, "axes_normal")) {
+            return this.axesNormalAnimationState;
+        } else if (Objects.equals(input, "laugh")) {
+            return this.laughAnimationState;
+        } else if (Objects.equals(input, "bombs")) {
             return this.bombsAnimationState;
-        } else if (Objects.equals(input, "axes")) {
-            return this.axesAnimationState;
-        } else if (Objects.equals(input, "fastaxes")) {
-            return this.fastaxesAnimationState;
+        } else if (Objects.equals(input, "minions")) {
+            return this.minionsAnimationState;
+        } else if (Objects.equals(input, "axes_angry")) {
+            return this.angryAxesAnimationState;
         } else if (Objects.equals(input, "potions")) {
             return this.potionsAnimationState;
         } else if (Objects.equals(input, "scythe")) {
             return this.scytheAnimationState;
+        } else if (Objects.equals(input, "catch")) {
+            return this.catchAnimationState;
+        } else if (Objects.equals(input, "trickortreat")) {
+            return this.trickortreatAnimationState;
         } else {
-            return Objects.equals(input, "trickortreat") ? this.trickortreatAnimationState : new AnimationState();
+            return Objects.equals(input, "phase") ? this.phaseAnimationState : new AnimationState();
         }
     }
 
@@ -694,7 +894,7 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
         public void start() {
             BoundFreakager.this.playSound(IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_TRICKORTREAT.get(), 2.0F, BoundFreakager.this.getVoicePitch());
             BoundFreakager.this.setAnimationState(8);
-            BoundFreakager.this.attackType = BoundFreakager.this.TOT_ATTACK;
+            BoundFreakager.this.attackType = 6;
             if (!BoundFreakager.this.level.isClientSide) {
                 BoundFreakager.this.setShowArms(true);
             }
@@ -738,9 +938,9 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
 
         public void start() {
             BoundFreakager.this.setAnimationState(7);
-            BoundFreakager.this.attackType = BoundFreakager.this.SCYTHE_ATTACK;
+            BoundFreakager.this.attackType = 5;
+            BoundFreakager.this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
             if (!BoundFreakager.this.level.isClientSide) {
-                BoundFreakager.this.setShowScythe(true);
                 BoundFreakager.this.setShowArms(true);
             }
 
@@ -759,12 +959,15 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
 
         public void stop() {
             BoundFreakager.this.attackTicks = 0;
+            BoundFreakager.this.catchTicks = 0;
             BoundFreakager.this.attackType = 0;
             BoundFreakager.this.setAnimationState(0);
             if (!BoundFreakager.this.level.isClientSide) {
                 BoundFreakager.this.setShowArms(false);
+                BoundFreakager.this.setShowScythe(false);
             }
 
+            BoundFreakager.this.setItemSlot(EquipmentSlot.MAINHAND, Items.IRON_AXE.getDefaultInstance());
             BoundFreakager.this.scytheCooldown = 200;
             BoundFreakager.this.attackCooldown = 100;
         }
@@ -783,9 +986,8 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
         }
 
         public void start() {
-            BoundFreakager.this.playSound(IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_REVEAL.get(), 2.0F, BoundFreakager.this.getVoicePitch());
             BoundFreakager.this.setAnimationState(6);
-            BoundFreakager.this.attackType = BoundFreakager.this.POTIONS_ATTACK;
+            BoundFreakager.this.attackType = 4;
             if (!BoundFreakager.this.level.isClientSide) {
                 BoundFreakager.this.setShowArms(true);
             }
@@ -793,7 +995,7 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
         }
 
         public boolean canContinueToUse() {
-            return BoundFreakager.this.attackTicks <= 60;
+            return BoundFreakager.this.attackTicks <= 75;
         }
 
         public void tick() {
@@ -816,8 +1018,8 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
         }
     }
 
-    class FastAxesGoal extends Goal {
-        public FastAxesGoal() {
+    class AngryAxesGoal extends Goal {
+        public AngryAxesGoal() {
             this.setFlags(EnumSet.of(Flag.JUMP, Flag.LOOK, Flag.MOVE));
         }
 
@@ -825,20 +1027,23 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
             return BoundFreakager.this.doesAttackMeetNormalRequirements()
                     && BoundFreakager.this.random.nextInt(16) == 0
                     && BoundFreakager.this.axesCooldown < 1
-                    && BoundFreakager.this.getHealth() < BoundFreakager.this.getMaxHealth() / 2.0F;
+                    && BoundFreakager.this.halfHealth();
         }
 
         public void start() {
             BoundFreakager.this.setAnimationState(5);
-            BoundFreakager.this.attackType = BoundFreakager.this.FAST_AXES_ATTACK;
+            BoundFreakager.this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+            BoundFreakager.this.setItemSlot(EquipmentSlot.OFFHAND, ItemStack.EMPTY);
+            BoundFreakager.this.attackType = 3;
             if (!BoundFreakager.this.level.isClientSide) {
                 BoundFreakager.this.setShowArms(true);
+                BoundFreakager.this.setFreakagerFace(2);
             }
 
         }
 
         public boolean canContinueToUse() {
-            return BoundFreakager.this.attackTicks <= 60;
+            return BoundFreakager.this.attackTicks <= 115;
         }
 
         public void tick() {
@@ -854,8 +1059,11 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
             BoundFreakager.this.setAnimationState(0);
             if (!BoundFreakager.this.level.isClientSide) {
                 BoundFreakager.this.setShowArms(false);
+                BoundFreakager.this.setFreakagerFace(0);
             }
 
+            BoundFreakager.this.setItemSlot(EquipmentSlot.MAINHAND, Items.IRON_AXE.getDefaultInstance());
+            BoundFreakager.this.setItemSlot(EquipmentSlot.OFFHAND, ItemStack.EMPTY);
             BoundFreakager.this.axesCooldown = 200;
             BoundFreakager.this.attackCooldown = 100;
         }
@@ -875,15 +1083,18 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
 
         public void start() {
             BoundFreakager.this.setAnimationState(4);
-            BoundFreakager.this.attackType = BoundFreakager.this.AXES_ATTACK;
+            BoundFreakager.this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+            BoundFreakager.this.setItemSlot(EquipmentSlot.OFFHAND, ItemStack.EMPTY);
+            BoundFreakager.this.attackType = 2;
             if (!BoundFreakager.this.level.isClientSide) {
                 BoundFreakager.this.setShowArms(true);
+                BoundFreakager.this.setFreakagerFace(2);
             }
 
         }
 
         public boolean canContinueToUse() {
-            return BoundFreakager.this.attackTicks <= 82;
+            return BoundFreakager.this.attackTicks <= 100;
         }
 
         public void tick() {
@@ -901,6 +1112,9 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
                 BoundFreakager.this.setShowArms(false);
             }
 
+            BoundFreakager.this.setLeftHanded(false);
+            BoundFreakager.this.setItemSlot(EquipmentSlot.MAINHAND, Items.IRON_AXE.getDefaultInstance());
+            BoundFreakager.this.setItemSlot(EquipmentSlot.OFFHAND, ItemStack.EMPTY);
             BoundFreakager.this.axesCooldown = 200;
             BoundFreakager.this.attackCooldown = 100;
         }
@@ -920,7 +1134,7 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
         public void start() {
             BoundFreakager.this.playSound(IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_PUMPKINBOMBS.get(), 2.0F, BoundFreakager.this.getVoicePitch());
             BoundFreakager.this.setAnimationState(3);
-            BoundFreakager.this.attackType = BoundFreakager.this.BOMBS_ATTACK;
+            BoundFreakager.this.attackType = 1;
             if (!BoundFreakager.this.level.isClientSide) {
                 BoundFreakager.this.setShowArms(true);
             }
@@ -928,7 +1142,7 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
         }
 
         public boolean canContinueToUse() {
-            return BoundFreakager.this.attackTicks <= 30;
+            return BoundFreakager.this.attackTicks <= 40;
         }
 
         public void tick() {
@@ -947,6 +1161,52 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
             }
 
             BoundFreakager.this.bombsCooldown = 200;
+            BoundFreakager.this.attackCooldown = 90;
+        }
+    }
+
+    class ThrowMinionsGoal extends Goal {
+        public ThrowMinionsGoal() {
+            this.setFlags(EnumSet.of(Flag.JUMP, Flag.LOOK, Flag.MOVE));
+        }
+
+        public boolean canUse() {
+            return BoundFreakager.this.doesAttackMeetNormalRequirements()
+                    && BoundFreakager.this.random.nextInt(16) == 0
+                    && BoundFreakager.this.minionsCooldown < 1
+                    && BoundFreakager.this.hasFewEnoughMinions();
+        }
+
+        public void start() {
+            BoundFreakager.this.playSound(IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_MINIONS.get(), 2.0F, BoundFreakager.this.getVoicePitch());
+            BoundFreakager.this.setAnimationState(1);
+            BoundFreakager.this.attackType = 7;
+            if (!BoundFreakager.this.level.isClientSide) {
+                BoundFreakager.this.setShowArms(true);
+            }
+
+        }
+
+        public boolean canContinueToUse() {
+            return BoundFreakager.this.attackTicks <= 50;
+        }
+
+        public void tick() {
+            BoundFreakager.this.getNavigation().stop();
+            if (BoundFreakager.this.getTarget() != null) {
+                BoundFreakager.this.getLookControl().setLookAt(BoundFreakager.this.getTarget(), 100.0F, 100.0F);
+            }
+        }
+
+        public void stop() {
+            BoundFreakager.this.attackTicks = 0;
+            BoundFreakager.this.attackType = 0;
+            BoundFreakager.this.setAnimationState(0);
+            if (!BoundFreakager.this.level.isClientSide) {
+                BoundFreakager.this.setShowArms(false);
+            }
+
+            BoundFreakager.this.minionsCooldown = 400;
             BoundFreakager.this.attackCooldown = 100;
         }
     }

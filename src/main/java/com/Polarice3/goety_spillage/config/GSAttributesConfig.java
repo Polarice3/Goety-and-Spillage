@@ -36,12 +36,12 @@ public class GSAttributesConfig {
                         .defineInRange("boundFreakagerAxeDamage", 8.0, 1.0, Double.MAX_VALUE);
                 BUILDER.pop();
                 BUILDER.push("Ragno Servant");
-                RagnoServantHealth = BUILDER.comment("How much Max Health Ragno Servants have, Default: 160.0")
-                        .defineInRange("ragnoServantHealth", 160.0, 1.0, Double.MAX_VALUE);
+                RagnoServantHealth = BUILDER.comment("How much Max Health Ragno Servants have, Default: 200.0")
+                        .defineInRange("ragnoServantHealth", 200.0, 1.0, Double.MAX_VALUE);
                 RagnoServantArmor = BUILDER.comment("How much natural armor points Ragno Servants have, Default: 0.0")
                         .defineInRange("ragnoServantArmor", 0.0, 0.0, Double.MAX_VALUE);
-                RagnoServantDamage = BUILDER.comment("How much damage Ragno Servants deals, Default: 8.0")
-                        .defineInRange("ragnoServantDamage", 8.0, 1.0, Double.MAX_VALUE);
+                RagnoServantDamage = BUILDER.comment("How much damage Ragno Servants deals, Default: 5.0")
+                        .defineInRange("ragnoServantDamage", 5.0, 1.0, Double.MAX_VALUE);
                 BUILDER.pop();
             BUILDER.pop();
         BUILDER.pop();

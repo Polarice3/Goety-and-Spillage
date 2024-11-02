@@ -1,0 +1,53 @@
+{
+  "advancements.goety_spillage.root.title": "溢出艺术",
+  "advancements.goety_spillage.root.description": "是曰够厄溢出",
+  "advancements.goety_spillage.craft_spirit_hand_focus.title": "摊牌时间",
+  "advancements.goety_spillage.craft_spirit_hand_focus.description": "制作灵魂掌聚晶",
+  "advancements.goety_spillage.obtain_dark_potion.title": "你这该死的怪胎！",
+  "advancements.goety_spillage.obtain_dark_potion.description": "获得一瓶至暗药水",
+  "advancements.goety_spillage.obtain_mutation_potion.title": "你何时才能懂事？",
+  "advancements.goety_spillage.obtain_mutation_potion.description": "获得一瓶异变药水",
+  "advancements.goety_spillage.convert_ragno.title": "百因必有果",
+  "advancements.goety_spillage.convert_ragno.description": "把一个村民变异成腐败蜘蛛",
+
+  "entity.goety_spillage.illager_soul": "灾厄灵",
+  "entity.goety_spillage.spirit_hand": "灵魂巨掌",
+  "entity.goety_spillage.villager_victim": "村民",
+  "entity.goety_spillage.bound_freakager": "被绑定的怪人",
+  "entity.goety_spillage.ragno_servant": "腐败蜘蛛",
+  "entity.goety_spillage.soul_beam": "灵魂光束",
+  "entity.goety_spillage.skull_bomb": "颅骨炸弹",
+  "entity.goety_spillage.pumpkin_bomb": "南瓜炸弹",
+  "entity.goety_spillage.thrown_axe": "飞斧",
+  "entity.goety_spillage.freaky_scythe": "怪异飞镰",
+  "entity.goety_spillage.dark_potion": "至暗药水",
+  "entity.goety_spillage.web": "网",
+
+  "item.goety_spillage.bound_freakager_spawn_egg": "被绑定的怪人刷怪蛋",
+
+  "item.goety_spillage.freaky_hat": "怪异帽子",
+  "item.goety_spillage.freaky_robe": "怪异法袍",
+
+  "item.goety_spillage.mutated_flesh": "异变之肉",
+
+  "item.goety_spillage.pumpkin_bomb": "南瓜炸弹",
+  "item.goety_spillage.skull_bomb": "颅骨炸弹",
+
+  "item.goety_spillage.mutation_potion": "异变药水",
+
+  "item.goety_spillage.impish_focus": "顽鬼聚晶",
+  "item.goety_spillage.impish_focus.info": "在施法者周围召唤魂鬼",
+  "item.goety_spillage.spirit_hand_focus": "灵魂掌聚晶",
+  "item.goety_spillage.spirit_hand_focus.info": "召唤两只灵魂巨掌，施法者潜行召唤时会使其靠近自身",
+  "item.goety_spillage.requiem_focus": "安魂聚晶",
+  "item.goety_spillage.requiem_focus.info": "在施法者周围召唤灵魂，冲向目标并造成爆炸",
+  "item.goety_spillage.soul_beam_focus": "灵魂光束聚晶",
+  "item.goety_spillage.soul_beam_focus.info": "射出一道灵魂光束，持续对目标造成伤害",
+
+  "itemGroup.goety_spillage": "够厄溢出",
+
+  "info.goety_spillage.freaky_hat": "骑乘腐败蜘蛛期间，受到的伤害减半",
+  "info.goety_spillage.freaky_hat_axe": "投掷铁斧将只会消耗其耐久而不是将其完全消耗",
+  "info.goety_spillage.freaky_robe_power": "按 %s 键可使用怪人的技能",
+  "info.goety_spillage.freaky_robe_axe": "允许玩家投掷铁斧"
+}

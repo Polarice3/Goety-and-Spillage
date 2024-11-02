@@ -9,6 +9,7 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 
 public class FreakyHatModel extends HumanoidModel<LivingEntity> {
@@ -29,6 +30,8 @@ public class FreakyHatModel extends HumanoidModel<LivingEntity> {
 
         PartDefinition brim2 = hat.addOrReplaceChild("brim2", CubeListBuilder.create().texOffs(24, 34).addBox(-1.5F, -5.0F, 0.0F, 3.0F, 5.0F, 3.0F, new CubeDeformation(0.02F)), PartPose.offsetAndRotation(0.0F, -9.0F, 0.0F, -0.5236F, 0.0F, 0.0F));
 
+        hat.addOrReplaceChild("hat_littlepiece2", CubeListBuilder.create().texOffs(40, 36).addBox(1.5F, -7.0F, -1.5F, 0.0F, 7.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.0F, -4.5F, -1.0F, 0.0F, 0.1745F, 0.2618F));
+
         return LayerDefinition.create(meshdefinition, 64, 64);
     }
 
@@ -36,6 +39,11 @@ public class FreakyHatModel extends HumanoidModel<LivingEntity> {
     public void setupAnim(LivingEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
         super.setupAnim(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
         this.head.visible = !entityIn.isInvisible();
+        float f4 = ageInTicks / 60.0F;
+        float multiplier = 0.1F;
+        ModelPart var10000 = head.getChild("hat").getChild("hat_littlepiece2");
+        var10000.zRot = 0.2618F;
+        var10000.zRot += Mth.cos(f4 * 5.0F) * multiplier;
     }
 
     @Override

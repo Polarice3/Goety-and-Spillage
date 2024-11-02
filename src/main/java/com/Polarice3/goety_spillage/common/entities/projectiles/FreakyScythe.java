@@ -55,7 +55,7 @@ public class FreakyScythe extends MobProjectile {
             if (!this.level.getBlockState(this.blockPosition().above()).isAir()) {
                 this.shouldReturn = true;
             }
-        } else if (this.tickCount > 120 && !this.level.getBlockState(this.blockPosition().above()).isAir()) {
+        } else if (this.tickCount > 40 && !this.goFor.isAlive() || this.tickCount > 120 && !this.level.getBlockState(this.blockPosition().above()).isAir()) {
             this.shouldReturn = true;
         }
 

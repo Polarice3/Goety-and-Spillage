@@ -1,30 +1,36 @@
 package com.Polarice3.goety_spillage.common.events;
 
+import com.Polarice3.Goety.api.entities.IOwned;
+import com.Polarice3.Goety.common.effects.GoetyEffects;
 import com.Polarice3.Goety.common.entities.neutral.AbstractHauntedArmor;
 import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.Polarice3.Goety.utils.CuriosFinder;
 import com.Polarice3.Goety.utils.ItemHelper;
 import com.Polarice3.Goety.utils.MobUtil;
-import com.Polarice3.Goety.utils.SEHelper;
 import com.Polarice3.goety_spillage.GoetySpillage;
 import com.Polarice3.goety_spillage.common.capabilities.spillage.ISpillage;
 import com.Polarice3.goety_spillage.common.capabilities.spillage.SpillageCapHelper;
 import com.Polarice3.goety_spillage.common.capabilities.spillage.SpillageProvider;
 import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
 import com.Polarice3.goety_spillage.common.entities.IAttackMyOwner;
+import com.Polarice3.goety_spillage.common.entities.ally.GSTot;
 import com.Polarice3.goety_spillage.common.entities.ally.RagnoServant;
 import com.Polarice3.goety_spillage.common.entities.neutral.VillagerVictim;
 import com.Polarice3.goety_spillage.common.entities.projectiles.ThrownAxe;
 import com.Polarice3.goety_spillage.common.items.MutationPotion;
 import com.Polarice3.goety_spillage.common.items.curios.FreakyHatItem;
+import com.Polarice3.goety_spillage.common.items.curios.FreakyRobeItem;
 import com.Polarice3.goety_spillage.config.GSMobsConfig;
 import com.Polarice3.goety_spillage.init.GSLootTables;
 import com.yellowbrossproductions.illageandspillage.entities.*;
 import com.yellowbrossproductions.illageandspillage.entities.projectile.AxeEntity;
+import com.yellowbrossproductions.illageandspillage.util.EffectRegisterer;
 import com.yellowbrossproductions.illageandspillage.util.ItemRegisterer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
@@ -45,6 +51,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -97,6 +104,17 @@ public class GSEvents {
                     mob.setTarget(victim.getTrueOwner());
                 } else {
                     mob.setTarget(null);
+                }
+            }
+            if (mob instanceof TrickOrTreatEntity treat){
+                if (treat.getOwner() instanceof IOwned || treat.getOwner() instanceof Player){
+                    Entity convert = MobUtil.convertTo(treat, GSEntityTypes.TRICK_OR_TREAT.get(), false, null);
+                    if (convert instanceof GSTot gsTot){
+                        gsTot.setTrueOwner(treat.getOwner());
+                        gsTot.circleTime = treat.circleTime;
+                        gsTot.bounceTime = treat.bounceTime;
+                        gsTot.setTreat(treat.getTreat());
+                    }
                 }
             }
             if (mob instanceof Villager villager){
@@ -164,12 +182,7 @@ public class GSEvents {
                         .findFirst()
                         .filter(itemEntity -> itemEntity.getItem().is(ItemRegisterer.BAG_OF_HORRORS.get()));
                 if (bag.isPresent()){
-                    bag.get().setPos(player.getX(), player.getY(), player.getZ());
-                    bag.get().setDeltaMovement(0.0D, 0.6D, 0.0D);
-                    bag.get().setNeverPickUp();
-                    bag.get().setUnlimitedLifetime();
-                    bag.get().noPhysics = true;
-                    ragnoServant.item = bag.get();
+                    bag.get().discard();
                     ragnoServant.goCrazy();
                 }
             }
@@ -236,6 +249,15 @@ public class GSEvents {
                         villager.discard();
                     }
                 }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void PotionApplicationEvents(MobEffectEvent.Applicable event) {
+        if (event.getEffectInstance().getEffect() == EffectRegisterer.MUTATION.get()) {
+            if (CuriosFinder.hasCurio(event.getEntity(), itemStack -> itemStack.getItem() instanceof FreakyRobeItem)) {
+                event.setResult(Event.Result.DENY);
             }
         }
     }

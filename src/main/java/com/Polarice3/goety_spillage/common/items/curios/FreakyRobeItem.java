@@ -1,19 +1,23 @@
 package com.Polarice3.goety_spillage.common.items.curios;
 
+import com.Polarice3.Goety.api.entities.ally.IServant;
 import com.Polarice3.Goety.common.effects.GoetyEffects;
 import com.Polarice3.Goety.common.items.curios.SingleStackItem;
 import com.Polarice3.Goety.init.ModKeybindings;
 import com.Polarice3.goety_spillage.common.capabilities.spillage.SpillageCapHelper;
 import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
+import com.Polarice3.goety_spillage.common.entities.ally.GSEyesore;
+import com.Polarice3.goety_spillage.common.entities.ally.GSTot;
+import com.Polarice3.goety_spillage.common.entities.ally.undead.GSFunnybone;
 import com.Polarice3.goety_spillage.common.entities.projectiles.DarkPotion;
 import com.Polarice3.goety_spillage.common.entities.projectiles.FreakyScythe;
 import com.Polarice3.goety_spillage.common.entities.projectiles.GSPumpkinBomb;
 import com.Polarice3.goety_spillage.common.entities.projectiles.GSSkullBomb;
 import com.Polarice3.goety_spillage.config.GSAttributesConfig;
 import com.Polarice3.goety_spillage.config.GSItemConfig;
-import com.yellowbrossproductions.illageandspillage.entities.TrickOrTreatEntity;
-import com.yellowbrossproductions.illageandspillage.init.ModEntityTypes;
+import com.yellowbrossproductions.illageandspillage.util.EffectRegisterer;
 import com.yellowbrossproductions.illageandspillage.util.IllageAndSpillageSoundEvents;
+import com.yellowbrossproductions.illageandspillage.util.ItemRegisterer;
 import com.yellowbrossproductions.illageandspillage.util.PotionRegisterer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
@@ -28,7 +32,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.level.ClipContext;
@@ -49,10 +52,12 @@ public class FreakyRobeItem extends SingleStackItem {
     private static final String POTION_COOLDOWN = "Potion Cooldown";
     private static final String SCYTHE_COOLDOWN = "Scythe Cooldown";
     private static final String TOT_COOLDOWN = "ToT Cooldown";
+    private static final String MINION_COOLDOWN = "Minion Cooldown";
     private static final int BOMBS_ATTACK = 1;
     private static final int POTIONS_ATTACK = 2;
     private static final int SCYTHE_ATTACK = 3;
     private static final int TOT_ATTACK = 4;
+    private static final int MINION_ATTACK = 5;
 
     @Override
     public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
@@ -67,6 +72,7 @@ public class FreakyRobeItem extends SingleStackItem {
                 compound.putInt(POTION_COOLDOWN, 0);
                 compound.putInt(SCYTHE_COOLDOWN, 0);
                 compound.putInt(TOT_COOLDOWN, 0);
+                compound.putInt(MINION_COOLDOWN, 0);
             } else {
                 if (getAttackType(stack) > 0){
                     livingEntity.addEffect(new MobEffectInstance(GoetyEffects.TANGLED.get(), 20, 0, false, false, false));
@@ -88,6 +94,9 @@ public class FreakyRobeItem extends SingleStackItem {
                     if (getAttackTypeCooldown(stack, TOT_COOLDOWN) > 0){
                         decreaseAttackTypeCooldown(stack, TOT_COOLDOWN);
                     }
+                    if (getAttackTypeCooldown(stack, MINION_COOLDOWN) > 0 && hasFewEnoughMinions(livingEntity)){
+                        decreaseAttackTypeCooldown(stack, MINION_COOLDOWN);
+                    }
                 }
                 stopAttacking(stack);
                 summonHorrors(livingEntity, stack);
@@ -97,6 +106,11 @@ public class FreakyRobeItem extends SingleStackItem {
                     } else {
                         SpillageCapHelper.setCasting(livingEntity, getAttackType(stack) > 0);
                     }
+                }
+            }
+            if (!worldIn.isClientSide){
+                if (livingEntity.hasEffect(EffectRegisterer.MUTATION.get())){
+                    livingEntity.removeEffect(EffectRegisterer.MUTATION.get());
                 }
             }
         }
@@ -213,6 +227,8 @@ public class FreakyRobeItem extends SingleStackItem {
                 setAttackType(robe, POTIONS_ATTACK);
             } else if (getAttackTypeCooldown(robe, BOMB_COOLDOWN) < 1) {
                 setAttackType(robe, BOMBS_ATTACK);
+            } else if (getAttackTypeCooldown(robe, MINION_COOLDOWN) < 1 && hasFewEnoughMinions(wearer)) {
+                setAttackType(robe, MINION_ATTACK);
             }
         }
     }
@@ -247,6 +263,14 @@ public class FreakyRobeItem extends SingleStackItem {
                 setAttackTick(robe, 0);
                 setAttackType(robe, 0);
                 setAttackTypeCooldown(robe, BOMB_COOLDOWN, 200);
+                setAttackCooldown(robe, 100);
+            }
+        }
+        if (getAttackType(robe) == MINION_ATTACK) {
+            if (getAttackTick(robe) > 50){
+                setAttackTick(robe, 0);
+                setAttackType(robe, 0);
+                setAttackTypeCooldown(robe, MINION_COOLDOWN, 400);
                 setAttackCooldown(robe, 100);
             }
         }
@@ -298,12 +322,12 @@ public class FreakyRobeItem extends SingleStackItem {
                 int amount = 7;
 
                 for(int i = 0; i < amount; ++i) {
-                    TrickOrTreatEntity treat = ModEntityTypes.TrickOrTreat.get().create(wearer.level);
+                    GSTot treat = GSEntityTypes.TRICK_OR_TREAT.get().create(wearer.level);
                     if (treat != null) {
                         treat.circleTime = i * 20;
                         treat.bounceTime = i;
                         treat.setPos(wearer.getX(), wearer.getY(), wearer.getZ());
-                        treat.setOwner(wearer);
+                        treat.setTrueOwner(wearer);
                         treat.setTreat(wearer.getRandom().nextInt(5) + 1);
                         if (wearer.getTeam() != null) {
                             PlayerTeam playerTeam = wearer.level.getScoreboard().getPlayerTeam(wearer.getTeam().getName());
@@ -317,7 +341,20 @@ public class FreakyRobeItem extends SingleStackItem {
                     }
                 }
             }
+
+            if (getAttackType(robe) == MINION_ATTACK){
+                if (getAttackTick(robe) == 40){
+                    summonMinions(wearer);
+                }
+            }
         }
+    }
+
+    public static boolean hasFewEnoughMinions(LivingEntity wearer) {
+        List<LivingEntity> list = wearer.level.getEntitiesOfClass(LivingEntity.class, wearer.getBoundingBox().inflate(100.0), (predicate) -> {
+            return predicate.isAlive() && predicate instanceof IServant servant && (servant instanceof GSEyesore || servant instanceof GSFunnybone) && servant.getTrueOwner() == wearer;
+        });
+        return list.size() < 3;
     }
 
     public static void circleTreat(Entity entity, int number, int amount) {
@@ -396,10 +433,47 @@ public class FreakyRobeItem extends SingleStackItem {
                 if (potion != null) {
                     potion.setPos(wearer.getX(), wearer.getY() + 2.0D, wearer.getZ());
                     potion.setOwner(wearer);
-                    potion.setItem(PotionUtils.setPotion(new ItemStack(Items.SPLASH_POTION), PotionRegisterer.MUTATION.get()));
+                    int lingerChance = wearer.getHealth() <= wearer.getMaxHealth() / 2.0F ? wearer.getRandom().nextInt(0, 15) : 1;
+                    potion.setItem(PotionUtils.setPotion(new ItemStack(lingerChance == 0 ? ItemRegisterer.DARK_LINGER.get() : ItemRegisterer.DARK_SPLASH.get()), PotionRegisterer.MUTATION.get()));
                     potion.setXRot(-20.0F);
                     potion.setDeltaMovement((-2.0D + wearer.getRandom().nextDouble() + wearer.getRandom().nextDouble() + wearer.getRandom().nextDouble() + wearer.getRandom().nextDouble()) * (getPotionDistance(robe) / 4.0D), 1.0, (-2.0D + wearer.getRandom().nextDouble() + wearer.getRandom().nextDouble() + wearer.getRandom().nextDouble() + wearer.getRandom().nextDouble()) * (getPotionDistance(robe) / 4.0D));
                     wearer.level.addFreshEntity(potion);
+                }
+            }
+        }
+    }
+
+    public static void summonMinions(LivingEntity wearer){
+        wearer.playSound(IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_CYMBAL.get(), 1.0F, 1.0F);
+
+        for(int i = 0; i < 5; ++i) {
+            if (wearer.getHealth() <= wearer.getMaxHealth() / 2.0F) {
+                GSEyesore entity = GSEntityTypes.EYESORE.get().create(wearer.level);
+                if (entity != null) {
+                    entity.setPos(wearer.getX(), wearer.getY() + 0.25, wearer.getZ());
+                    entity.setTrueOwner(wearer);
+                    entity.setTarget(getTarget(wearer));
+                    entity.setFlying(true);
+                    entity.setDeltaMovement((double) (-2 + wearer.getRandom().nextInt(5)) * 0.4, 0.6, (double) (-2 + wearer.getRandom().nextInt(5)) * 0.4);
+                    if (wearer.getTeam() != null) {
+                        wearer.level.getScoreboard().addPlayerToTeam(entity.getStringUUID(), wearer.level.getScoreboard().getPlayerTeam(wearer.getTeam().getName()));
+                    }
+
+                    wearer.level.addFreshEntity(entity);
+                }
+            } else {
+                GSFunnybone entity = GSEntityTypes.FUNNYBONE.get().create(wearer.level);
+                if (entity != null) {
+                    entity.setPos(wearer.getX(), wearer.getY() + 0.25, wearer.getZ());
+                    entity.setTrueOwner(wearer);
+                    entity.setTarget(getTarget(wearer));
+                    entity.setFlying(true);
+                    entity.setDeltaMovement((double) (-2 + wearer.getRandom().nextInt(5)) * 0.4, 0.6, (double) (-2 + wearer.getRandom().nextInt(5)) * 0.4);
+                    if (wearer.getTeam() != null) {
+                        wearer.level.getScoreboard().addPlayerToTeam(entity.getStringUUID(), wearer.level.getScoreboard().getPlayerTeam(wearer.getTeam().getName()));
+                    }
+
+                    wearer.level.addFreshEntity(entity);
                 }
             }
         }

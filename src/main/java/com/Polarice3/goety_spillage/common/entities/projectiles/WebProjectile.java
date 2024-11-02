@@ -1,8 +1,6 @@
 package com.Polarice3.goety_spillage.common.entities.projectiles;
 
-import com.Polarice3.Goety.api.entities.IOwned;
 import com.Polarice3.Goety.utils.MobUtil;
-import com.Polarice3.Goety.utils.ModDamageSource;
 import com.yellowbrossproductions.illageandspillage.entities.IllagerAttack;
 import com.yellowbrossproductions.illageandspillage.util.EffectRegisterer;
 import com.yellowbrossproductions.illageandspillage.util.IllageAndSpillageSoundEvents;
@@ -10,7 +8,6 @@ import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
@@ -33,10 +30,6 @@ public class WebProjectile extends MobProjectile implements IllagerAttack, ItemS
     public void tick() {
         LivingEntity attacker = this.shooter != null ? this.shooter : this;
 
-        DamageSource damageSource = this.damageSources().mobAttack(attacker);
-        if (this.shooter instanceof IOwned owned && owned.getTrueOwner() != null){
-            damageSource = ModDamageSource.summonAttack(attacker, owned.getTrueOwner());
-        }
         List<LivingEntity> list = this.level.getEntitiesOfClass(LivingEntity.class, new AABB(this.getX() - 0.4, this.getY() - 0.4, this.getZ() - 0.4, this.getX() + 0.4, this.getY() + 0.4, this.getZ() + 0.4), Entity::isAlive);
 
         for (LivingEntity target : list) {
@@ -47,7 +40,7 @@ public class WebProjectile extends MobProjectile implements IllagerAttack, ItemS
                     && !target.hasEffect(EffectRegisterer.WEBBED.get())) {
                 this.playSound(IllageAndSpillageSoundEvents.ENTITY_RAGNO_WEB_HIT.get(), 1.0F, this.getVoicePitch());
                 this.emitParticles();
-                target.hurt(damageSource, this.getDamage());
+                target.hurt(this.damageSources().thrown(this, attacker), this.getDamage());
                 if (!this.level.isClientSide) {
                     target.addEffect(new MobEffectInstance(EffectRegisterer.WEBBED.get(), 200, 0, false, false, true));
                 }

@@ -2,15 +2,19 @@ package com.Polarice3.goety_spillage.common.entities.projectiles;
 
 import com.Polarice3.Goety.api.entities.IOwned;
 import com.Polarice3.Goety.utils.MobUtil;
+import com.Polarice3.goety_spillage.common.entities.util.DarkEffectCloud;
+import com.yellowbrossproductions.illageandspillage.util.ItemRegisterer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.axolotl.Axolotl;
 import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
@@ -120,7 +124,7 @@ public class DarkPotion extends ThrownPotion {
     }
 
     private void makeAreaOfEffectCloud(ItemStack p_37538_, Potion p_37539_) {
-        AreaEffectCloud areaeffectcloud = new AreaEffectCloud(this.level, this.getX(), this.getY(), this.getZ());
+        DarkEffectCloud areaeffectcloud = new DarkEffectCloud(this.level, this.getX(), this.getY(), this.getZ());
         Entity entity = this.getOwner();
         if (entity instanceof LivingEntity) {
             areaeffectcloud.setOwner((LivingEntity)entity);
@@ -144,8 +148,8 @@ public class DarkPotion extends ThrownPotion {
         this.level.addFreshEntity(areaeffectcloud);
     }
 
-    private boolean isLingering() {
-        return this.getItem().is(Items.LINGERING_POTION);
+    public boolean isLingering() {
+        return this.getItem().is(ItemRegisterer.DARK_LINGER.get());
     }
 
     protected boolean canHitEntity(Entity pEntity) {

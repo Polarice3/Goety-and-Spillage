@@ -1,11 +1,15 @@
 package com.Polarice3.goety_spillage.common.entities;
 
 import com.Polarice3.goety_spillage.GoetySpillage;
+import com.Polarice3.goety_spillage.common.entities.ally.GSEyesore;
 import com.Polarice3.goety_spillage.common.entities.ally.GSSpiritHand;
+import com.Polarice3.goety_spillage.common.entities.ally.GSTot;
 import com.Polarice3.goety_spillage.common.entities.ally.RagnoServant;
+import com.Polarice3.goety_spillage.common.entities.ally.undead.GSFunnybone;
 import com.Polarice3.goety_spillage.common.entities.ally.undead.bound.BoundFreakager;
 import com.Polarice3.goety_spillage.common.entities.neutral.VillagerVictim;
 import com.Polarice3.goety_spillage.common.entities.projectiles.*;
+import com.Polarice3.goety_spillage.common.entities.util.DarkEffectCloud;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -15,6 +19,13 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class GSEntityTypes {
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPE = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, GoetySpillage.MOD_ID);
+
+    public static final RegistryObject<EntityType<DarkEffectCloud>> DARK_CLOUD_EFFECT = register("dark_cloud_effect",
+            EntityType.Builder.<DarkEffectCloud>of(DarkEffectCloud::new, MobCategory.MISC)
+                    .fireImmune()
+                    .sized(6.0F, 0.5F)
+                    .clientTrackingRange(10)
+                    .updateInterval(Integer.MAX_VALUE));
 
     public static final RegistryObject<EntityType<GSIllagerSoul>> ILLAGER_SOUL = register("illager_soul",
             EntityType.Builder.of(GSIllagerSoul::new, MobCategory.MONSTER)
@@ -38,6 +49,14 @@ public class GSEntityTypes {
             EntityType.Builder.of(RagnoServant::new, MobCategory.MONSTER)
                     .sized(3.2F, 1.8F));
 
+    public static final RegistryObject<EntityType<GSEyesore>> EYESORE = register("eyesore",
+            EntityType.Builder.of(GSEyesore::new, MobCategory.MONSTER)
+                    .sized(0.8F, 0.8F));
+
+    public static final RegistryObject<EntityType<GSFunnybone>> FUNNYBONE = register("funnybone",
+            EntityType.Builder.of(GSFunnybone::new, MobCategory.MONSTER)
+                    .sized(0.5F, 1.2F));
+
     public static final RegistryObject<EntityType<GSSoulBeam>> SOUL_BEAM = register("soul_beam",
             EntityType.Builder.<GSSoulBeam>of(GSSoulBeam::new, MobCategory.MISC)
                     .sized(0.5F, 0.5F)
@@ -53,7 +72,7 @@ public class GSEntityTypes {
                     .sized(0.75F, 0.75F));
 
     public static final RegistryObject<EntityType<ThrownAxe>> THROWN_AXE = register("thrown_axe",
-            EntityType.Builder.of(ThrownAxe::new, MobCategory.MONSTER)
+            EntityType.Builder.<ThrownAxe>of(ThrownAxe::new, MobCategory.MONSTER)
                     .sized(0.2F, 0.2F));
 
     public static final RegistryObject<EntityType<FreakyScythe>> FREAKY_SCYTHE = register("freaky_scythe",
@@ -69,6 +88,10 @@ public class GSEntityTypes {
     public static final RegistryObject<EntityType<WebProjectile>> WEB = register("web",
             EntityType.Builder.of(WebProjectile::new, MobCategory.MONSTER)
                     .sized(0.2F, 0.2F));
+
+    public static final RegistryObject<EntityType<GSTot>> TRICK_OR_TREAT = register("trick_or_treat",
+            EntityType.Builder.of(GSTot::new, MobCategory.MONSTER)
+                    .sized(1.0F, 1.8F));
 
     private static <T extends Entity> RegistryObject<EntityType<T>> register(String p_20635_, EntityType.Builder<T> p_20636_) {
         return ENTITY_TYPE.register(p_20635_, () -> p_20636_.build(GoetySpillage.location(p_20635_).toString()));

@@ -2,7 +2,6 @@ package com.Polarice3.goety_spillage.common.magic.spells;
 
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.magic.Spell;
-import com.Polarice3.Goety.config.MainConfig;
 import com.Polarice3.Goety.utils.SEHelper;
 import com.Polarice3.Goety.utils.WandUtil;
 import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
@@ -68,20 +67,16 @@ public class RequiemSpell extends Spell {
 
     @Override
     public void useSpell(ServerLevel worldIn, LivingEntity entityLiving, ItemStack staff, int castTime) {
-        int soulPower = 1;
-        if (entityLiving instanceof Player player){
-            float rawPercent = (float) SEHelper.getSoulAmountInt(player) / MainConfig.MaxArcaSouls.get();
-            int sePercent = (int) (rawPercent * 10);
-            soulPower += Math.min(8, sePercent);
+        int soulPower = 2;
+
+        if (WandUtil.enchantedFocus(entityLiving)){
+            soulPower += WandUtil.getLevels(ModEnchantments.POTENCY.get(), entityLiving) * 2;
         }
 
-        int potency = 0;
-        if (WandUtil.enchantedFocus(entityLiving)){
-            potency += WandUtil.getLevels(ModEnchantments.POTENCY.get(), entityLiving);
-        }
+        soulPower = Math.min(soulPower, 8);
 
         if (castTime > 10){
-            for(int i = 0; i < potency; ++i) {
+            for(int i = 0; i < soulPower; ++i) {
                 GSIllagerSoul soul = GSEntityTypes.ILLAGER_SOUL.get().create(worldIn);
                 if (soul != null) {
                     soul.setPos(entityLiving.getX() + (double) (-10 - soulPower + worldIn.random.nextInt(20 + soulPower * 2)), entityLiving.getY() + (double) (-1 + worldIn.random.nextInt(10 + soulPower * 2)), entityLiving.getZ() + (double) (-10 - soulPower + worldIn.random.nextInt(20 + soulPower * 2)));
