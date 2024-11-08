@@ -86,14 +86,6 @@ public class GSEyesore extends Summoned {
         return IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_EYESORE_DEATH.get();
     }
 
-    public void setTarget(@Nullable LivingEntity p_21544_) {
-        if (this.getTrueOwner() != null && this.getTrueOwner().isAlive() && this.getTrueOwner() instanceof Mob mob && p_21544_ == mob.getTarget()) {
-            super.setTarget(p_21544_);
-        } else if (this.getTrueOwner() == null || !this.getTrueOwner().isAlive()) {
-            super.setTarget(p_21544_);
-        }
-    }
-
     public void setAnimationState(int state) {
         this.entityData.set(ANIMATION_STATE, state);
     }
@@ -108,7 +100,7 @@ public class GSEyesore extends Summoned {
 
     public void onSyncedDataUpdated(EntityDataAccessor<?> p_21104_) {
         if (ANIMATION_STATE.equals(p_21104_) && this.level().isClientSide) {
-            switch ((Integer)this.entityData.get(ANIMATION_STATE)) {
+            switch (this.entityData.get(ANIMATION_STATE)) {
                 case 0:
                     this.stopAllAnimationStates();
                     break;
@@ -166,14 +158,11 @@ public class GSEyesore extends Summoned {
 
     public void tick() {
         super.tick();
-        if (!this.isFlying() && (Integer)this.entityData.get(ANIMATION_STATE) != 1) {
+        if (!this.isFlying() && this.entityData.get(ANIMATION_STATE) != 1) {
             this.setAnimationState(1);
         }
 
         this.targetPos = this.getTarget() != null && this.getTarget().isAlive() ? this.getTarget().getOnPos() : null;
-        if (this.getTrueOwner() != null && this.getTrueOwner().isAlive() && this.getTrueOwner() instanceof Mob mob && this.getTarget() != mob.getTarget()) {
-            this.setTarget(mob.getTarget());
-        }
 
         for (LivingEntity livingEntity : this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(0.7))){
             if (this.isEffectiveAi() && !MobUtil.areAllies(livingEntity, this)) {

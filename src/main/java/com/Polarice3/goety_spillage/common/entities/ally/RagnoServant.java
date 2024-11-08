@@ -1808,10 +1808,9 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
             if (pSource.is(DamageTypes.STARVE)){
                 return super.hurt(pSource, pAmount);
             }
-            if (this.isAlive() && !pSource.is(DamageTypes.FELL_OUT_OF_WORLD) && !pSource.is(DamageTypes.GENERIC_KILL) && EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(pSource.getEntity())) {
-                boolean source;
+            if (this.isAlive() && !pSource.is(DamageTypes.FELL_OUT_OF_WORLD) && !pSource.is(DamageTypes.GENERIC_KILL) && (!this.isCrazy() || isMobNotInCreativeMode(pSource.getEntity()))) {
                 if (!this.isCrazy()) {
-                    source = !pSource.is(DamageTypeTags.BYPASSES_ARMOR);
+                    boolean source = !pSource.is(DamageTypeTags.BYPASSES_ARMOR);
                     if (!this.isStunned() && source && this.blockTicks < 1 && ((Integer)this.entityData.get(ANIMATION_STATE) == 0 || (Integer)this.entityData.get(ANIMATION_STATE) == 3 || (Integer)this.entityData.get(ANIMATION_STATE) == 15)) {
                         this.playSound(IllageAndSpillageSoundEvents.ENTITY_RAGNO_BLOCK.get(), 2.0F, 1.0F);
                         this.setAnimationState(0);
@@ -1819,10 +1818,14 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
                         this.blockTicks = 10;
                         this.loseStunHealth((int)pAmount, true);
                     }
+
+                    if (pSource.getEntity() instanceof LivingEntity && this.getLastHurtByMob() == null) {
+                        this.setLastHurtByMob((LivingEntity)pSource.getEntity());
+                    }
                 }
 
-                if ((this.stunTick < 10 || this.stunTick >= 105)) {
-                    source = !pSource.is(DamageTypeTags.BYPASSES_ARMOR);
+                if (this.isCrazy() && (this.stunTick < 10 || this.stunTick >= 105)) {
+                    boolean source = !pSource.is(DamageTypeTags.BYPASSES_ARMOR);
                     if (!this.isStunned() && source && this.getAttackType() == 0) {
                         if (this.blockTicks < 1 && (this.entityData.get(ANIMATION_STATE) == 0 || (Integer)this.entityData.get(ANIMATION_STATE) == 3 || (Integer)this.entityData.get(ANIMATION_STATE) == 15)) {
                             this.playSound(IllageAndSpillageSoundEvents.ENTITY_RAGNO_BLOCK.get(), 2.0F, 1.0F);

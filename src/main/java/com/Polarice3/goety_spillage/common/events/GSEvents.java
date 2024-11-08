@@ -137,13 +137,6 @@ public class GSEvents {
                 armor.disableShield(true);
             }
         }
-        if (direct instanceof ImpEntity impEntity){
-            if (impEntity.getOwner() != null && !(impEntity.getOwner() instanceof Raider)){
-                if (MobUtil.areAllies(victim, impEntity.getOwner())){
-                    event.setCanceled(true);
-                }
-            }
-        }
     }
 
     @SubscribeEvent

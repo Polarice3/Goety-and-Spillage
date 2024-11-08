@@ -3,7 +3,6 @@ package com.Polarice3.goety_spillage.common.entities.projectiles;
 import com.Polarice3.Goety.utils.MobUtil;
 import com.Polarice3.goety_spillage.common.entities.ally.RagnoServant;
 import com.yellowbrossproductions.illageandspillage.entities.IllagerAttack;
-import com.yellowbrossproductions.illageandspillage.entities.RagnoEntity;
 import com.yellowbrossproductions.illageandspillage.util.EntityUtil;
 import com.yellowbrossproductions.illageandspillage.util.IllageAndSpillageSoundEvents;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
@@ -137,8 +136,8 @@ public class GSWebNet extends PathfinderMob implements IllagerAttack {
 
         if (this.tickCount > 20 || this.pullingEntity != null) {
             this.shouldReturn = true;
-            if (this.shooter instanceof RagnoEntity) {
-                ((RagnoEntity)this.shooter).setAnimationState(20);
+            if (this.shooter instanceof RagnoServant ragnoServant) {
+                ragnoServant.setAnimationState(20);
             }
         }
 

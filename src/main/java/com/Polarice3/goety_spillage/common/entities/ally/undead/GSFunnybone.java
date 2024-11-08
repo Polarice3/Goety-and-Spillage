@@ -119,14 +119,6 @@ public class GSFunnybone extends Summoned implements ICanBeAnimated {
         this.playSound(SoundEvents.SKELETON_STEP, 0.15F, 1.0F);
     }
 
-    public void setTarget(@Nullable LivingEntity p_21544_) {
-        if (this.getTrueOwner() != null && this.getTrueOwner().isAlive() && this.getTrueOwner() instanceof Mob mob && p_21544_ == mob.getTarget()) {
-            super.setTarget(p_21544_);
-        } else if (this.getTrueOwner() == null || !this.getTrueOwner().isAlive()) {
-            super.setTarget(p_21544_);
-        }
-    }
-
     public void setAnimationState(int state) {
         this.entityData.set(ANIMATION_STATE, state);
     }
@@ -225,10 +217,6 @@ public class GSFunnybone extends Summoned implements ICanBeAnimated {
 
         if (this.introTicks == 22) {
             this.setAnimationState(0);
-        }
-
-        if (this.getTrueOwner() != null && this.getTrueOwner().isAlive() && this.getTrueOwner() instanceof Mob mob && this.getTarget() != mob.getTarget()) {
-            this.setTarget(mob.getTarget());
         }
 
         if (this.isFlying() && this.getAnimationState() != 1) {

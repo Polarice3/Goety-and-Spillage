@@ -223,12 +223,12 @@ public class FreakyRobeItem extends SingleStackItem {
                 setAttackType(robe, TOT_ATTACK);
             } else if (getAttackTypeCooldown(robe, SCYTHE_COOLDOWN) < 1 && getTarget(wearer) != null) {
                 setAttackType(robe, SCYTHE_ATTACK);
+            } else if (getAttackTypeCooldown(robe, MINION_COOLDOWN) < 1 && hasFewEnoughMinions(wearer)) {
+                setAttackType(robe, MINION_ATTACK);
             } else if (getAttackTypeCooldown(robe, POTION_COOLDOWN) < 1) {
                 setAttackType(robe, POTIONS_ATTACK);
             } else if (getAttackTypeCooldown(robe, BOMB_COOLDOWN) < 1) {
                 setAttackType(robe, BOMBS_ATTACK);
-            } else if (getAttackTypeCooldown(robe, MINION_COOLDOWN) < 1 && hasFewEnoughMinions(wearer)) {
-                setAttackType(robe, MINION_ATTACK);
             }
         }
     }
@@ -455,6 +455,11 @@ public class FreakyRobeItem extends SingleStackItem {
                     entity.setTarget(getTarget(wearer));
                     entity.setFlying(true);
                     entity.setDeltaMovement((double) (-2 + wearer.getRandom().nextInt(5)) * 0.4, 0.6, (double) (-2 + wearer.getRandom().nextInt(5)) * 0.4);
+
+                    if (wearer.getTeam() != null) {
+                        wearer.level.getScoreboard().addPlayerToTeam(entity.getStringUUID(), wearer.level.getScoreboard().getPlayerTeam(wearer.getTeam().getName()));
+                    }
+
                     wearer.level.addFreshEntity(entity);
                 }
             } else {
@@ -465,6 +470,11 @@ public class FreakyRobeItem extends SingleStackItem {
                     entity.setTarget(getTarget(wearer));
                     entity.setFlying(true);
                     entity.setDeltaMovement((double) (-2 + wearer.getRandom().nextInt(5)) * 0.4, 0.6, (double) (-2 + wearer.getRandom().nextInt(5)) * 0.4);
+
+                    if (wearer.getTeam() != null) {
+                        wearer.level.getScoreboard().addPlayerToTeam(entity.getStringUUID(), wearer.level.getScoreboard().getPlayerTeam(wearer.getTeam().getName()));
+                    }
+
                     wearer.level.addFreshEntity(entity);
                 }
             }
