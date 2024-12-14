@@ -13,7 +13,6 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -64,7 +63,7 @@ public class GSTot extends Summoned {
     }
 
     public boolean getBounce() {
-        return (Boolean)this.entityData.get(BOUNCE);
+        return this.entityData.get(BOUNCE);
     }
 
     public void setBounce() {
@@ -72,7 +71,7 @@ public class GSTot extends Summoned {
     }
 
     public boolean getGoopy() {
-        return (Boolean)this.entityData.get(GOOPY);
+        return this.entityData.get(GOOPY);
     }
 
     public void setGoopy() {
@@ -118,7 +117,7 @@ public class GSTot extends Summoned {
                         this.setBounce();
                     }
 
-                    this.playSound((SoundEvent) IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_TRICKORTREAT_BOUNCE.get(), 2.0F, 1.9F);
+                    this.playSound(IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_TRICKORTREAT_BOUNCE.get(), 2.0F, 1.9F);
                     this.setDeltaMovement(this.getDeltaMovement().add(0.0, 0.6, 0.0));
                     this.makeTreatParticles();
                 }

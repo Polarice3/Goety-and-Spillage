@@ -35,7 +35,13 @@ public class GSItems {
     public static RegistryObject<Item> PUMPKIN_BOMB = ITEMS.register("pumpkin_bomb", PumpkinBombItem::new);
     public static RegistryObject<Item> SKULL_BOMB = ITEMS.register("skull_bomb", SkullBombItem::new);
 
+    /*public static RegistryObject<Item> CHAGRIN_PACKAGE = ITEMS.register("chagrin_package", () -> new FactoryItem(0));
+    public static RegistryObject<Item> HINDER_PACKAGE = ITEMS.register("hinder_package", () -> new FactoryItem(1));
+    public static RegistryObject<Item> FACTORY_PACKAGE = ITEMS.register("factory_package", () -> new FactoryItem(2));*/
+
     public static RegistryObject<Item> MUTATION_POTION = ITEMS.register("mutation_potion", MutationPotion::new);
+
+    public static RegistryObject<Item> ENGINEER_MALLET = ITEMS.register("engineer_mallet", EngineerMalletItem::new);
 
     //Curios
     public static final RegistryObject<SingleStackItem> FREAKY_HAT = ITEMS.register("freaky_hat", FreakyHatItem::new);
@@ -48,6 +54,9 @@ public class GSItems {
     public static RegistryObject<Item> REQUIEM_FOCUS = ITEMS.register("requiem_focus", () -> new MagicFocus(new RequiemSpell()));
     public static RegistryObject<Item> SOUL_BEAM_FOCUS = ITEMS.register("soul_beam_focus", () -> new MagicFocus(new SoulBeamSpell()));
 
+    //Spawn Eggs
+    public static final RegistryObject<ModSpawnEggItem> BOUND_ENGINEER_SPAWN_EGG = ITEMS.register("bound_engineer_spawn_egg",
+            () -> new ModSpawnEggItem(GSEntityTypes.BOUND_ENGINEER, 0x292c30, 0xbfb177, ModSpawnEggs.egg()));
     public static final RegistryObject<ModSpawnEggItem> BOUND_FREAKAGER_SPAWN_EGG = ITEMS.register("bound_freakager_spawn_egg",
             () -> new ModSpawnEggItem(GSEntityTypes.BOUND_FREAKAGER, 0x202226, 0x3b3e47, ModSpawnEggs.egg()));
 

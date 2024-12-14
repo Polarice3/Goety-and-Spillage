@@ -1,0 +1,43 @@
+{
+  "name": "Engineer's Creations",
+  "icon": "minecraft:dispenser",
+  "category": "goety:spillage/summons",
+  "advancement": "goety_spillage:obtain_engineer_mallet",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "With the Engineer's Mallet, you're able to replicate the Engineer's technological minions."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "These robotic creatures cannot be moved nor healed without the use of potions, certain spells and the mallet itself."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:chagrin_sentry",
+      "scale": 0.5
+    },
+    {
+      "type": "patchouli:text",
+      "text": "An intelligent targeting dispenser that rapidly shoots arrows towards any creature that wishes harm upon their creator. After rapidly shooting around 75 arrows, they have a chance of overheating and are unable to attack for around 9-10 seconds."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:hinder",
+      "scale": 0.5
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Named as to hinder the efforts of foes, these sentries will heal any allied creature near itself. Unfortunately, $(l)they cannot heal the undead.$()"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:factory",
+      "scale": 0.5
+    },
+    {
+      "type": "patchouli:text",
+      "text": "As its name suggests, the factory constantly churns our tiny servants that are either explosive, capable of flying and shooting arrows or tiny illager-like robots that poke at enemies."
+    }
+  ]
+}

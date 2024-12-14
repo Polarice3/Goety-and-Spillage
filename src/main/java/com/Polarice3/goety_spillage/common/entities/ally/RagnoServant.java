@@ -9,6 +9,7 @@ import com.Polarice3.Goety.config.MobsConfig;
 import com.Polarice3.Goety.utils.MobUtil;
 import com.Polarice3.Goety.utils.ModDamageSource;
 import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
+import com.Polarice3.goety_spillage.common.entities.ally.undead.GSFunnybone;
 import com.Polarice3.goety_spillage.common.entities.projectiles.GSPumpkinBomb;
 import com.Polarice3.goety_spillage.common.entities.projectiles.GSWebNet;
 import com.Polarice3.goety_spillage.common.entities.projectiles.WebProjectile;
@@ -19,8 +20,6 @@ import com.Polarice3.goety_spillage.common.network.server.SSetDeltaMovement;
 import com.Polarice3.goety_spillage.config.GSAttributesConfig;
 import com.yellowbrossproductions.illageandspillage.client.model.animation.ICanBeAnimated;
 import com.yellowbrossproductions.illageandspillage.entities.CameraShakeEntity;
-import com.yellowbrossproductions.illageandspillage.entities.FreakagerEntity;
-import com.yellowbrossproductions.illageandspillage.entities.FunnyboneEntity;
 import com.yellowbrossproductions.illageandspillage.entities.VillagerSoulEntity;
 import com.yellowbrossproductions.illageandspillage.init.ModEntityTypes;
 import com.yellowbrossproductions.illageandspillage.particle.ParticleRegisterer;
@@ -142,6 +141,7 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
     private int breathCooldown;
     int introTicks;
     int phaseTicks;
+    public ItemEntity item = null;
     int blockTicks;
     boolean shouldHurtOnTouch;
     public boolean isPlayingIntro;
@@ -630,15 +630,33 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
             ++this.phaseTicks;
         }
 
-        if (this.phaseTicks == 20 || this.phaseTicks == 30 || this.phaseTicks == 63 || this.phaseTicks == 69) {
-            this.playSound(SoundEvents.PLAYER_ATTACK_KNOCKBACK, 2.0F, 1.0F);
+        if (this.phaseTicks == 20) {
+            this.level.addFreshEntity(this.item);
         }
 
-        if (this.phaseTicks == 40 || this.phaseTicks == 77) {
-            this.playSound(IllageAndSpillageSoundEvents.ENTITY_RAGNO_BLOCK.get(), 2.0F, 1.0F);
+        if (this.phaseTicks == 25) {
+            this.playSound(IllageAndSpillageSoundEvents.ENTITY_RAGNO_LEAP.get(), 2.0F, 1.0F);
         }
 
-        if (this.phaseTicks == 116) {
+        if (this.phaseTicks == 26 && this.item != null) {
+            this.makeSpitParticles(this.item);
+            this.item.discard();
+            this.playSound(IllageAndSpillageSoundEvents.ENTITY_RAGNO_EAT.get(), 2.0F, 1.0F);
+        }
+
+        if (this.phaseTicks == 30) {
+            this.playSound(IllageAndSpillageSoundEvents.ENTITY_RAGNO_BLOCK.get(), 2.0F, 1.5F);
+        }
+
+        if (this.phaseTicks == 32 || this.phaseTicks == 40) {
+            this.playSound(IllageAndSpillageSoundEvents.ENTITY_RAGNO_EAT.get(), 2.0F, 1.0F);
+        }
+
+        if (this.phaseTicks == 50) {
+            this.playSound(IllageAndSpillageSoundEvents.ENTITY_RAGNO_PREPARECHARGE.get(), 2.0F, 0.7F);
+        }
+
+        if (this.phaseTicks == 74) {
             if (!this.level.isClientSide) {
                 this.setCrazy(true);
                 this.setRagnoFace(3);
@@ -646,106 +664,20 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
                 this.level.broadcastEntityEvent(this, (byte) 7);
             }
 
-            CameraShakeEntity.cameraShake(this.level(), this.position(), 50.0F, 0.1F, 0, 20);
-            this.playSound(IllageAndSpillageSoundEvents.ENTITY_RAGNO_SLAM.get(), 2.0F, 1.0F);
-            this.playSound(IllageAndSpillageSoundEvents.ENTITY_RAGNO_LEAP.get(), 2.0F, 1.0F);
-            if (!this.level.isClientSide) {
-                float radius = 2.0F;
-                double x = this.getX() + 0.8D * Math.sin((double)(-this.getYRot()) * Math.PI / 180.0) + (double)radius * Math.sin((double)(-this.yHeadRot) * Math.PI / 180.0) * Math.cos((double)(-this.getXRot()) * Math.PI / 180.0);
-                double deltaX = this.getZ() + 0.8D * Math.cos((double)(-this.getYRot()) * Math.PI / 180.0) + (double)radius * Math.cos((double)(-this.yHeadRot) * Math.PI / 180.0) * Math.cos((double)(-this.getXRot()) * Math.PI / 180.0);
-                List<LivingEntity> list = this.level.getEntitiesOfClass(LivingEntity.class, new AABB(x - 2.0, this.getY(), deltaX - 2.0, x + 2.0, this.getY() + 2.0, deltaX + 2.0));
-
-                for (LivingEntity livingEntity : list){
-                    if (!MobUtil.areAllies(livingEntity, this) && livingEntity.isAlive()) {
-                        double x2 = this.getX() - livingEntity.getX();
-                        double extraX = this.getY() - livingEntity.getY();
-                        double extraZ = this.getZ() - livingEntity.getZ();
-                        double motionY = Math.sqrt(x2 * x2 + extraX * extraX + extraZ * extraZ);
-                        if (isMobNotInCreativeMode(livingEntity)) {
-                            livingEntity.hurtMarked = true;
-                            livingEntity.hurt(this.damageSources().mobAttack(this), 15.0F);
-                            livingEntity.setDeltaMovement(livingEntity.getDeltaMovement().add(-x2 / motionY * 5.0 - livingEntity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE), -extraX / motionY * 0.3 - livingEntity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE), -extraZ / motionY * 5.0 - livingEntity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE)));
-                            if (livingEntity.isBlocking()) {
-                                EntityUtil.disableShield(livingEntity, 100);
-                            }
-                        }
-                    }
-                }
-            }
+            CameraShakeEntity.cameraShake(this.level, this.position(), 50.0F, 0.1F, 0, 20);
+            this.playSound(IllageAndSpillageSoundEvents.ENTITY_RAGNO_SCREECH.get(), 2.0F, 1.0F);
         }
 
-        if (this.phaseTicks == 140) {
-            CameraShakeEntity.cameraShake(this.level, this.position(), 50.0F, 0.05F, 0, 30);
-            this.playSound(IllageAndSpillageSoundEvents.ENTITY_RAGNO_SLAM.get(), 2.0F, 1.5F);
-            if (!this.level.isClientSide) {
-                float radius = 2.0F;
-                double x = this.getX() + 0.8D * Math.sin((double)(-this.getYRot()) * Math.PI / 180.0) + (double)radius * Math.sin((double)(-this.yHeadRot) * Math.PI / 180.0) * Math.cos((double)(-this.getXRot()) * Math.PI / 180.0);
-                double deltaX = this.getZ() + 0.8D * Math.cos((double)(-this.getYRot()) * Math.PI / 180.0) + (double)radius * Math.cos((double)(-this.yHeadRot) * Math.PI / 180.0) * Math.cos((double)(-this.getXRot()) * Math.PI / 180.0);
-                List<LivingEntity> list = this.level.getEntitiesOfClass(LivingEntity.class, new AABB(x - 2.0, this.getY(), deltaX - 2.0, x + 2.0, this.getY() + 2.0, deltaX + 2.0));
-
-                for (LivingEntity livingEntity : list){
-                    if (!MobUtil.areAllies(livingEntity, this) && livingEntity.isAlive()) {
-                        double x2 = this.getX() - livingEntity.getX();
-                        double extraX = this.getY() - livingEntity.getY();
-                        double extraZ = this.getZ() - livingEntity.getZ();
-                        double motionY = Math.sqrt(x2 * x2 + extraX * extraX + extraZ * extraZ);
-                        if (isMobNotInCreativeMode(livingEntity)) {
-                            livingEntity.hurtMarked = true;
-                            livingEntity.hurt(this.damageSources().mobAttack(this), 10.0F);
-                            livingEntity.setDeltaMovement(livingEntity.getDeltaMovement().add(-x2 / motionY * 5.0 - livingEntity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE), -extraX / motionY * 0.3 - livingEntity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE), -extraZ / motionY * 5.0 - livingEntity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE)));
-                            if (livingEntity.isBlocking()) {
-                                EntityUtil.disableShield(livingEntity, 100);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        if (this.phaseTicks == 151 || this.phaseTicks == 161) {
-            CameraShakeEntity.cameraShake(this.level, this.position(), 50.0F, 0.05F, 0, 30);
-            this.playSound(IllageAndSpillageSoundEvents.ENTITY_RAGNO_SLAM.get(), 2.0F, 1.4F);
-            if (!this.level.isClientSide) {
-                float radius = 2.0F;
-                double x = this.getX() + 0.8D * Math.sin((double)(-this.getYRot()) * Math.PI / 180.0) + (double)radius * Math.sin((double)(-this.yHeadRot) * Math.PI / 180.0) * Math.cos((double)(-this.getXRot()) * Math.PI / 180.0);
-                double deltaX = this.getZ() + 0.8D * Math.cos((double)(-this.getYRot()) * Math.PI / 180.0) + (double)radius * Math.cos((double)(-this.yHeadRot) * Math.PI / 180.0) * Math.cos((double)(-this.getXRot()) * Math.PI / 180.0);
-                List<LivingEntity> list = this.level.getEntitiesOfClass(LivingEntity.class, new AABB(x - 2.0, this.getY(), deltaX - 2.0, x + 2.0, this.getY() + 2.0, deltaX + 2.0));
-
-                for (LivingEntity livingEntity : list){
-                    if (EntityUtil.canHurtThisMob(livingEntity, this) && livingEntity.isAlive()) {
-                        double x2 = this.getX() - livingEntity.getX();
-                        double extraX = this.getY() - livingEntity.getY();
-                        double extraZ = this.getZ() - livingEntity.getZ();
-                        double motionY = Math.sqrt(x2 * x2 + extraX * extraX + extraZ * extraZ);
-                        if (isMobNotInCreativeMode(livingEntity)) {
-                            livingEntity.hurtMarked = true;
-                            livingEntity.hurt(this.damageSources().mobAttack(this), 10.0F);
-                            livingEntity.setDeltaMovement(livingEntity.getDeltaMovement().add(-x2 / motionY * 5.0 - livingEntity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE), -extraX / motionY * 0.3 - livingEntity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE), -extraZ / motionY * 5.0 - livingEntity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE)));
-                            if (livingEntity.isBlocking()) {
-                                EntityUtil.disableShield(livingEntity, 100);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        if (this.phaseTicks == 183) {
-            this.playSound(IllageAndSpillageSoundEvents.ENTITY_RAGNO_PREPARECHARGE.get(), 2.0F, 1.0F);
-        }
-
-        if (this.phaseTicks == 206) {
-            this.playSound(IllageAndSpillageSoundEvents.ENTITY_RAGNO_LEAP.get(), 2.0F, 1.0F);
-            this.playSound(IllageAndSpillageSoundEvents.ENTITY_RAGNO_COUGH.get(), 2.0F, 1.0F);
-        }
-
-        if (this.phaseTicks == 250) {
+        if (this.phaseTicks >= 84) {
             this.isPlayingPhase = false;
-            this.level.broadcastEntityEvent(this, (byte) 12);
+            if (!this.level.isClientSide) {
+                this.level.broadcastEntityEvent(this, (byte) 12);
+            }
             this.setStunHealth(this.getMaxStunHealth());
             this.setAttackTicks(0);
             this.setAttackType(0);
             this.setAnimationState(0);
+            this.phaseTicks = 0;
         }
 
         if (this.getAttackType() > 0) {
@@ -1110,7 +1042,7 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
                 }
             }
 
-            if ((!this.isCrazy() && this.getOwner() instanceof FreakagerEntity && ((FreakagerEntity)this.getOwner()).halfHealth() || this.isCrazy() && this.halfHealth()) && (this.doesAttackMeetNormalRequirements() && this.getRandom().nextInt(16) == 0 && this.jumpCooldown < 1 || this.getAttackType() == JUMP_ATTACK)) {
+            if ((!this.isCrazy() && this.getFirstPassenger() instanceof LivingEntity livingEntity && MobUtil.healthIsHalved(livingEntity) || this.isCrazy() && this.halfHealth()) && (this.doesAttackMeetNormalRequirements() && this.getRandom().nextInt(16) == 0 && this.jumpCooldown < 1 || this.getAttackType() == JUMP_ATTACK)) {
                 if (this.getAttackTicks() == 0) {
                     this.setAttackType(JUMP_ATTACK);
                     this.setAnimationState(14);
@@ -1480,7 +1412,7 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
                     for(int i = 0; i < 3; ++i) {
                         if (!this.level.isClientSide) {
                             if (this.halfHealth()) {
-                                FunnyboneEntity funnybone = ModEntityTypes.Funnybone.get().create(this.level());
+                                GSFunnybone funnybone = GSEntityTypes.FUNNYBONE.get().create(this.level());
                                 if (funnybone != null) {
                                     funnybone.setPos(this.getX(), this.getY(), this.getZ());
                                     double deltaX = this.getX() - this.getTarget().getX();
@@ -1496,7 +1428,7 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
                                     }
 
                                     funnybone.setDeltaMovement(motionX, motionY, motionZ);
-                                    funnybone.setOwner(this);
+                                    funnybone.setTrueOwner(this);
                                     funnybone.setTarget(this.getTarget());
                                     funnybone.setGoopy(true);
                                     this.level.addFreshEntity(funnybone);
@@ -1549,8 +1481,7 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
                                 float angle = 0.017453292F * this.yBodyRot;
                                 double extraX = radius * Mth.sin((float)(Math.PI + (double)angle));
                                 double extraZ = radius * Mth.cos(angle);
-                                LivingEntity var57 = this.grabbedEntity;
-                                if (var57 instanceof ServerPlayer serverPlayer) {
+                                if (this.grabbedEntity instanceof ServerPlayer serverPlayer) {
                                     this.grabbedEntity.teleportTo(this.getX() + extraX, this.getY() + 0.75, this.getZ() + extraZ);
                                     serverPlayer.connection.send(new ClientboundSetEntityMotionPacket(this.grabbedEntity.getId(), new Vec3(0.0, 0.0, 0.0)));
                                 } else {
@@ -1705,6 +1636,17 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
         }
     }
 
+    public void makeSpitParticles(Entity caught) {
+        if (this.level instanceof ServerLevel serverLevel) {
+            for(int i = 0; i < 12; ++i) {
+                double d0 = -0.5D + this.random.nextGaussian();
+                double d1 = -0.5D + this.random.nextGaussian();
+                double d2 = -0.5D + this.random.nextGaussian();
+                serverLevel.sendParticles(ParticleTypes.SPLASH, caught.getRandomX(0.5D), caught.getRandomY(), caught.getRandomZ(0.5D), 0, d0, d1, d2, 0.5F);
+            }
+        }
+    }
+
     public void makePassiveMutationParticles() {
         if (this.level instanceof ServerLevel serverLevel) {
             serverLevel.sendParticles(ParticleRegisterer.MUTATION_DRIP_PARTICLES.get(), this.getRandomX(0.6), this.getRandomY() + (this.isAlive() ? 0.75 : 0.0), this.getRandomZ(0.6), 1, 0.0F, 0.0F, 0.0F, 0.0F);
@@ -1808,10 +1750,10 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
             if (pSource.is(DamageTypes.STARVE)){
                 return super.hurt(pSource, pAmount);
             }
-            if (this.isAlive() && !pSource.is(DamageTypes.FELL_OUT_OF_WORLD) && !pSource.is(DamageTypes.GENERIC_KILL) && (!this.isCrazy() || isMobNotInCreativeMode(pSource.getEntity()))) {
+            if (pAmount > 0.0F && this.isAlive() && !pSource.is(DamageTypes.FELL_OUT_OF_WORLD) && !pSource.is(DamageTypes.GENERIC_KILL) && (!this.isCrazy() || isMobNotInCreativeMode(pSource.getEntity()))) {
                 if (!this.isCrazy()) {
                     boolean source = !pSource.is(DamageTypeTags.BYPASSES_ARMOR);
-                    if (!this.isStunned() && source && this.blockTicks < 1 && ((Integer)this.entityData.get(ANIMATION_STATE) == 0 || (Integer)this.entityData.get(ANIMATION_STATE) == 3 || (Integer)this.entityData.get(ANIMATION_STATE) == 15)) {
+                    if (!this.isStunned() && source && this.blockTicks < 1 && (this.entityData.get(ANIMATION_STATE) == 0 || this.entityData.get(ANIMATION_STATE) == 3 || this.entityData.get(ANIMATION_STATE) == 15)) {
                         this.playSound(IllageAndSpillageSoundEvents.ENTITY_RAGNO_BLOCK.get(), 2.0F, 1.0F);
                         this.setAnimationState(0);
                         this.setAnimationState(3);
@@ -1819,15 +1761,15 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
                         this.loseStunHealth((int)pAmount, true);
                     }
 
-                    if (pSource.getEntity() instanceof LivingEntity && this.getLastHurtByMob() == null) {
-                        this.setLastHurtByMob((LivingEntity)pSource.getEntity());
+                    if (pSource.getEntity() instanceof LivingEntity livingEntity && this.getLastHurtByMob() == null) {
+                        this.setLastHurtByMob(livingEntity);
                     }
                 }
 
                 if (this.isCrazy() && (this.stunTick < 10 || this.stunTick >= 105)) {
                     boolean source = !pSource.is(DamageTypeTags.BYPASSES_ARMOR);
                     if (!this.isStunned() && source && this.getAttackType() == 0) {
-                        if (this.blockTicks < 1 && (this.entityData.get(ANIMATION_STATE) == 0 || (Integer)this.entityData.get(ANIMATION_STATE) == 3 || (Integer)this.entityData.get(ANIMATION_STATE) == 15)) {
+                        if (this.blockTicks < 1 && (this.entityData.get(ANIMATION_STATE) == 0 || this.entityData.get(ANIMATION_STATE) == 3 || this.entityData.get(ANIMATION_STATE) == 15)) {
                             this.playSound(IllageAndSpillageSoundEvents.ENTITY_RAGNO_BLOCK.get(), 2.0F, 1.0F);
                             this.setAnimationState(0);
                             this.setAnimationState(3);
@@ -1835,8 +1777,8 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
                             this.loseStunHealth((int)pAmount, true);
                         }
 
-                        if (pSource.getEntity() instanceof LivingEntity && this.getLastHurtByMob() == null) {
-                            this.setLastHurtByMob((LivingEntity)pSource.getEntity());
+                        if (pSource.getEntity() instanceof LivingEntity livingEntity && this.getLastHurtByMob() == null) {
+                            this.setLastHurtByMob(livingEntity);
                         }
 
                         return false;
@@ -1851,10 +1793,10 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
     }
 
     public static boolean isMobNotInCreativeMode(Entity entity) {
-        if (!(entity instanceof Player)) {
+        if (!(entity instanceof Player player)) {
             return true;
         } else {
-            return !((Player)entity).isCreative() && !entity.isSpectator();
+            return !player.isCreative() && !entity.isSpectator();
         }
     }
 
@@ -2175,6 +2117,8 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
             this.phaseTicks = 1;
         } else if (pId == 7){
             this.setCrazy(true);
+            this.setRagnoFace(3);
+            this.setShakeMultiplier(20);
         } else if (pId == 8){
             this.setCrazy(false);
         } else if (pId == 9){
@@ -2218,7 +2162,22 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
                     }
                 } else if (!this.isCrazy() && this.phaseTicks < 1 && pPlayer.getMainHandItem().is(ItemRegisterer.BAG_OF_HORRORS.get())){
                     pPlayer.getMainHandItem().shrink(1);
-                    this.goCrazy();
+                    ItemEntity bag = EntityType.ITEM.create(this.level);
+                    if (bag != null) {
+                        bag.setItem(ItemRegisterer.BAG_OF_HORRORS.get().getDefaultInstance());
+                        bag.setPos(this.getX(), this.getY(), this.getZ());
+                        bag.setDeltaMovement(0.0, 0.6, 0.0);
+                        bag.setNeverPickUp();
+                        bag.setUnlimitedLifetime();
+                        bag.noPhysics = true;
+                        this.item = bag;
+                    }
+                    this.stopAttacking();
+
+                    this.isPlayingPhase = true;
+                    this.setAnimationState(2);
+                    this.phaseTicks = 1;
+                    this.level.broadcastEntityEvent(this, (byte) 11);
                 } else if (this.isCrazy() && !this.isDeadOrDying() && this.isNotAttacking() && this.getTarget() == null){
                     ItemEntity bag = EntityType.ITEM.create(this.level);
                     if (bag != null) {

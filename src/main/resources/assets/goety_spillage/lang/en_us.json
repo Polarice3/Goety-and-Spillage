@@ -9,10 +9,23 @@
   "advancements.goety_spillage.obtain_mutation_potion.description": "Obtain a Potion of Mutation.",
   "advancements.goety_spillage.convert_ragno.title": "That Your Actions Have Consequences!",
   "advancements.goety_spillage.convert_ragno.description": "Convert a Villager into a Ragno.",
+  "advancements.goety_spillage.obtain_engineer_mallet.title": "Makin' Bacon",
+  "advancements.goety_spillage.obtain_engineer_mallet.description": "Obtain an Engineer's Mallet. Rarely dropped by Engineers.",
+  "advancements.goety_spillage.summon_bound_engineer.title": "Being Dead Just Got Me Mad!",
+  "advancements.goety_spillage.summon_bound_engineer.description": "Summon a Bound Engineer.",
 
   "entity.goety_spillage.dark_cloud_effect": "Dark Cloud Effect",
+  "entity.goety_spillage.bound_engineer": "Bound Engineer",
+  "entity.goety_spillage.chagrin_sentry": "Chagrin Sentry",
+  "entity.goety_spillage.hinder": "Hinder",
+  "entity.goety_spillage.factory": "Factory",
+  "entity.goety_spillage.beeper": "Beeper",
+  "entity.goety_spillage.sniper": "Sniper",
+  "entity.goety_spillage.poker": "Poker",
   "entity.goety_spillage.illager_soul": "Illager Soul",
+  "entity.goety_spillage.imp": "Imp",
   "entity.goety_spillage.spirit_hand": "Spirit Hand",
+  "entity.goety_spillage.crocofang_servant": "Crocofang",
   "entity.goety_spillage.villager_victim": "Villager",
   "entity.goety_spillage.bound_freakager": "Bound Freakager",
   "entity.goety_spillage.ragno_servant": "Ragno",
@@ -28,6 +41,7 @@
   "entity.goety_spillage.web": "Web",
   "entity.goety_spillage.web_net": "Web Net",
 
+  "item.goety_spillage.bound_engineer_spawn_egg": "Bound Engineer Spawn Egg",
   "item.goety_spillage.bound_freakager_spawn_egg": "Bound Freakager Spawn Egg",
 
   "item.goety_spillage.freaky_hat": "Freaky Hat",
@@ -39,6 +53,7 @@
   "item.goety_spillage.skull_bomb": "Skull Bomb",
 
   "item.goety_spillage.mutation_potion": "Potion of Mutation",
+  "item.goety_spillage.engineer_mallet": "Engineer's Mallet",
 
   "item.goety_spillage.impish_focus": "Impish Focus",
   "item.goety_spillage.impish_focus.info": "Summon Imps in various positions around the caster.",

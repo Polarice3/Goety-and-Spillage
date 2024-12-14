@@ -1,0 +1,24 @@
+{
+  "name": "Crocofang",
+  "icon": "goety:ominous_saddle",
+  "category": "goety:spillage/summons",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "A horrific mixture between a crocodile and an Evoker Fang, these beasts will bite and charge towards the foes of their master."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:crocofang_servant",
+      "scale": 0.5
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety_spillage:thrall/summon_crocofang"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The beast can be healed by feeding it meat while crouching."
+    }
+  ]
+}

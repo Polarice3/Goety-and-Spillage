@@ -24,12 +24,12 @@ side="BOTH"
 [[dependencies.goety_spillage]]
 modId="goety"
 mandatory=true
-versionRange="[2.5.21.2,)"
+versionRange="[2.5.27.4,)"
 ordering="NONE"
 side="BOTH"
 [[dependencies.goety_spillage]]
 modId="illageandspillage"
 mandatory=true
-versionRange="[1.2.0,)"
+versionRange="[1.2.2,)"
 ordering="NONE"
 side="BOTH"

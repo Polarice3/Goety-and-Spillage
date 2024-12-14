@@ -2,12 +2,10 @@ package com.Polarice3.goety_spillage.common.magic.spells;
 
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.magic.Spell;
-import com.Polarice3.Goety.config.MainConfig;
-import com.Polarice3.Goety.utils.SEHelper;
 import com.Polarice3.Goety.utils.WandUtil;
+import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
+import com.Polarice3.goety_spillage.common.entities.projectiles.GSImp;
 import com.Polarice3.goety_spillage.config.GSSpellConfig;
-import com.yellowbrossproductions.illageandspillage.entities.ImpEntity;
-import com.yellowbrossproductions.illageandspillage.init.ModEntityTypes;
 import com.yellowbrossproductions.illageandspillage.util.IllageAndSpillageSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -154,22 +152,15 @@ public class ImpSpell extends Spell {
         } while(blockpos.getY() >= Mth.floor(p_190876_5_) - 1);
 
         if (flag) {
-            int soulPower = 1;
-            if (livingEntity instanceof Player player){
-                float rawPercent = (float) SEHelper.getSoulAmountInt(player) / MainConfig.MaxArcaSouls.get();
-                int sePercent = (int) (rawPercent * 10);
-                soulPower += Math.min(8, sePercent);
-            }
-
             int potency = 0;
             if (WandUtil.enchantedFocus(livingEntity)){
                 potency += WandUtil.getLevels(ModEnchantments.POTENCY.get(), livingEntity);
             }
 
-            ImpEntity imp = ModEntityTypes.Imp.get().create(livingEntity.level);
+            GSImp imp = GSEntityTypes.IMP.get().create(livingEntity.level);
             if (imp != null) {
                 imp.setPos((double) blockpos.getX() + 0.5, (double) blockpos.getY() + d0, (double) blockpos.getZ() + 0.5);
-                imp.setOwner(livingEntity);
+                imp.setTrueOwner(livingEntity);
                 imp.setPower(potency);
                 imp.setTarget(this.getTarget(livingEntity));
                 imp.setWaitTime(time);

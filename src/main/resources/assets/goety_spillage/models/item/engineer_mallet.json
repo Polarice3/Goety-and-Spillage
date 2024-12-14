@@ -1,0 +1,15 @@
+{
+  "loader": "forge:separate_transforms",
+  "gui_light": "front",
+  "base": {
+    "parent": "goety_spillage:item/engineer_mallet_model"
+  },
+  "perspectives": {
+    "gui": {
+      "parent": "goety_spillage:item/engineer_mallet_inventory"
+    },
+    "fixed": {
+      "parent": "goety_spillage:item/engineer_mallet_inventory"
+    }
+  }
+}

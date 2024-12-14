@@ -1,15 +1,17 @@
 package com.Polarice3.goety_spillage.mixin;
 
+import com.Polarice3.Goety.common.entities.neutral.Minion;
 import com.Polarice3.Goety.common.network.ModNetwork;
 import com.Polarice3.Goety.common.network.server.SPlayWorldSoundPacket;
 import com.Polarice3.Goety.utils.CuriosFinder;
 import com.Polarice3.Goety.utils.ItemHelper;
-import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
+import com.Polarice3.Goety.utils.MobUtil;
 import com.Polarice3.goety_spillage.common.entities.projectiles.ThrownAxe;
 import com.Polarice3.goety_spillage.common.items.curios.FreakyHatItem;
 import com.Polarice3.goety_spillage.common.items.curios.FreakyRobeItem;
 import com.Polarice3.goety_spillage.config.GSAttributesConfig;
 import com.yellowbrossproductions.illageandspillage.util.IllageAndSpillageSoundEvents;
+import com.yellowbrossproductions.illageandspillage.util.ItemRegisterer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -25,6 +27,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.List;
 
 @Mixin(Item.class)
 public abstract class ItemMixin {
@@ -49,6 +53,19 @@ public abstract class ItemMixin {
         if (CuriosFinder.hasCurio(playerIn, item -> item.getItem() instanceof FreakyRobeItem)) {
             if (itemstack.is(Items.IRON_AXE)) {
                 playerIn.startUsingItem(handIn);
+                cir.setReturnValue(InteractionResultHolder.consume(itemstack));
+            }
+        }
+        if (itemstack.is(ItemRegisterer.TOTEM_OF_BANISHMENT.get())){
+            List<Minion> list = worldIn.getEntitiesOfClass(Minion.class, playerIn.getBoundingBox().inflate(20.0D), living -> !MobUtil.areAllies(living, playerIn));
+            if (!list.isEmpty()) {
+                for(Minion minion : list) {
+                    minion.deathTime = 19;
+                    minion.kill();
+                }
+
+                playerIn.playSound(IllageAndSpillageSoundEvents.TOTEM_BANISHMENT.get(), 1.0F, 1.0F);
+                playerIn.getCooldowns().addCooldown(itemstack.getItem(), 300);
                 cir.setReturnValue(InteractionResultHolder.consume(itemstack));
             }
         }

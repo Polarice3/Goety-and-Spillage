@@ -2,11 +2,10 @@ package com.Polarice3.goety_spillage;
 
 import com.Polarice3.Goety.utils.ModPotionUtil;
 import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
-import com.Polarice3.goety_spillage.common.entities.ally.GSEyesore;
+import com.Polarice3.goety_spillage.common.entities.ally.CrocofangServant;
 import com.Polarice3.goety_spillage.common.entities.ally.GSSpiritHand;
-import com.Polarice3.goety_spillage.common.entities.ally.GSTot;
 import com.Polarice3.goety_spillage.common.entities.ally.RagnoServant;
-import com.Polarice3.goety_spillage.common.entities.ally.undead.GSFunnybone;
+import com.Polarice3.goety_spillage.common.entities.ally.undead.bound.BoundEngineer;
 import com.Polarice3.goety_spillage.common.entities.ally.undead.bound.BoundFreakager;
 import com.Polarice3.goety_spillage.common.entities.neutral.VillagerVictim;
 import com.Polarice3.goety_spillage.common.entities.projectiles.*;
@@ -16,6 +15,7 @@ import com.Polarice3.goety_spillage.compat.GSOtherModCompat;
 import com.Polarice3.goety_spillage.config.*;
 import com.Polarice3.goety_spillage.init.GSCreativeTab;
 import com.mojang.logging.LogUtils;
+import com.yellowbrossproductions.illageandspillage.entities.*;
 import com.yellowbrossproductions.illageandspillage.util.PotionRegisterer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.alchemy.Potions;
@@ -123,19 +123,28 @@ public class GoetySpillage {
     }
 
     private void setupEntityAttributeCreation(final EntityAttributeCreationEvent event) {
+        event.put(GSEntityTypes.BOUND_ENGINEER.get(), BoundEngineer.setCustomAttributes().build());
+        event.put(GSEntityTypes.CHAGRIN.get(), ChagrinSentryEntity.createAttributes().build());
+        event.put(GSEntityTypes.HINDER.get(), HinderEntity.createAttributes().build());
+        event.put(GSEntityTypes.FACTORY.get(), FactoryEntity.createAttributes().build());
+        event.put(GSEntityTypes.BEEPER.get(), BeeperEntity.createAttributes().build());
+        event.put(GSEntityTypes.SNIPER.get(), SniperEntity.createAttributes().build());
+        event.put(GSEntityTypes.POKER.get(), PokerEntity.createAttributes().build());
         event.put(GSEntityTypes.ILLAGER_SOUL.get(), GSIllagerSoul.setCustomAttributes().build());
+        event.put(GSEntityTypes.IMP.get(), GSImp.setCustomAttributes().build());
         event.put(GSEntityTypes.SPIRIT_HAND.get(), GSSpiritHand.setCustomAttributes().build());
+        event.put(GSEntityTypes.CROCOFANG_SERVANT.get(), CrocofangServant.setCustomAttributes().build());
         event.put(GSEntityTypes.VILLAGER_VICTIM.get(), VillagerVictim.setCustomAttributes().build());
         event.put(GSEntityTypes.BOUND_FREAKAGER.get(), BoundFreakager.setCustomAttributes().build());
         event.put(GSEntityTypes.RAGNO_SERVANT.get(), RagnoServant.setCustomAttributes().build());
-        event.put(GSEntityTypes.EYESORE.get(), GSEyesore.setCustomAttributes().build());
-        event.put(GSEntityTypes.FUNNYBONE.get(), GSFunnybone.setCustomAttributes().build());
+        event.put(GSEntityTypes.EYESORE.get(), EyesoreEntity.createAttributes().build());
+        event.put(GSEntityTypes.FUNNYBONE.get(), FunnyboneEntity.createAttributes().build());
         event.put(GSEntityTypes.SKULL_BOMB.get(), GSSkullBomb.setCustomAttributes().build());
         event.put(GSEntityTypes.PUMPKIN_BOMB.get(), GSPumpkinBomb.setCustomAttributes().build());
         event.put(GSEntityTypes.FREAKY_SCYTHE.get(), FreakyScythe.setCustomAttributes().build());
         event.put(GSEntityTypes.WEB.get(), WebProjectile.setCustomAttributes().build());
         event.put(GSEntityTypes.WEB_NET.get(), GSWebNet.setCustomAttributes().build());
-        event.put(GSEntityTypes.TRICK_OR_TREAT.get(), GSTot.setCustomAttributes().build());
+        event.put(GSEntityTypes.TRICK_OR_TREAT.get(), TrickOrTreatEntity.createAttributes().build());
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event) {

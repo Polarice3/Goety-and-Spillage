@@ -38,6 +38,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.warden.AngerLevel;
 import net.minecraft.world.entity.monster.warden.Warden;
@@ -689,7 +690,17 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
         }
 
         if (this.getVehicle() instanceof RagnoServant ragno && ragno.isAlive()) {
-            ragno.goCrazy();
+            ItemEntity bag = EntityType.ITEM.create(this.level);
+            if (bag != null) {
+                bag.setItem(ItemRegisterer.BAG_OF_HORRORS.get().getDefaultInstance());
+                bag.setPos(this.getX(), this.getY(), this.getZ());
+                bag.setDeltaMovement(0.0D, 0.6D, 0.0D);
+                bag.setNeverPickUp();
+                bag.setUnlimitedLifetime();
+                bag.noPhysics = true;
+                ragno.item = bag;
+                ragno.goCrazy();
+            }
         } else {
             if (this.level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
                 this.spawnAtLocation(ItemRegisterer.BAG_OF_HORRORS.get().getDefaultInstance());

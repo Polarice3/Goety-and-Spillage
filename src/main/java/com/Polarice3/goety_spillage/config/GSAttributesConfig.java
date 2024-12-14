@@ -10,6 +10,14 @@ public class GSAttributesConfig {
     public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
     public static final ForgeConfigSpec SPEC;
 
+    public static final ForgeConfigSpec.ConfigValue<Double> CrocofangServantHealth;
+    public static final ForgeConfigSpec.ConfigValue<Double> CrocofangServantArmor;
+    public static final ForgeConfigSpec.ConfigValue<Double> CrocofangServantDamage;
+
+    public static final ForgeConfigSpec.ConfigValue<Double> BoundEngineerHealth;
+    public static final ForgeConfigSpec.ConfigValue<Double> BoundEngineerArmor;
+    public static final ForgeConfigSpec.ConfigValue<Double> BoundEngineerDamage;
+
     public static final ForgeConfigSpec.ConfigValue<Double> BoundFreakagerHealth;
     public static final ForgeConfigSpec.ConfigValue<Double> BoundFreakagerArmor;
     public static final ForgeConfigSpec.ConfigValue<Double> BoundFreakagerDamage;
@@ -23,6 +31,22 @@ public class GSAttributesConfig {
     static {
         BUILDER.push("Attributes");
             BUILDER.push("Summoned Mobs");
+                BUILDER.push("Crocofang Servant");
+                CrocofangServantHealth = BUILDER.comment("How much Max Health Crocofang Servants have, Default: 40.0")
+                        .defineInRange("crocofangServantHealth", 40.0, 1.0, Double.MAX_VALUE);
+                CrocofangServantArmor = BUILDER.comment("How much natural armor points Crocofang Servants have, Default: 3.0")
+                        .defineInRange("crocofangServantArmor", 3.0, 0.0, Double.MAX_VALUE);
+                CrocofangServantDamage = BUILDER.comment("How much damage Crocofang Servants deals, Default: 8.0")
+                        .defineInRange("crocofangServantDamage", 8.0, 1.0, Double.MAX_VALUE);
+                BUILDER.pop();
+                BUILDER.push("Bound Engineer");
+                BoundEngineerHealth = BUILDER.comment("How much Max Health Bound Engineers have, Default: 30.0")
+                        .defineInRange("boundEngineerHealth", 30.0, 1.0, Double.MAX_VALUE);
+                BoundEngineerArmor = BUILDER.comment("How much natural armor points Bound Engineers have, Default: 0.0")
+                        .defineInRange("boundEngineerArmor", 0.0, 0.0, Double.MAX_VALUE);
+                BoundEngineerDamage = BUILDER.comment("How much damage Bound Engineers deals, Default: 5.0")
+                        .defineInRange("boundEngineerDamage", 5.0, 1.0, Double.MAX_VALUE);
+                BUILDER.pop();
                 BUILDER.push("Bound Freakager");
                 BoundFreakagerHealth = BUILDER.comment("How much Max Health Bound Freakagers have, Default: 160.0")
                         .defineInRange("boundFreakagerHealth", 160.0, 1.0, Double.MAX_VALUE);

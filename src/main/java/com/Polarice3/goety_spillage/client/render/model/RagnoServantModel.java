@@ -1,5 +1,6 @@
 package com.Polarice3.goety_spillage.client.render.model;
 
+import com.Polarice3.goety_spillage.client.render.animation.RagnoServantAnimations;
 import com.Polarice3.goety_spillage.common.entities.ally.RagnoServant;
 import com.yellowbrossproductions.illageandspillage.client.model.RagnoModel;
 import com.yellowbrossproductions.illageandspillage.client.model.animation.RagnoAnimation;
@@ -34,7 +35,7 @@ public class RagnoServantModel<T extends Entity> extends RagnoModel<T> {
             float craziness = (float)ragno.getShakeMultiplier() * 4.0F;
             this.animate(ragno.getAnimationState("intro1"), RagnoAnimation.INTRO1, ageInTicks, ragno.getAnimationSpeed());
             this.animate(ragno.getAnimationState("intro2"), RagnoAnimation.INTRO2, ageInTicks, ragno.getAnimationSpeed());
-            this.animate(ragno.getAnimationState("phase"), RagnoAnimation.PHASE, ageInTicks, ragno.getAnimationSpeed());
+            this.animate(ragno.getAnimationState("phase"), RagnoServantAnimations.PHASE, ageInTicks, ragno.getAnimationSpeed());
             this.animate(ragno.getAnimationState("block"), RagnoAnimation.BLOCK, ageInTicks, ragno.getAnimationSpeed());
             this.animate(ragno.getAnimationState("attack"), RagnoAnimation.ATTACK, ageInTicks, ragno.getAnimationSpeed());
             this.animate(ragno.getAnimationState("web"), RagnoAnimation.WEB, ageInTicks, ragno.getAnimationSpeed());

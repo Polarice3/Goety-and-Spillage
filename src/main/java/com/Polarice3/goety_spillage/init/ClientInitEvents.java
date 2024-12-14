@@ -38,8 +38,17 @@ public class ClientInitEvents {
     @SubscribeEvent
     public static void onRegisterRenders(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(GSEntityTypes.DARK_CLOUD_EFFECT.get(), NoopRenderer::new);
+        event.registerEntityRenderer(GSEntityTypes.BOUND_ENGINEER.get(), BoundEngineerRenderer::new);
+        event.registerEntityRenderer(GSEntityTypes.CHAGRIN.get(), GSChagrinRenderer::new);
+        event.registerEntityRenderer(GSEntityTypes.HINDER.get(), GSHinderRenderer::new);
+        event.registerEntityRenderer(GSEntityTypes.FACTORY.get(), GSFactoryRenderer::new);
+        event.registerEntityRenderer(GSEntityTypes.BEEPER.get(), GSBeeperRenderer::new);
+        event.registerEntityRenderer(GSEntityTypes.SNIPER.get(), GSSniperRenderer::new);
+        event.registerEntityRenderer(GSEntityTypes.POKER.get(), GSPokerRenderer::new);
         event.registerEntityRenderer(GSEntityTypes.ILLAGER_SOUL.get(), GSIllagerSoulRenderer::new);
+        event.registerEntityRenderer(GSEntityTypes.IMP.get(), GSImpRenderer::new);
         event.registerEntityRenderer(GSEntityTypes.SPIRIT_HAND.get(), GSSpiritHandRenderer::new);
+        event.registerEntityRenderer(GSEntityTypes.CROCOFANG_SERVANT.get(), CrocofangServantRenderer::new);
         event.registerEntityRenderer(GSEntityTypes.VILLAGER_VICTIM.get(), VillagerVictimRenderer::new);
         event.registerEntityRenderer(GSEntityTypes.BOUND_FREAKAGER.get(), BoundFreakagerRenderer::new);
         event.registerEntityRenderer(GSEntityTypes.RAGNO_SERVANT.get(), RagnoServantRenderer::new);

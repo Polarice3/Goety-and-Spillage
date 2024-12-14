@@ -1,0 +1,39 @@
+{
+  "parent": "goety_spillage:obtain_engineer_mallet",
+  "display": {
+    "icon": {
+      "item": "goety_spillage:bound_engineer_spawn_egg"
+    },
+    "title": {
+      "translate": "advancements.goety_spillage.summon_bound_engineer.title"
+    },
+    "description": {
+      "translate": "advancements.goety_spillage.summon_bound_engineer.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "criteria": {
+    "summon_bound_engineer": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "goety_spillage:bound_engineer"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:summoned_entity"
+    }
+  },
+  "requirements": [
+    [
+      "summon_bound_engineer"
+    ]
+  ]
+}

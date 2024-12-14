@@ -1,5 +1,6 @@
 package com.Polarice3.goety_spillage.client.render;
 
+import com.Polarice3.goety_spillage.client.render.model.GSSkullBombModel;
 import com.Polarice3.goety_spillage.common.entities.projectiles.GSSkullBomb;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yellowbrossproductions.illageandspillage.client.model.SkullBombModel;
@@ -8,11 +9,11 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-public class GSSkullBombRenderer extends MobRenderer<GSSkullBomb, SkullBombModel<GSSkullBomb>> {
+public class GSSkullBombRenderer extends MobRenderer<GSSkullBomb, GSSkullBombModel<GSSkullBomb>> {
     private static final ResourceLocation TEXTURE = new ResourceLocation("illageandspillage", "textures/entity/freakager/skull_bomb.png");
 
     public GSSkullBombRenderer(EntityRendererProvider.Context renderManagerIn) {
-        super(renderManagerIn, new SkullBombModel<>(renderManagerIn.bakeLayer(SkullBombModel.LAYER_LOCATION)), 0.3F);
+        super(renderManagerIn, new GSSkullBombModel<>(renderManagerIn.bakeLayer(SkullBombModel.LAYER_LOCATION)), 0.3F);
     }
 
     protected void scale(GSSkullBomb p_114046_, PoseStack p_114047_, float p_114048_) {

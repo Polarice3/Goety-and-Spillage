@@ -4,7 +4,6 @@ import com.Polarice3.goety_spillage.common.entities.projectiles.GSWebNet;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.yellowbrossproductions.illageandspillage.client.model.WebNetModel;
-import com.yellowbrossproductions.illageandspillage.entities.projectile.WebNetEntity;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;

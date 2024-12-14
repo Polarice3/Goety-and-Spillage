@@ -1,0 +1,29 @@
+{
+  "name": "Bound Engineer",
+  "icon": "goety_spillage:engineer_mallet",
+  "category": "goety:spillage/summons",
+  "advancement": "goety_spillage:obtain_engineer_mallet",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The genius of the illager's engineers should not go to waste, so you've decided to make use of it for your own purposes."
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety_spillage:thrall/summon_bound_engineer"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The bound spirit of the engineer retains their knowledge in creating and maintaining contraptions as they did in life. While you can use the mallet to make and repair your own machines, it's nice to leave such technological prowess to others through the use of dark magic."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:bound_engineer",
+      "scale": 0.75
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Much like other bound illagers, the returned Engineers can float above ground and is unaffected by gravity. Despite their spiritual looks, they cannot phase through walls and can still be harmed with conventional weaponry. The bound soul can be healed by right-clicking on them with Ectoplasm."
+    }
+  ]
+}

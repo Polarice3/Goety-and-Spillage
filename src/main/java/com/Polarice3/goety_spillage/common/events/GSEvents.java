@@ -1,7 +1,5 @@
 package com.Polarice3.goety_spillage.common.events;
 
-import com.Polarice3.Goety.api.entities.IOwned;
-import com.Polarice3.Goety.common.effects.GoetyEffects;
 import com.Polarice3.Goety.common.entities.neutral.AbstractHauntedArmor;
 import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.Polarice3.Goety.utils.CuriosFinder;
@@ -13,7 +11,6 @@ import com.Polarice3.goety_spillage.common.capabilities.spillage.SpillageCapHelp
 import com.Polarice3.goety_spillage.common.capabilities.spillage.SpillageProvider;
 import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
 import com.Polarice3.goety_spillage.common.entities.IAttackMyOwner;
-import com.Polarice3.goety_spillage.common.entities.ally.GSTot;
 import com.Polarice3.goety_spillage.common.entities.ally.RagnoServant;
 import com.Polarice3.goety_spillage.common.entities.neutral.VillagerVictim;
 import com.Polarice3.goety_spillage.common.entities.projectiles.ThrownAxe;
@@ -29,8 +26,6 @@ import com.yellowbrossproductions.illageandspillage.util.ItemRegisterer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
@@ -43,7 +38,6 @@ import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -164,7 +158,12 @@ public class GSEvents {
                         .findFirst()
                         .filter(itemEntity -> itemEntity.getItem().is(ItemRegisterer.BAG_OF_HORRORS.get()));
                 if (bag.isPresent()){
-                    bag.get().discard();
+                    bag.get().setPos(player.getX(), player.getY(), player.getZ());
+                    bag.get().setDeltaMovement(0.0D, 0.6D, 0.0D);
+                    bag.get().setNeverPickUp();
+                    bag.get().setUnlimitedLifetime();
+                    bag.get().noPhysics = true;
+                    ragnoServant.item = bag.get();
                     ragnoServant.goCrazy();
                 }
             }
@@ -185,6 +184,14 @@ public class GSEvents {
                         LootParams.Builder lootcontext$builder = MobUtil.createLootContext(event.getSource(), livingEntity);
                         LootParams ctx = lootcontext$builder.create(LootContextParamSets.ENTITY);
                         loottable.getRandomItems(ctx).forEach((loot) -> event.getDrops().add(ItemHelper.itemEntityDrop(livingEntity, loot)));
+                    }
+                }
+                if (killed instanceof EngineerEntity engineer) {
+                    if (engineer.level.getServer() != null) {
+                        LootTable loottable = engineer.level.getServer().getLootData().getLootTable(GSLootTables.ENGINEER_EXTRA);
+                        LootParams.Builder lootcontext$builder = MobUtil.createLootContext(event.getSource(), engineer);
+                        LootParams ctx = lootcontext$builder.create(LootContextParamSets.ENTITY);
+                        loottable.getRandomItems(ctx).forEach((loot) -> event.getDrops().add(ItemHelper.itemEntityDrop(engineer, loot)));
                     }
                 }
             }
