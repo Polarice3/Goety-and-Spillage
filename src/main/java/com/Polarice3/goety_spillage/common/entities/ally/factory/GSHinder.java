@@ -1,5 +1,6 @@
 package com.Polarice3.goety_spillage.common.entities.ally.factory;
 
+import com.Polarice3.Goety.common.entities.ally.Summoned;
 import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.Polarice3.Goety.utils.MobUtil;
 import com.yellowbrossproductions.illageandspillage.client.model.animation.ICanBeAnimated;
@@ -25,7 +26,7 @@ import net.minecraft.world.level.Level;
 import java.util.List;
 import java.util.Objects;
 
-public class GSHinder extends Owned implements ICanBeAnimated, IEngineerMachine, IllagerAttack {
+public class GSHinder extends Summoned implements ICanBeAnimated, IEngineerMachine, IllagerAttack {
     private static final EntityDataAccessor<Integer> ANIMATION_STATE = SynchedEntityData.defineId(GSHinder.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> IN_MOTION = SynchedEntityData.defineId(GSHinder.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> HEALING = SynchedEntityData.defineId(GSHinder.class, EntityDataSerializers.BOOLEAN);
@@ -48,6 +49,20 @@ public class GSHinder extends Owned implements ICanBeAnimated, IEngineerMachine,
         this.entityData.define(ANIMATION_STATE, 0);
         this.entityData.define(IN_MOTION, false);
         this.entityData.define(HEALING, false);
+    }
+
+    public boolean canSpawnArmor() {
+        return false;
+    }
+
+    @Override
+    public boolean canUpdateMove() {
+        return false;
+    }
+
+    @Override
+    public boolean isCommanded() {
+        return false;
     }
 
     public void setAnimationState(int state) {

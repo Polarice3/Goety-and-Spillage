@@ -10,7 +10,7 @@
     {
       "type": "patchouli:entity",
       "entity": "goety_spillage:crocofang_servant",
-      "scale": 0.5
+      "scale": 0.25
     },
     {
       "type": "goety:ritual",

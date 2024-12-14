@@ -1,5 +1,6 @@
 package com.Polarice3.goety_spillage.common.entities.ally.factory;
 
+import com.Polarice3.Goety.common.entities.ally.Summoned;
 import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
 import com.yellowbrossproductions.illageandspillage.client.model.animation.ICanBeAnimated;
@@ -28,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class GSFactory extends Owned implements ICanBeAnimated, IEngineerMachine {
+public class GSFactory extends Summoned implements ICanBeAnimated, IEngineerMachine {
     private static final EntityDataAccessor<Integer> ANIMATION_STATE = SynchedEntityData.defineId(GSFactory.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> IN_MOTION = SynchedEntityData.defineId(GSFactory.class, EntityDataSerializers.BOOLEAN);
     public AnimationState introAnimationState = new AnimationState();
@@ -64,6 +65,20 @@ public class GSFactory extends Owned implements ICanBeAnimated, IEngineerMachine
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("SpawnTicks", this.spawnTicks);
+    }
+
+    public boolean canSpawnArmor() {
+        return false;
+    }
+
+    @Override
+    public boolean canUpdateMove() {
+        return false;
+    }
+
+    @Override
+    public boolean isCommanded() {
+        return false;
     }
 
     protected SoundEvent getHurtSound(DamageSource p_184601_1_) {

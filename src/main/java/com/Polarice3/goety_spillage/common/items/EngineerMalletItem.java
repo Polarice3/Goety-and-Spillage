@@ -1,9 +1,11 @@
 package com.Polarice3.goety_spillage.common.items;
 
 import com.Polarice3.Goety.api.entities.IOwned;
+import com.Polarice3.Goety.api.entities.ally.IServant;
 import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.Polarice3.Goety.common.network.ModNetwork;
 import com.Polarice3.Goety.common.network.server.SPlayPlayerSoundPacket;
+import com.Polarice3.Goety.config.SpellConfig;
 import com.Polarice3.Goety.utils.ItemHelper;
 import com.Polarice3.Goety.utils.SEHelper;
 import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
@@ -17,6 +19,7 @@ import com.yellowbrossproductions.illageandspillage.util.IllageAndSpillageSoundE
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -69,17 +72,37 @@ public class EngineerMalletItem extends Item implements Vanishable {
 
     @Override
     public boolean onLeftClickEntity(ItemStack stack, Player player, Entity entity) {
-        if (!SEHelper.getFocusCoolDown(player).isOnCooldown(this)) {
-            if (entity instanceof Owned owned) {
-                if (owned instanceof IEngineerMachine && owned.getMasterOwner() == player) {
-                    player.playSound(IllageAndSpillageSoundEvents.ENTITY_ENGINEER_REPAIR.get(), 2.0F, player.getVoicePitch());
-                    owned.heal(5.0F);
-                    ItemHelper.hurtAndBreak(stack, 1, player);
-                    SEHelper.addCooldown(player, this, 100);
+        if (!player.isShiftKeyDown()) {
+            if (!SEHelper.getFocusCoolDown(player).isOnCooldown(this)) {
+                if (entity instanceof Owned owned) {
+                    if (owned instanceof IEngineerMachine && owned.getMasterOwner() == player) {
+                        player.playSound(IllageAndSpillageSoundEvents.ENTITY_ENGINEER_REPAIR.get(), 2.0F, player.getVoicePitch());
+                        owned.heal(5.0F);
+                        ItemHelper.hurtAndBreak(stack, 1, player);
+                        SEHelper.addCooldown(player, this, 100);
+                    }
+                }
+            }
+        } else if (SpellConfig.OwnerHitKill.get()) {
+            if (entity instanceof IServant servant) {
+                if (servant instanceof IEngineerMachine && servant.getMasterOwner() == player) {
+                    servant.tryKill(player);
                 }
             }
         }
         return super.onLeftClickEntity(stack, player, entity);
+    }
+
+    @Override
+    public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity entity, InteractionHand hand) {
+        if (!SpellConfig.OwnerHitKill.get()){
+            if (entity instanceof IServant servant) {
+                if (servant instanceof IEngineerMachine && servant.getMasterOwner() == player) {
+                    servant.tryKill(player);
+                }
+            }
+        }
+        return super.interactLivingEntity(stack, player, entity, hand);
     }
 
     public List<LivingEntity> getMachines(Level level, Player player) {

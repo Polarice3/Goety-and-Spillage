@@ -1,6 +1,7 @@
 package com.Polarice3.goety_spillage.common.entities.ally.factory;
 
 import com.Polarice3.Goety.common.entities.ai.SummonTargetGoal;
+import com.Polarice3.Goety.common.entities.ally.Summoned;
 import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.yellowbrossproductions.illageandspillage.client.model.animation.ICanBeAnimated;
 import com.yellowbrossproductions.illageandspillage.entities.IllagerAttack;
@@ -34,7 +35,7 @@ import net.minecraft.world.level.Level;
 
 import java.util.Objects;
 
-public class GSChagrin extends Owned implements RangedAttackMob, IEngineerMachine, ICanBeAnimated, IllagerAttack {
+public class GSChagrin extends Summoned implements RangedAttackMob, IEngineerMachine, ICanBeAnimated, IllagerAttack {
     private static final EntityDataAccessor<Integer> ANIMATION_STATE = SynchedEntityData.defineId(GSChagrin.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Float> PARTIAL_TICKS = SynchedEntityData.defineId(GSChagrin.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Boolean> IN_MOTION = SynchedEntityData.defineId(GSChagrin.class, EntityDataSerializers.BOOLEAN);
@@ -77,6 +78,20 @@ public class GSChagrin extends Owned implements RangedAttackMob, IEngineerMachin
         this.entityData.define(SHOW_LOCKER, false);
         this.entityData.define(STUN_TICKS, 0);
         this.entityData.define(PARTIAL_TICKS, 0.0F);
+    }
+
+    public boolean canSpawnArmor() {
+        return false;
+    }
+
+    @Override
+    public boolean canUpdateMove() {
+        return false;
+    }
+
+    @Override
+    public boolean isCommanded() {
+        return false;
     }
 
     public void setAnimationState(int state) {

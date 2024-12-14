@@ -6,12 +6,12 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "You've obtained the mallet of those pesky yet ingenious engineers that, somehow, allows you to create and maintain your own band of machines."
+      "text": "You've obtained the mallet of those pesky yet ingenious engineers that, somehow, allows you to create and maintain your own band of machines. The mallet is too small to function the same as hammers, but right-clicking with it creates one of three of the engineer's machines."
     },
     {
       "type": "patchouli:spotlight",
       "item": "goety_spillage:engineer_mallet",
-      "text": "The mallet is too small to function the same as hammers, but right-clicking with it creates one of three of the engineer's machines. Left-clicking one of said machines with it will repair 2 and half hearts of damage. The mallet can be repaired on an anvil with an Iron Ingot."
+      "text": "Left-clicking one of said machines with it will repair 2 and half hearts of damage. Shift-left (or shift-right if 'ownerHitKill' is set to false) clicking one of the three machines owned by you will instantly destroy it. The mallet can be repaired on an anvil with an Iron Ingot."
     }
   ],
   "extra_recipe_mappings": {
