@@ -1,0 +1,7 @@
+{
+  "name": "聚晶",
+  "description": "更多能施展的法术！",
+  "icon": "goety_spillage:impish_focus",
+  "parent": "goety:spillage",
+  "sortnum": 2
+}

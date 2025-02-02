@@ -1,0 +1,31 @@
+{
+  "name": "怪人套装",
+  "icon": "goety_spillage:freaky_robe",
+  "category": "goety:spillage/crafts",
+  "advancement": "goety_spillage:obtain_bag_of_horrors",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "可怖之袋总是让你感到一丝...捉摸不定，以普遍理性而言，你决定复制怪人的服装并把它穿在身上"
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety_spillage:freaky_robe"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety_spillage:freaky_hat"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "长袍不仅让你看上去像个怪胎，还允许你在没有手握可怖之袋的情况下使用它的能力（需按下与打开女巫袍一致的键位），还允许你投掷铁斧（不幸的是，这不支持除铁斧以外的其它斧）"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "这顶帽子不仅很拽，而且还会在你投掷铁斧改为消耗其耐久，而非消耗铁斧本身，此外，如果你以某种方式骑上了腐败蜘蛛的话，你受到的伤害也会随之减半"
+    }
+  ],
+  "extra_recipe_mappings": {
+    "goety_spillage:freaky_robe": 1
+  }
+}

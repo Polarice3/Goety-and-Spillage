@@ -254,7 +254,7 @@ public class GSFunnybone extends Summoned implements ICanBeAnimated {
                     CompoundTag tag = this.getPersistentData().getCompound("Rotation");
                     projectile.readAdditionalSaveData(tag);
                     projectile.isGoopy = this.isGoopy();
-                    projectile.setShooter(this);
+                    projectile.setOwner(this);
                     this.level.addFreshEntity(projectile);
                 }
             }

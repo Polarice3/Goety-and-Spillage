@@ -784,8 +784,8 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
     }
 
     public boolean hurt(DamageSource source, float amount) {
-        if (source.isIndirect()) {
-            amount /= 2.0F;
+        if (this.getVehicle() instanceof RagnoServant && !((RagnoServant)this.getVehicle()).isStunned() && (!(source.getEntity() instanceof Player) || !((Player)source.getEntity()).getAbilities().instabuild)) {
+            amount = (float)((double)amount / 3.5);
         }
 
         return !source.is(DamageTypes.IN_WALL) && super.hurt(source, amount);

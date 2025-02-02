@@ -8,6 +8,7 @@ import com.yellowbrossproductions.illageandspillage.particle.ParticleRegisterer;
 import com.yellowbrossproductions.illageandspillage.util.EffectRegisterer;
 import com.yellowbrossproductions.illageandspillage.util.IllageAndSpillageSoundEvents;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -16,11 +17,10 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.AnimationState;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.util.DefaultRandomPos;
@@ -35,6 +35,7 @@ import java.util.Objects;
 public class GSEyesore extends Summoned {
     private static final EntityDataAccessor<Integer> ANIMATION_STATE = SynchedEntityData.defineId(GSEyesore.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> FLYING = SynchedEntityData.defineId(GSEyesore.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> SCARED = SynchedEntityData.defineId(GSEyesore.class, EntityDataSerializers.BOOLEAN);
     public AnimationState slitherAnimationState = new AnimationState();
     public AnimationState flyAnimationState = new AnimationState();
     private BlockPos targetPos;
@@ -47,6 +48,7 @@ public class GSEyesore extends Summoned {
         super.registerGoals();
         this.goalSelector.addGoal(0, new StareAtDeadFreakGoal(this));
         this.goalSelector.addGoal(0, new FloatGoal(this));
+        this.goalSelector.addGoal(0, new AvoidRagnoGoal(this, 16.0F, 0.6499999761581421, 0.6000000238418579));
         this.goalSelector.addGoal(1, new SlitherGoal(this, 0.5));
     }
 
@@ -62,6 +64,7 @@ public class GSEyesore extends Summoned {
         super.defineSynchedData();
         this.entityData.define(ANIMATION_STATE, 0);
         this.entityData.define(FLYING, false);
+        this.entityData.define(SCARED, false);
     }
 
     @Override
@@ -144,6 +147,15 @@ public class GSEyesore extends Summoned {
         return shouldHurt;
     }
 
+    public void makeCryParticles() {
+        if (this.level instanceof ServerLevel serverLevel) {
+            double d0 = -0.5 + this.random.nextGaussian();
+            double d1 = -0.5 + this.random.nextGaussian();
+            double d2 = -0.5 + this.random.nextGaussian();
+            serverLevel.sendParticles(ParticleTypes.SPLASH, this.getRandomX(0.5), this.getRandomY(), this.getRandomZ(0.5), 0, d0, d1, d2, 0.5F);
+        }
+    }
+
     public void makeBloodParticles() {
         if (this.level instanceof ServerLevel serverLevel) {
             for(int i = 0; i < 5; ++i) {
@@ -173,6 +185,10 @@ public class GSEyesore extends Summoned {
             this.setFlying(false);
         }
 
+        if (this.isScared()) {
+            this.makeCryParticles();
+        }
+
     }
 
     public boolean isFlying() {
@@ -182,6 +198,14 @@ public class GSEyesore extends Summoned {
     public void setFlying(boolean flying) {
         this.entityData.set(FLYING, flying);
         this.setAnimationState(flying ? 2 : 1);
+    }
+
+    public boolean isScared() {
+        return this.entityData.get(SCARED);
+    }
+
+    public void setScared(boolean scared) {
+        this.entityData.set(SCARED, scared);
     }
 
     protected void dealDamage(LivingEntity entity) {
@@ -197,6 +221,28 @@ public class GSEyesore extends Summoned {
 
     public void knockback(double p_147241_, double p_147242_, double p_147243_) {
         super.knockback(p_147241_ * 1.5, p_147242_ * 2.0, p_147243_ * 1.5);
+    }
+
+    class AvoidRagnoGoal extends AvoidEntityGoal {
+        public AvoidRagnoGoal(PathfinderMob p_25033_, float p_25035_, double p_25036_, double p_25037_) {
+            super(p_25033_, RagnoServant.class, p_25035_, p_25036_, p_25037_, (predicate) -> {
+                return isEntityCrazyRagno((Entity)predicate);
+            });
+        }
+
+        public static boolean isEntityCrazyRagno(Entity entity) {
+            return entity instanceof RagnoServant && ((RagnoServant)entity).isCrazy();
+        }
+
+        public void start() {
+            super.start();
+            GSEyesore.this.setScared(true);
+        }
+
+        public void stop() {
+            super.stop();
+            GSEyesore.this.setScared(false);
+        }
     }
 
     class SlitherGoal extends Goal {

@@ -1,0 +1,20 @@
+{
+  "name": "工程师锤",
+  "icon": "goety_spillage:engineer_mallet",
+  "category": "goety:spillage/crafts",
+  "advancement": "goety_spillage:obtain_engineer_mallet",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "你设法拿到了那些聪明但讨人厌的工程师的锤子，不知为何，他允许你创建并维护属于自己的机械，尽管这小锤无法作为武器挥动，但右键点击时你可以生成工程师可搭建的三种机械之一"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "goety_spillage:engineer_mallet",
+      "text": "左键单击一台受损的机械可以为其恢复5点生命值，潜行时左键（如果配置文件中的ownerHitKill被禁用请改用右键）点击你拥有的机械即可将其销毁，在铁砧上使用铁锭来修复你的工程师锤"
+    }
+  ],
+  "extra_recipe_mappings": {
+    "goety_spillage:engineer_mallet": 1
+  }
+}

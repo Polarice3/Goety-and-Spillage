@@ -1,0 +1,18 @@
+{
+  "name": "顽鬼聚晶",
+  "icon": "goety_spillage:impish_focus",
+  "category": "goety:spillage/focus",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "该聚晶允许你召唤出下界炽热的灵魂，它们会在被迫扯回下界之前飞出并让敌人如临地狱"
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety_spillage:focus/impish_focus"
+    }
+  ],
+  "extra_recipe_mappings": {
+    "goety_spillage:impish_focus": 1
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "被绑定的怪人",
+  "icon": "illageandspillage:bag_of_horrors",
+  "category": "goety:spillage/summons",
+  "advancement": "goety_spillage:obtain_bag_of_horrors",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "可怖之袋也盛有那个怪胎的灵魂，这可以为袋子的魔法注入新的力量，在短暂冷却的前提下无限量地投掷炸弹、零食和其它恐怖的小玩意"
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety_spillage:thrall/summon_bound_freakager"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "好吧，你不想浪费它的灵魂，你决定让这位可怜的生物学家起死回生...是不是有些绑定了？"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:bound_freakager",
+      "scale": 0.75
+    },
+    {
+      "type": "patchouli:text",
+      "text": "就像其它被绑定的灾厄村民一样，它可以不受重力影响地在地面上飘浮，尽管它看上去像是灵体，但它并没有穿墙能力且仍会被常规武器伤害到，手持灵质右键可以治疗它"
+    }
+  ]
+}

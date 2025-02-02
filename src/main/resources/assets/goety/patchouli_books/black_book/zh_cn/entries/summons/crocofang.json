@@ -1,0 +1,24 @@
+{
+  "name": "鳄牙兽",
+  "icon": "goety:ominous_saddle",
+  "category": "goety:spillage/summons",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "这些野兽是鳄鱼和唤魔尖牙的恐怖嵌合体，它们会撕咬，或是冲向它们主人的敌人再撕咬"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:crocofang_servant",
+      "scale": 0.25
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety_spillage:thrall/summon_crocofang"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "在潜行时手持肉右键喂食即可恢复它的血量"
+    }
+  ]
+}

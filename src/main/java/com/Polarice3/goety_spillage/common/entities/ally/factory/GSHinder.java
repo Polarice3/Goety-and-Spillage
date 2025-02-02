@@ -194,7 +194,7 @@ public class GSHinder extends Summoned implements ICanBeAnimated, IEngineerMachi
                     for (LivingEntity entity : list) {
                         this.makeParticleTrail(this.getX(), this.getY() + 0.6, this.getZ(), entity.getBoundingBox().getCenter().x, entity.getBoundingBox().getCenter().y, entity.getBoundingBox().getCenter().z);
                         this.setHealing(true);
-                        if (this.tickCount % 5 == 0) {
+                        if (this.tickCount % 2 == 0) {
                             this.playSound(IllageAndSpillageSoundEvents.ENTITY_ENGINEER_HINDER_HEAL.get(), 0.5F, 2.0F);
                             entity.heal(1.0F);
                         }

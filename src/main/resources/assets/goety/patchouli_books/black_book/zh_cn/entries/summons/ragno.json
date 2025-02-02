@@ -1,0 +1,40 @@
+{
+  "name": "腐败蜘蛛",
+  "icon": "goety_spillage:mutation_potion",
+  "category": "goety:spillage/summons",
+  "advancement": "goety_spillage:obtain_bag_of_horrors",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "这个饱经折磨的生物是灾厄村民们创造过的最可怕的生物，它是在你目睹一个村民被喂下异变药水后所产生的"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:ragno_servant",
+      "scale": 0.5
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety_spillage:mutation_potion"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "一旦你得到这支令人讨厌的药水，你就只需要想着把它塞进一位村民的喉咙里（右键单击），然后就可以观看即兴烟花秀了"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "腐败蜘蛛初始只有三种攻击模式（被骑乘时则只有两种），一种时在扑向目标时砸下前肢，一种是向目标喷吐蛛网，未被骑乘时，它还可以钻入地下并挖掘隧道靠近目标，而后显现并对非友方目标造成伤害"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "给予腐败蜘蛛一个可怖之袋（或是在骑着它死亡时掉落一个恐怖之袋），它会吞下该物品并获得各种新能力。不仅能通过袋子制造南瓜炸弹或捣蛋糖果，还可以向敌人发起冲锋，击倒沿途的非友方生物。"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "只需要在腐败蜘蛛未进行攻击时潜行并右键单击它，即可从它口中取回可怖之袋，你也可以通过喂肉来治疗腐败蜘蛛"
+    }
+  ],
+  "extra_recipe_mappings": {
+    "goety_spillage:mutation_potion": 3
+  }
+}

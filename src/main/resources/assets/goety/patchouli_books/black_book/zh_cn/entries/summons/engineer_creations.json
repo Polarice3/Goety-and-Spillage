@@ -1,0 +1,43 @@
+{
+  "name": "工程师的机械",
+  "icon": "minecraft:dispenser",
+  "category": "goety:spillage/summons",
+  "advancement": "goety_spillage:obtain_engineer_mallet",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "有了工程师锤，你就可以把工程师的技术成果通通复现出来"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "如果不使用药水、某些法术或工程师锤本身，这些机械便无法移动或受到治愈"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:chagrin_sentry",
+      "scale": 0.5
+    },
+    {
+      "type": "patchouli:text",
+      "text": "一种可以智能瞄准目标的全自动发射器，可以快速向任何想要伤害其创造者的生物射箭，在连射75根箭后，它可能会因过热而在9~10秒内无法射击"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:hinder",
+      "scale": 0.5
+    },
+    {
+      "type": "patchouli:text",
+      "text": "这些哨兵可以让敌人的努力前功尽弃，它能治愈周围的友方单位，但不幸的是，$(l)它们无法治疗亡灵生物.$()"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:factory",
+      "scale": 0.5
+    },
+    {
+      "type": "patchouli:text",
+      "text": "正如它的名字那样，这座工厂能够不断地生成小小的机器人仆从，这些机器人仆从有的具有爆炸性，有的够边飞边能射箭，也有的可以近战攻击敌人"
+    }
+  ]
+}

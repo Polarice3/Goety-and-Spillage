@@ -52,5 +52,23 @@
   "info.goety_spillage.freaky_hat": "骑乘腐败蜘蛛期间，受到的伤害减半",
   "info.goety_spillage.freaky_hat_axe": "投掷铁斧将只会消耗其耐久而不是将其完全消耗",
   "info.goety_spillage.freaky_robe_power": "按 %s 键可使用怪人的技能",
-  "info.goety_spillage.freaky_robe_axe": "允许玩家投掷铁斧"
+  "info.goety_spillage.freaky_robe_axe": "允许玩家投掷铁斧",
+
+  "advancements.goety_spillage.obtain_engineer_mallet.title": "猪肉培根！",
+  "advancements.goety_spillage.obtain_engineer_mallet.description": "获得一把工程师锤，工程师掉落它的概率很低",
+  "advancements.goety_spillage.summon_bound_engineer.title": "身死令我气愤",
+  "advancements.goety_spillage.summon_bound_engineer.description": "召唤一名被绑定的工程师",
+  "entity.goety_spillage.crocofang_servant": "鳄牙兽",
+  "entity.goety_spillage.dark_cloud_effect": "至暗药水云",
+  "entity.goety_spillage.bound_engineer": "被绑定的工程师",
+  "entity.goety_spillage.chagrin_sentry": "懊恼哨兵",
+  "entity.goety_spillage.hinder": "治愈者",
+  "entity.goety_spillage.factory": "兵工厂",
+  "entity.goety_spillage.beeper": "传呼自爆机",
+  "entity.goety_spillage.sniper": "狙击手",
+  "entity.goety_spillage.poker": "近战师",
+  "entity.goety_spillage.imp": "灵魂",
+  "entity.goety_spillage.web_net": "网缚",
+  "item.goety_spillage.bound_engineer_spawn_egg": "被绑定的工程师刷怪蛋",
+  "item.goety_spillage.engineer_mallet": "工程师锤"
 }

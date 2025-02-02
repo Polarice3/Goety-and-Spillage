@@ -31,7 +31,7 @@ public class FreakyScythe extends MobProjectile {
     public void tick() {
         this.setNoGravity(true);
         LivingEntity attacker = this.shooter != null ? this.shooter : this;
-        List<Entity> list = this.level.getEntities(this, new AABB(this.getX() - 0.4, this.getY() - 0.4, this.getZ() - 0.4, this.getX() + 0.4, this.getY() + 0.4, this.getZ() + 0.4), Entity::isAlive);
+        List<Entity> list = this.level().getEntities(this, new AABB(this.getX() - 1.0, this.getY() - 0.4, this.getZ() - 1.0, this.getX() + 1.0, this.getY() + 0.4, this.getZ() + 1.0), Entity::isAlive);
         for (Entity entity : list) {
             if (entity instanceof LivingEntity living) {
                 boolean canHurt = attacker instanceof Mob ? !MobUtil.areAllies(living, attacker) : living != this.shooter;

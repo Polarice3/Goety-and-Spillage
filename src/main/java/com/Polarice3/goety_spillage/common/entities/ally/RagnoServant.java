@@ -25,6 +25,7 @@ import com.yellowbrossproductions.illageandspillage.init.ModEntityTypes;
 import com.yellowbrossproductions.illageandspillage.particle.ParticleRegisterer;
 import com.yellowbrossproductions.illageandspillage.util.*;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -148,7 +149,6 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
     public boolean isPlayingPhase;
     public boolean waitingForWeb;
     public int followupTicks;
-    private LivingEntity grabbedEntity;
     public double chargeX;
     public double chargeZ;
     public boolean circleDirection;
@@ -477,7 +477,7 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
 
     @Nullable
     public LivingEntity getControllingPassenger() {
-        if (!this.isNoAi()) {
+        if (!this.isNoAi() && !this.isCrazy()) {
             Entity entity = this.getFirstPassenger();
             if (entity instanceof Mob mob){
                 return mob;
@@ -627,6 +627,7 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
         }
 
         if (this.phaseTicks > 0 && this.isAlive()) {
+            this.getPassengers().forEach(Entity::stopRiding);
             ++this.phaseTicks;
         }
 
@@ -669,6 +670,7 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
         }
 
         if (this.phaseTicks >= 84) {
+            this.getPassengers().forEach(Entity::stopRiding);
             this.isPlayingPhase = false;
             if (!this.level.isClientSide) {
                 this.level.broadcastEntityEvent(this, (byte) 12);
@@ -1209,17 +1211,15 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
                         this.playSound(SoundEvents.STONE_BREAK, 2.0F, 0.5F);
                     }
 
-                    double posX = this.getX();
-                    double posY = this.getY();
-                    double posZ = this.getZ();
                     if (this.getAttackTicks() < (this.halfHealth() ? 40 : 100)) {
                         this.setInvisible(true);
-                        posX = this.getTarget().getX();
-                        posY = this.getTarget().getY();
-                        posZ = this.getTarget().getZ();
+                        double targetX = this.getTarget().getX();
+                        double deltaX = this.getTarget().getZ();
+                        double deltaY = Math.min(this.getTarget().getY(), this.getY());
+                        double deltaZ = Math.max(this.getTarget().getY(), this.getY());
+                        this.setPos(this.getBurrowPosition(targetX, deltaX, deltaY, deltaZ));
                     }
 
-                    this.setPos(posX, posY, posZ);
                     this.setDeltaMovement(0.0, 0.0, 0.0);
                     if (this.getAttackTicks() == (this.halfHealth() ? 49 : 119)) {
                         this.setAnimationState(7);
@@ -1461,70 +1461,109 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
                 }
             }
 
-            if (this.getAttackType() == BREATH_ATTACK) {
-                if (this.getAttackTicks() == 21) {
-                    this.playSound(IllageAndSpillageSoundEvents.ENTITY_RAGNO_BLOCK.get(), 2.0F, 1.0F);
-                    if (!this.level.isClientSide) {
-                        float radius = 2.0F;
-                        double x = this.getX() + 0.800000011920929 * Math.sin((double)(-this.getYRot()) * Math.PI / 180.0) + (double)radius * Math.sin((double)(-this.yHeadRot) * Math.PI / 180.0) * Math.cos((double)(-this.getXRot()) * Math.PI / 180.0);
-                        double z = this.getZ() + 0.800000011920929 * Math.cos((double)(-this.getYRot()) * Math.PI / 180.0) + (double)radius * Math.cos((double)(-this.yHeadRot) * Math.PI / 180.0) * Math.cos((double)(-this.getXRot()) * Math.PI / 180.0);
-                        List<LivingEntity> list = this.level.getEntitiesOfClass(LivingEntity.class, new AABB(x - 2.0, this.getY(), z - 2.0, x + 2.0, this.getY() + 2.0, z + 2.0),
-                                (predicate) -> !MobUtil.areAllies(predicate, this) && isMobNotInCreativeMode(predicate));
+            if (this.canUseBreath() || this.getAttackType() == BREATH_ATTACK) {
+                label1409: {
+                    this.getNavigation().stop();
+                    this.getMoveControl().strafe(0.0F, 0.0F);
+                    if (this.getTarget() != null && !this.isGrabbing()) {
+                        this.getLookControl().setLookAt(this.getTarget(), 100.0F, 100.0F);
+                    }
+                    if (this.getAttackTicks() == 0) {
+                        this.setAnimationState(18);
+                        this.playSound(IllageAndSpillageSoundEvents.ENTITY_RAGNO_PREPARECHARGE.get(), 2.0F, 0.9F);
+                        this.setAttackType(BREATH_ATTACK);
+                    }
 
-                        for (LivingEntity entity : list){
-                            entity.hurt(damageSource, 2.0F);
-                            if (!this.isGrabbing() && entity.isAlive()) {
-                                this.playSound(IllageAndSpillageSoundEvents.ENTITY_RAGNO_LEAP.get(), 2.0F, this.getVoicePitch());
-                                this.grabbedEntity = entity;
-                                this.setGrabbing(true);
-                                radius = 3.0F;
-                                float angle = 0.017453292F * this.yBodyRot;
-                                double extraX = radius * Mth.sin((float)(Math.PI + (double)angle));
-                                double extraZ = radius * Mth.cos(angle);
-                                if (this.grabbedEntity instanceof ServerPlayer serverPlayer) {
-                                    this.grabbedEntity.teleportTo(this.getX() + extraX, this.getY() + 0.75, this.getZ() + extraZ);
-                                    serverPlayer.connection.send(new ClientboundSetEntityMotionPacket(this.grabbedEntity.getId(), new Vec3(0.0, 0.0, 0.0)));
-                                } else {
-                                    this.grabbedEntity.setPos(this.getX() + extraX, this.getY() + 0.75, this.getZ() + extraZ);
-                                    this.grabbedEntity.setDeltaMovement(0.0, 0.0, 0.0);
+                    if (this.getAttackTicks() == 30) {
+                        this.playSound(IllageAndSpillageSoundEvents.ENTITY_RAGNO_BLOCK.get(), 2.0F, 1.0F);
+                        if (!this.level().isClientSide) {
+                            float radius2 = 2.0F;
+                            double targetX = this.getX() + 0.800000011920929 * Math.sin((double)(-this.getYRot()) * Math.PI / 180.0) + (double)radius2 * Math.sin((double)(-this.yHeadRot) * Math.PI / 180.0) * Math.cos((double)(-this.getXRot()) * Math.PI / 180.0);
+                            double deltaX = this.getZ() + 0.800000011920929 * Math.cos((double)(-this.getYRot()) * Math.PI / 180.0) + (double)radius2 * Math.cos((double)(-this.yHeadRot) * Math.PI / 180.0) * Math.cos((double)(-this.getXRot()) * Math.PI / 180.0);
+                            List<LivingEntity> list = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(targetX - 2.0, this.getY(), deltaX - 2.0, targetX + 2.0, this.getY() + 2.0, deltaX + 2.0), (predicate) -> {
+                                return !MobUtil.areAllies(predicate, this) && isMobNotInCreativeMode(predicate);
+                            });
+
+                            for (LivingEntity entity : list){
+                                entity.hurt(this.damageSources().mobAttack(this), 2.0F);
+                                if (!this.isGrabbing() && entity.isAlive() && entity.startRiding(this, true)) {
+                                    this.playSound(IllageAndSpillageSoundEvents.ENTITY_RAGNO_LEAP.get(), 2.0F, this.getVoicePitch());
+                                    this.setGrabbing(true);
                                 }
                             }
                         }
                     }
-                }
 
-                if (this.getAttackTicks() >= 21 && this.getAttackTicks() < 99 && this.grabbedEntity != null) {
-                    float radius = 3.0F;
-                    float angle = 0.017453292F * this.yBodyRot;
-                    double extraX = radius * Mth.sin((float)(Math.PI + (double)angle));
-                    double extraZ = radius * Mth.cos(angle);
-                    if (this.grabbedEntity.distanceToSqr(this.getX() + extraX, this.getY() + 0.75, this.getZ() + extraZ) <= 2.25) {
-                        if (this.grabbedEntity instanceof ServerPlayer serverPlayer) {
-                            this.grabbedEntity.teleportTo(this.getX() + extraX, this.getY() + 0.75, this.getZ() + extraZ);
-                            serverPlayer.connection.send(new ClientboundSetEntityMotionPacket(this.grabbedEntity.getId(), new Vec3(0.0, 0.0, 0.0)));
-                        } else {
-                            this.grabbedEntity.setPos(this.getX() + extraX, this.getY() + 0.75, this.getZ() + extraZ);
-                            this.grabbedEntity.setDeltaMovement(0.0, 0.0, 0.0);
-                        }
-                    } else {
-                        this.grabbedEntity = null;
+                    if (this.getAttackTicks() == 40 && this.isGrabbing()) {
+                        this.setAnimationState(19);
                     }
-                }
 
-                if (this.getAttackTicks() == 30 && this.isGrabbing()) {
-                    this.setAnimationState(19);
-                }
+                    if (this.getAttackTicks() == 53) {
+                        this.playSound(IllageAndSpillageSoundEvents.ENTITY_RAGNO_SCREECH.get(), 2.0F, 0.75F);
+                        CameraShakeEntity.cameraShake(this.level(), this.position(), 50.0F, 0.05F, 48, 20);
+                    }
 
-                if (this.getAttackTicks() == 43) {
-                    this.playSound(IllageAndSpillageSoundEvents.ENTITY_RAGNO_SCREECH.get(), 2.0F, 0.75F);
-                    CameraShakeEntity.cameraShake(this.level(), this.position(), 50.0F, 0.05F, 48, 20);
-                }
+                    if (this.getAttackTicks() >= 53 && this.getAttackTicks() <= 109) {
+                        this.makeBreath();
+                    }
 
-                if (this.getAttackTicks() >= 43 && this.getAttackTicks() <= 99) {
-                    this.makeBreath();
+                    if (this.getAttackTicks() == 109 && !this.getPassengers().isEmpty()) {
+                        this.getPassengers().forEach(Entity::stopRiding);
+                    }
+
+                    if (this.isGrabbing()) {
+                        if (this.getAttackTicks() <= 125) {
+                            break label1409;
+                        }
+                    } else if (this.getAttackTicks() <= 45) {
+                        break label1409;
+                    }
+
+                    this.setAnimationState(0);
+                    this.setAttackTicks(0);
+                    this.setAttackType(0);
+                    this.loseStunHealth(this.isGrabbing() ? 10 : 5, false);
+                    this.setGrabbing(false);
+                    this.breathCooldown = 100;
+                    this.attackCooldown = 20;
                 }
             }
         }
+    }
+
+    protected void positionRider(Entity passenger, Entity.MoveFunction moveFunction) {
+        if (!this.isCrazy() || this.phaseTicks >= 1 && this.phaseTicks <= 250) {
+            super.positionRider(passenger, moveFunction);
+        } else {
+            float radius = 3.0F;
+            float angle = 0.017453292F * this.yBodyRot;
+            double x = this.getX() + (double)(radius * Mth.sin((float)(Math.PI + (double)angle)));
+            double z = this.getZ() + (double)(radius * Mth.cos(angle));
+            moveFunction.accept(passenger, x, this.getY() + 0.75, z);
+        }
+
+    }
+
+    public boolean shouldRiderSit() {
+        return !this.isCrazy();
+    }
+
+    private Vec3 getBurrowPosition(double p_32673_, double p_32674_, double p_32675_, double p_32676_) {
+        BlockPos blockpos = BlockPos.containing(p_32673_, p_32676_, p_32674_);
+        boolean flag = false;
+
+        do {
+            BlockPos blockpos1 = blockpos.below();
+            BlockState blockstate = this.level().getBlockState(blockpos1);
+            if (blockstate.isFaceSturdy(this.level(), blockpos1, Direction.UP)) {
+                flag = true;
+                break;
+            }
+
+            blockpos = blockpos.below();
+        } while(blockpos.getY() >= Mth.floor(p_32675_) - 1);
+
+        return flag ? new Vec3(p_32673_, (double)blockpos.getY(), p_32674_) : this.position();
     }
 
     public boolean isNotAttacking(){
@@ -1740,7 +1779,7 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
     }
 
     public boolean hurt(DamageSource pSource, float pAmount) {
-        if (this.getTrueOwner() != null && pSource.getEntity() == this.getTrueOwner() && MobsConfig.MinionsMasterImmune.get()){
+        if (this.getTrueOwner() != null && pSource.getEntity() == this.getTrueOwner() && MobsConfig.ServantsMasterImmune.get()){
             return false;
         } else if (this.hasPassenger() && pSource.getEntity() == this.getFirstPassenger()) {
             return false;
@@ -2040,7 +2079,7 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
 
     public int getMaxStunHealth() {
         if (this.isCrazy()) {
-            return this.halfHealth() ? 70 : 110;
+            return this.halfHealth() ? 70 : 90;
         } else {
             return 50;
         }
@@ -2053,6 +2092,20 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
                 && this.attackCooldown < 1
                 && !this.isStunned()
                 && !this.isPlayingIntro();
+    }
+
+    public boolean canUseBreath() {
+        return this.getAttackType() == 0
+                && this.getTarget() != null
+                && this.hasLineOfSight(this.getTarget())
+                && this.attackCooldown < 1
+                && !this.isStunned()
+                && !this.isPlayingIntro
+                && !this.isPlayingPhase
+                && this.halfHealth()
+                && this.breathCooldown < 1
+                && this.isCrazy()
+                && this.distanceToSqr(this.getTarget()) < 36.0;
     }
 
     @Override
@@ -2068,6 +2121,7 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
         if (this.isAlive()) {
             LivingEntity rider = this.getControllingPassenger();
             if (this.hasPassenger()
+                    && !this.isCrazy()
                     && ((rider instanceof Player && !this.isAutonomous())
                     || (rider instanceof IServant servant && (servant.isStaying() || servant.isCommanded() || servant.isPatrolling())))
                     && this.notClientAttacking() && !this.isPlayingIntro()) {
@@ -2139,7 +2193,7 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
     public InteractionResult mobInteract(Player pPlayer, InteractionHand pHand) {
         if (!pPlayer.level.isClientSide) {
             if (pPlayer == this.getTrueOwner() && !this.isBurrowing() && !this.isPlayingIntro()) {
-                if (!pPlayer.isCrouching() && !this.isStunned()) {
+                if (!pPlayer.isCrouching() && !this.isStunned() && !this.isCrazy()) {
                     if (this.getFirstPassenger() != null && this.getFirstPassenger() != pPlayer){
                         this.getFirstPassenger().stopRiding();
                         return InteractionResult.SUCCESS;
@@ -2369,7 +2423,6 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
             RagnoServant.this.setAttackType(0);
             RagnoServant.this.loseStunHealth(RagnoServant.this.isGrabbing() ? 10 : 5, false);
             RagnoServant.this.setGrabbing(false);
-            RagnoServant.this.grabbedEntity = null;
             RagnoServant.this.breathCooldown = 100;
             RagnoServant.this.attackCooldown = 20;
         }

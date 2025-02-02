@@ -1,0 +1,29 @@
+{
+  "name": "被绑定的工程师",
+  "icon": "goety_spillage:engineer_mallet",
+  "category": "goety:spillage/summons",
+  "advancement": "goety_spillage:obtain_engineer_mallet",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "灾厄工程师的天分不能被浪费，所以你决定成为他们的工头"
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety_spillage:thrall/summon_bound_engineer"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "被绑定的工程师仍熟记它们创建和维护机械的知识，这种日常宛如他们的生活，虽然你也可以用工程师锤创建和维护你的机械，但通过黑魔法把这种苦差事撂给别人真蛮好的"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:bound_engineer",
+      "scale": 0.75
+    },
+    {
+      "type": "patchouli:text",
+      "text": "就像其它被绑定的灾厄村民一样，它们可以不受重力影响地在地面上飘浮，尽管他们看上去像是灵体，但它们并没有穿墙能力且仍会被常规武器伤害到，手持灵质右键可以治疗它"
+    }
+  ]
+}

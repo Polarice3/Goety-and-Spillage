@@ -1,0 +1,16 @@
+{
+  "name": "怪人的炸弹",
+  "icon": "goety_spillage:skull_bomb",
+  "category": "goety:spillage/crafts",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "你已经发现了制造怪人专用活体炸弹的方法，这些炸弹在短暂时间后就会造成不破坏地形的爆炸"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety_spillage:skull_bomb",
+      "recipe2": "goety_spillage:pumpkin_bomb"
+    }
+  ]
+}
