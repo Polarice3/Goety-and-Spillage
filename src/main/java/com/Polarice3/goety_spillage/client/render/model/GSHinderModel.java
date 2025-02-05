@@ -6,10 +6,13 @@ import com.yellowbrossproductions.illageandspillage.client.model.animation.Hinde
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.world.entity.Entity;
 
+import java.util.Calendar;
+
 public class GSHinderModel<T extends Entity> extends HinderModel<T> {
     private final ModelPart thingy2;
     private final ModelPart thingy;
     private final ModelPart head;
+    private final ModelPart propeler;
     private final ModelPart base;
 
     public GSHinderModel(ModelPart root) {
@@ -18,6 +21,8 @@ public class GSHinderModel<T extends Entity> extends HinderModel<T> {
         this.thingy = root.getChild("thingy");
         this.head = root.getChild("head");
         this.base = root.getChild("base");
+        ModelPart stick = this.head.getChild("stick");
+        this.propeler = stick.getChild("propeler");
     }
 
     public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
@@ -25,6 +30,8 @@ public class GSHinderModel<T extends Entity> extends HinderModel<T> {
         if (entity instanceof GSHinder hinder) {
             this.animate(hinder.getAnimationState("intro"), HinderAnimation.SPAWN, ageInTicks, hinder.getAnimationSpeed());
             this.animate(hinder.getAnimationState("idle"), HinderAnimation.IDLE, ageInTicks, hinder.getAnimationSpeed());
+            Calendar calendar = Calendar.getInstance();
+            this.propeler.getChild("birthday").visible = calendar.get(2) == 1 && calendar.get(5) < 8;
             if (hinder.isInMotion()) {
                 this.base.xRot = ageInTicks * 25.0F * 0.017453292F;
                 this.base.yRot = ageInTicks * 15.0F * 0.017453292F;

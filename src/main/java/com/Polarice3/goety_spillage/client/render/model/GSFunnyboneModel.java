@@ -7,6 +7,8 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 
+import java.util.Calendar;
+
 public class GSFunnyboneModel<T extends Entity> extends FunnyboneModel<T> {
     private final ModelPart all;
     private final ModelPart leg1;
@@ -55,6 +57,8 @@ public class GSFunnyboneModel<T extends Entity> extends FunnyboneModel<T> {
             this.animate(funnybone.getAnimationState("fly"), FunnyboneAnimation.FLY, ageInTicks, funnybone.getAnimationSpeed());
             this.animate(funnybone.getAnimationState("spawn"), FunnyboneAnimation.SPAWN, ageInTicks, funnybone.getAnimationSpeed());
             this.animate(funnybone.getAnimationState("throw"), FunnyboneAnimation.THROW, ageInTicks, funnybone.getAnimationSpeed());
+            Calendar calendar = Calendar.getInstance();
+            this.head.getChild("birthday").visible = calendar.get(2) == 1 && calendar.get(5) < 8;
             this.bone_weapon.visible = funnybone.shouldShowBone();
             if (!funnybone.isFlying()) {
                 this.head.yRot = netHeadYaw * 0.017453292F;

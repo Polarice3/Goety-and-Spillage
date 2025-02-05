@@ -3,7 +3,6 @@ package com.Polarice3.goety_spillage.client.render;
 import com.Polarice3.goety_spillage.client.render.model.GSEyesoreModel;
 import com.Polarice3.goety_spillage.common.entities.ally.GSEyesore;
 import com.yellowbrossproductions.illageandspillage.client.model.EyesoreModel;
-import com.yellowbrossproductions.illageandspillage.entities.EyesoreEntity;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;

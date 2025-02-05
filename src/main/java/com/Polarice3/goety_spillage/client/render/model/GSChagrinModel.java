@@ -6,6 +6,8 @@ import com.yellowbrossproductions.illageandspillage.client.model.animation.Chagr
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.world.entity.Entity;
 
+import java.util.Calendar;
+
 public class GSChagrinModel<T extends Entity> extends ChagrinSentryModel<T> {
     private final ModelPart locker;
     private final ModelPart upperBody;
@@ -22,12 +24,15 @@ public class GSChagrinModel<T extends Entity> extends ChagrinSentryModel<T> {
         this.head = this.upperBody.getChild("head");
         this.arm1 = this.upperBody.getChild("arm1");
         this.arm2 = this.upperBody.getChild("arm2");
-        this.slab = root.getChild("slab");
+        this.slab = sentry.getChild("slab");
     }
 
     public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.root().getAllParts().forEach(ModelPart::resetPose);
         if (entity instanceof GSChagrin sentry) {
+            Calendar calendar = Calendar.getInstance();
+            this.head.getChild("birthday").visible = calendar.get(2) == 1 && calendar.get(5) < 8;
+
             float deltaYaw;
             for(deltaYaw = sentry.yBodyRot - sentry.yBodyRotO; deltaYaw < -180.0F; deltaYaw += 360.0F) {
             }

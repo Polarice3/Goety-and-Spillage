@@ -121,7 +121,7 @@ dependencies {
 
     //Compat
     implementation fg.deobf("curse.maven:goety-586095:6054637")
-    implementation fg.deobf("curse.maven:illage-and-spillage-finally-ported-1079714:6144461")
+    implementation fg.deobf("curse.maven:illage-and-spillage-finally-ported-1079714:6156035")
 
     //Testing Only
     runtimeOnly fg.deobf("curse.maven:kiwi-303657:5603816")

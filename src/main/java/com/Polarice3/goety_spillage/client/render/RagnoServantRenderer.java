@@ -2,8 +2,8 @@ package com.Polarice3.goety_spillage.client.render;
 
 import com.Polarice3.goety_spillage.client.render.model.RagnoServantModel;
 import com.Polarice3.goety_spillage.common.entities.ally.RagnoServant;
+import com.yellowbrossproductions.illageandspillage.Config;
 import com.yellowbrossproductions.illageandspillage.client.model.RagnoModel;
-import com.yellowbrossproductions.illageandspillage.config.IllageAndSpillageConfig;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -35,11 +35,11 @@ public class RagnoServantRenderer extends MobRenderer<RagnoServant, RagnoServant
 
     public ResourceLocation getTextureLocation(RagnoServant p_110775_1_) {
         return switch (p_110775_1_.getRagnoFace()) {
-            case 1 -> IllageAndSpillageConfig.arachnophobeMode.get() ? PAIN_ARACH : PAIN;
-            case 2 -> IllageAndSpillageConfig.arachnophobeMode.get() ? SCREAM_ARACH : SCREAM;
-            case 3 -> IllageAndSpillageConfig.arachnophobeMode.get() ? SCREAM_ARACH : INSANE;
-            case 4 -> IllageAndSpillageConfig.arachnophobeMode.get() ? WOUNDED_ARACH : WOUNDED;
-            default -> IllageAndSpillageConfig.arachnophobeMode.get() ? TEXTURE_ARACH : TEXTURE;
+            case 1 -> Config.ClientConfig.arachnophobeMode.get() ? PAIN_ARACH : PAIN;
+            case 2 -> Config.ClientConfig.arachnophobeMode.get() ? SCREAM_ARACH : SCREAM;
+            case 3 -> Config.ClientConfig.arachnophobeMode.get() ? SCREAM_ARACH : INSANE;
+            case 4 -> Config.ClientConfig.arachnophobeMode.get() ? WOUNDED_ARACH : WOUNDED;
+            default -> Config.ClientConfig.arachnophobeMode.get() ? TEXTURE_ARACH : TEXTURE;
         };
     }
 }
