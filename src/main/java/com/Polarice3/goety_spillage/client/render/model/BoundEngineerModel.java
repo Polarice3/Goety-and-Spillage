@@ -7,7 +7,10 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 
+import java.util.Calendar;
+
 public class BoundEngineerModel<T extends Entity> extends EngineerModel<T> {
+    private final ModelPart body;
     private final ModelPart left_arm;
     private final ModelPart right_arm;
     private final ModelPart left_leg;
@@ -17,7 +20,7 @@ public class BoundEngineerModel<T extends Entity> extends EngineerModel<T> {
     public BoundEngineerModel(ModelPart root) {
         super(root);
         ModelPart all = root.getChild("all");
-        ModelPart body = all.getChild("body");
+        this.body = all.getChild("body");
         this.left_arm = body.getChild("left_arm");
         this.right_arm = body.getChild("right_arm");
         this.left_leg = all.getChild("left_leg");
@@ -30,6 +33,8 @@ public class BoundEngineerModel<T extends Entity> extends EngineerModel<T> {
         if (entity instanceof BoundEngineer engineer) {
             this.animate(engineer.getAnimationState("throw"), EngineerAnimation.THROW, ageInTicks, engineer.getAnimationSpeed());
             this.animate(engineer.getAnimationState("repair"), EngineerAnimation.REPAIR, ageInTicks, engineer.getAnimationSpeed());
+            Calendar calendar = Calendar.getInstance();
+            this.body.getChild("head").getChild("hat").getChild("birthday").visible = calendar.get(2) == 1 && calendar.get(5) < 8;
             this.head.yRot = netHeadYaw * 0.017453292F;
             this.head.xRot = headPitch * 0.017453292F;
             this.right_leg.visible = false;

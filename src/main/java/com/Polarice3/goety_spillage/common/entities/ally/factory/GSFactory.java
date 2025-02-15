@@ -207,7 +207,7 @@ public class GSFactory extends Summoned implements ICanBeAnimated, IEngineerMach
                     if (summoned != null) {
                         summoned.setPos(vec3);
                         summoned.setDeltaMovement(0.0D, jump, 0.0D);
-                        summoned.setTrueOwner(this);
+                        summoned.setTrueOwner(this.getTrueOwner() != null ? this.getTrueOwner() : this);
                         summoned.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(this.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
                         serverLevel.addFreshEntity(summoned);
                     }

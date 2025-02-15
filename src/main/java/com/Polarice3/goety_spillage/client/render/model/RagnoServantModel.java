@@ -10,6 +10,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 
+import java.util.Calendar;
+
 public class RagnoServantModel<T extends Entity> extends RagnoModel<T> {
     private final ModelPart all;
 
@@ -54,6 +56,8 @@ public class RagnoServantModel<T extends Entity> extends RagnoModel<T> {
             this.animate(ragno.getAnimationState("grab"), RagnoAnimation2.GRAB, ageInTicks, ragno.getAnimationSpeed());
             this.animate(ragno.getAnimationState("breath"), RagnoAnimation2.BREATH, ageInTicks, ragno.getAnimationSpeed());
             this.animate(ragno.getAnimationState("death"), RagnoAnimation2.DEATH, ageInTicks, ragno.getAnimationSpeed());
+            Calendar calendar = Calendar.getInstance();
+            head.getChild("birthday").visible = calendar.get(2) == 1 && calendar.get(5) < 8;
             if (!ragno.isAlive()) {
                 this.all.yRot = (float)Math.toRadians(180.0);
             } else {

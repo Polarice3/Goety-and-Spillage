@@ -7,6 +7,8 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 
+import java.util.Calendar;
+
 public class CrocofangServantModel<T extends Entity> extends CrocofangModel<T> {
     private final ModelPart bone;
     public CrocofangServantModel(ModelPart root) {
@@ -21,6 +23,8 @@ public class CrocofangServantModel<T extends Entity> extends CrocofangModel<T> {
             this.animate(crocofang.getAnimationState("precharge"), CrocofangAnimation.PRECHARGE, ageInTicks, crocofang.getAnimationSpeed());
             this.animate(crocofang.getAnimationState("charge"), CrocofangAnimation.CHARGE, ageInTicks, crocofang.getAnimationSpeed());
             this.animate(crocofang.getAnimationState("stunned"), CrocofangAnimation.STUNNED, ageInTicks, crocofang.getAnimationSpeed());
+            Calendar calendar = Calendar.getInstance();
+            this.bone.getChild("body").getChild("head").getChild("birthday").visible = calendar.get(2) == 1 && calendar.get(5) < 8;
             ModelPart var10000 = this.bone.getChild("body").getChild("head");
             var10000.yRot += netHeadYaw * 0.017453292F;
             var10000 = this.bone.getChild("body").getChild("head");

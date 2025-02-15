@@ -47,7 +47,7 @@ public abstract class FactoryServant extends Summoned implements IllagerAttack {
                 if (this.getTrueOwner().isDeadOrDying()){
                     if (owned.getTrueOwner() != null && owned.getTrueOwner().isAlive()) {
                         this.setTrueOwner(owned.getTrueOwner());
-                    } else if (owned.getMasterOwner() != null) {
+                    } else if (owned.getMasterOwner() != null && owned.getMasterOwner().isAlive()) {
                         this.setTrueOwner(owned.getMasterOwner());
                     }
                 }

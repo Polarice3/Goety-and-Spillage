@@ -285,7 +285,7 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
 
     public void setHealth(float p_21154_) {
         float healthValue = p_21154_ - this.getHealth();
-        if (healthValue > 0.0F || this.isCrazy() && !this.isBurrowing() && !this.isGrabbing() || healthValue <= -1.0E12F) {
+        if (healthValue > 0.0F || ((this.isCrazy() || this.getPassengers().isEmpty()) && !this.isBurrowing() && !this.isGrabbing()) || healthValue <= -1.0E12F) {
             if (this.isCrazy() && !this.level.isClientSide) {
                 if (this.getHealth() + healthValue > this.getMaxHealth() / 2.0F) {
                     this.setShakeMultiplier(20);
@@ -1787,9 +1787,11 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
             if (pSource.is(DamageTypes.STARVE)){
                 return super.hurt(pSource, pAmount);
             }
-            if (pAmount > 0.0F && this.isAlive() && !pSource.is(DamageTypes.FELL_OUT_OF_WORLD) && !pSource.is(DamageTypes.GENERIC_KILL) && (!this.isCrazy() || isMobNotInCreativeMode(pSource.getEntity()))) {
-                if (!this.isCrazy()) {
-                    boolean source = !pSource.is(DamageTypeTags.BYPASSES_ARMOR);
+            boolean crazy = this.isCrazy() || this.getPassengers().isEmpty();
+            if (this.isAlive() && !pSource.is(DamageTypes.FELL_OUT_OF_WORLD) && !pSource.is(DamageTypes.GENERIC_KILL) && (!crazy || isMobNotInCreativeMode(pSource.getEntity()))) {
+                boolean source;
+                if (!crazy || this.isPlayingPhase) {
+                    source = !pSource.is(DamageTypeTags.BYPASSES_ARMOR);
                     if (!this.isStunned() && source && this.blockTicks < 1 && (this.entityData.get(ANIMATION_STATE) == 0 || this.entityData.get(ANIMATION_STATE) == 3 || this.entityData.get(ANIMATION_STATE) == 15)) {
                         this.playSound(IllageAndSpillageSoundEvents.ENTITY_RAGNO_BLOCK.get(), 2.0F, 1.0F);
                         this.setAnimationState(0);
@@ -1801,10 +1803,12 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
                     if (pSource.getEntity() instanceof LivingEntity livingEntity && this.getLastHurtByMob() == null) {
                         this.setLastHurtByMob(livingEntity);
                     }
+
+                    return false;
                 }
 
-                if (this.isCrazy() && (this.stunTick < 10 || this.stunTick >= 105)) {
-                    boolean source = !pSource.is(DamageTypeTags.BYPASSES_ARMOR);
+                if (crazy && (this.stunTick < 10 || this.stunTick >= 105)) {
+                    source = !pSource.is(DamageTypeTags.BYPASSES_ARMOR);
                     if (!this.isStunned() && source && this.getAttackType() == 0) {
                         if (this.blockTicks < 1 && (this.entityData.get(ANIMATION_STATE) == 0 || this.entityData.get(ANIMATION_STATE) == 3 || this.entityData.get(ANIMATION_STATE) == 15)) {
                             this.playSound(IllageAndSpillageSoundEvents.ENTITY_RAGNO_BLOCK.get(), 2.0F, 1.0F);

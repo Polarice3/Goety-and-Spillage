@@ -9,6 +9,8 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 
+import java.util.Calendar;
+
 public class BoundFreakagerModel<T extends Entity> extends FreakagerModel<T> {
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(GoetySpillage.location("bound_freakager"), "main");
     private final ModelPart all;
@@ -43,6 +45,8 @@ public class BoundFreakagerModel<T extends Entity> extends FreakagerModel<T> {
             this.animate(freakager.getAnimationState("catch"), FreakagerAnimation.CATCH, ageInTicks, freakager.getAnimationSpeed());
             this.animate(freakager.getAnimationState("trickortreat"), FreakagerAnimation.TRICKORTREAT, ageInTicks, freakager.getAnimationSpeed());
             this.animate(freakager.getAnimationState("phase"), FreakagerAnimation.PHASE, ageInTicks, freakager.getAnimationSpeed());
+            Calendar calendar = Calendar.getInstance();
+            head.getChild("birthday").visible = calendar.get(2) == 1 && calendar.get(5) < 8;
             head.yRot += netHeadYaw * 0.017453292F;
             head.xRot += headPitch * 0.017453292F;
             left_arm.visible = freakager.shouldShowArms();

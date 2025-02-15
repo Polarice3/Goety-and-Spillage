@@ -193,6 +193,11 @@ public class CrocofangServant extends Summoned implements PlayerRideable, IAutoR
         }
     }
 
+    @Override
+    public boolean canUpdateMove() {
+        return true;
+    }
+
     public boolean isCharging() {
         return this.entityData.get(CHARGING);
     }
