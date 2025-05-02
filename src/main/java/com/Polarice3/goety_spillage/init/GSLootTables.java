@@ -13,7 +13,6 @@ public class GSLootTables {
     public static final ResourceLocation EMPTY = new ResourceLocation("empty");
 
     public static final ResourceLocation ENGINEER_EXTRA = register("entities/engineer_extra");
-    public static final ResourceLocation RAGNO_EXTRA = register("entities/ragno_extra");
     public static final ResourceLocation ILLAGER_BOSS_EXTRA = register("entities/illager_boss_extra");
 
     private static ResourceLocation register(String pId) {

@@ -1,0 +1,21 @@
+{
+  "name": "エンジニアのパッケージ",
+  "icon": "goety_spillage:chagrin_package",
+  "category": "goety:spillage/crafts",
+  "advancement": "goety_spillage:obtain_engineer_mallet",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "マレットを使用すると、エンジニアの個別のマシンを作成し、どこにでも配置することができます。"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety_spillage:chagrin_package",
+      "recipe2": "goety_spillage:hinder_package"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety_spillage:factory_package"
+    }
+  ]
+}

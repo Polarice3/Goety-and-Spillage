@@ -2,6 +2,7 @@ package com.Polarice3.goety_spillage.common.magic.spells;
 
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.magic.Spell;
+import com.Polarice3.Goety.common.magic.SpellStat;
 import com.Polarice3.Goety.config.MainConfig;
 import com.Polarice3.Goety.utils.MathHelper;
 import com.Polarice3.Goety.utils.SEHelper;
@@ -58,55 +59,55 @@ public class SpiritHandSpell extends Spell {
     }
 
     @Override
-    public void SpellResult(ServerLevel serverLevel, LivingEntity livingEntity, ItemStack itemStack) {
+    public void SpellResult(ServerLevel worldIn, LivingEntity caster, ItemStack staff, SpellStat spellStat) {
         int soulPower = 1;
-        if (livingEntity instanceof Player player){
+        if (caster instanceof Player player){
             float rawPercent = (float) SEHelper.getSoulAmountInt(player) / MainConfig.MaxArcaSouls.get();
             int sePercent = (int) (rawPercent * 10);
             soulPower = Math.min(8, sePercent);
         }
 
-        int potency = 0;
-        int duration = 0;
-        if (WandUtil.enchantedFocus(livingEntity)){
-            potency += WandUtil.getLevels(ModEnchantments.POTENCY.get(), livingEntity);
-            duration += WandUtil.getLevels(ModEnchantments.DURATION.get(), livingEntity);
+        int potency = spellStat.getPotency();
+        int duration = spellStat.getDuration();
+        if (WandUtil.enchantedFocus(caster)){
+            potency += WandUtil.getLevels(ModEnchantments.POTENCY.get(), caster);
+            duration += WandUtil.getLevels(ModEnchantments.DURATION.get(), caster);
         }
 
-        if (isShifting(livingEntity)) {
-            for (Entity entity : serverLevel.getAllEntities()) {
+        if (isShifting(caster)) {
+            for (Entity entity : worldIn.getAllEntities()) {
                 if (entity instanceof GSSpiritHand spiritHand) {
-                    if (spiritHand.getTrueOwner() == livingEntity) {
-                        spiritHand.moveTo(livingEntity.position());
+                    if (spiritHand.getTrueOwner() == caster) {
+                        spiritHand.moveTo(caster.position());
                     }
                 }
             }
         } else {
-            GSSpiritHand hand1 = GSEntityTypes.SPIRIT_HAND.get().create(serverLevel);
+            GSSpiritHand hand1 = GSEntityTypes.SPIRIT_HAND.get().create(worldIn);
             if (hand1 != null) {
-                hand1.setPos(livingEntity.getX(), livingEntity.getY() + 1.0, livingEntity.getZ());
+                hand1.setPos(caster.getX(), caster.getY() + 1.0, caster.getZ());
                 hand1.setGoodOrEvil(true);
-                hand1.setDeltaMovement((-0.5 + serverLevel.random.nextDouble()) / 2.0, (-0.5 + serverLevel.random.nextDouble()) / 2.0, (-0.5 + serverLevel.random.nextDouble()) / 2.0);
-                hand1.setTrueOwner(livingEntity);
-                hand1.setTarget(this.getTarget(livingEntity));
+                hand1.setDeltaMovement((-0.5 + worldIn.random.nextDouble()) / 2.0, (-0.5 + worldIn.random.nextDouble()) / 2.0, (-0.5 + worldIn.random.nextDouble()) / 2.0);
+                hand1.setTrueOwner(caster);
+                hand1.setTarget(this.getTarget(caster));
                 hand1.setPower(potency);
                 hand1.setLimitedLife(600 + MathHelper.secondsToTicks(duration * 5));
-                serverLevel.addFreshEntity(hand1);
+                worldIn.addFreshEntity(hand1);
             }
-            GSSpiritHand hand2 = GSEntityTypes.SPIRIT_HAND.get().create(serverLevel);
+            GSSpiritHand hand2 = GSEntityTypes.SPIRIT_HAND.get().create(worldIn);
 
             if (hand2 != null) {
-                hand2.setPos(livingEntity.getX(), livingEntity.getY() + 1.0, livingEntity.getZ());
+                hand2.setPos(caster.getX(), caster.getY() + 1.0, caster.getZ());
                 hand2.setGoodOrEvil(false);
-                hand2.setDeltaMovement((-0.5 + serverLevel.random.nextDouble()) / 2.0, (-0.5 + serverLevel.random.nextDouble()) / 2.0, (-0.5 + serverLevel.random.nextDouble()) / 2.0);
-                hand2.setTrueOwner(livingEntity);
-                hand2.setTarget(this.getTarget(livingEntity));
+                hand2.setDeltaMovement((-0.5 + worldIn.random.nextDouble()) / 2.0, (-0.5 + worldIn.random.nextDouble()) / 2.0, (-0.5 + worldIn.random.nextDouble()) / 2.0);
+                hand2.setTrueOwner(caster);
+                hand2.setTarget(this.getTarget(caster));
                 hand2.setLimitedLife(600 + MathHelper.secondsToTicks(duration * 5));
                 hand2.setPower(potency);
-                serverLevel.addFreshEntity(hand2);
+                worldIn.addFreshEntity(hand2);
             }
         }
 
-        serverLevel.playSound((Player)null, livingEntity.getX(), livingEntity.getY(), livingEntity.getZ(), IllageAndSpillageSoundEvents.ENTITY_SPIRITCALLER_CLAP.get(), this.getSoundSource(), 2.0F, 1.0F);
+        this.playSound(worldIn, caster, IllageAndSpillageSoundEvents.ENTITY_SPIRITCALLER_CLAP.get(), 2.0F, 1.0F);
     }
 }

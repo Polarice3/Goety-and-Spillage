@@ -67,7 +67,7 @@ public class GSSniper extends FactoryServant implements RangedAttackMob {
     public void tick() {
         this.setNoGravity(true);
         ++this.attackTicks;
-        LivingEntity flyTo = this.getTarget() != null ? this.getTarget() : (this.getOwner() != null && this.getMasterOwner() != null && this.getMasterOwner().isAlive() ? this.getMasterOwner() : null);
+        LivingEntity flyTo = this.getTarget() != null ? this.getTarget() : (this.getTrueOwner() != null && this.getTrueOwner().isAlive() ? this.getTrueOwner() : null);
         if (flyTo != null) {
             if (this.attackTicks > 40 && flyTo == this.getTarget() && this.distanceToSqr(flyTo) <= 400.0 && this.hasLineOfSight(flyTo)) {
                 this.playSound(SoundEvents.DISPENSER_LAUNCH, 1.0F, 1.0F);

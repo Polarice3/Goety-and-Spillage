@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec3;
 
 public class ThrownAxeRenderer extends EntityRenderer<ThrownAxe> {
     private static final ResourceLocation TEXTURE = new ResourceLocation("illageandspillage", "textures/entity/freakager/axe.png");
@@ -37,6 +38,11 @@ public class ThrownAxeRenderer extends EntityRenderer<ThrownAxe> {
 
     protected float getBob(Entity p_115305_, float p_115306_) {
         return (float)p_115305_.tickCount + p_115306_;
+    }
+
+    @Override
+    public Vec3 getRenderOffset(ThrownAxe p_114483_, float p_114484_) {
+        return new Vec3(0, -1.45, 0);
     }
 
     public ResourceLocation getTextureLocation(ThrownAxe axeEntity) {

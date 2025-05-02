@@ -1,0 +1,42 @@
+{
+  "type": "goety:ritual",
+  "ritual_type": "goety:summon_tamed",
+  "activation_item": {
+    "item": "goety:great_hammer"
+  },
+  "craftType": "necroturgy",
+  "entity_to_summon": "goety_spillage:zombie_absorber",
+  "soulCost": 15,
+  "duration": 10,
+  "ingredients": [
+    {
+      "item": "minecraft:rotten_flesh"
+    },
+    {
+      "item": "minecraft:rotten_flesh"
+    },
+    {
+      "tag": "minecraft:logs"
+    },
+    {
+      "tag": "forge:storage_blocks/gold"
+    },
+    {
+      "item": "minecraft:smooth_stone"
+    },
+    {
+      "item": "minecraft:smooth_stone"
+    },
+    {
+      "item": "minecraft:leather_leggings"
+    },
+    {
+      "type": "forge:nbt",
+      "item": "minecraft:potion",
+      "nbt": "{\"Potion\": \"minecraft:strength\"}"
+    }
+  ],
+  "result": {
+    "item": "goety:jei_dummy/none"
+  }
+}

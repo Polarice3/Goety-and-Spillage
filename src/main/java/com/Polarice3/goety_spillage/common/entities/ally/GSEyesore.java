@@ -3,6 +3,7 @@ package com.Polarice3.goety_spillage.common.entities.ally;
 import com.Polarice3.Goety.common.entities.ally.Summoned;
 import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.Polarice3.Goety.utils.MobUtil;
+import com.Polarice3.Goety.utils.ModDamageSource;
 import com.yellowbrossproductions.illageandspillage.entities.goal.StareAtDeadFreakGoal;
 import com.yellowbrossproductions.illageandspillage.particle.ParticleRegisterer;
 import com.yellowbrossproductions.illageandspillage.util.EffectRegisterer;
@@ -48,7 +49,7 @@ public class GSEyesore extends Summoned {
         super.registerGoals();
         this.goalSelector.addGoal(0, new StareAtDeadFreakGoal(this));
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(0, new AvoidRagnoGoal(this, 16.0F, 0.6499999761581421, 0.6000000238418579));
+        this.goalSelector.addGoal(0, new AvoidRagnoGoal<>(this, RagnoServant.class, 16.0F, 0.6499999761581421, 0.6000000238418579));
         this.goalSelector.addGoal(1, new SlitherGoal(this, 0.5));
     }
 
@@ -209,7 +210,11 @@ public class GSEyesore extends Summoned {
     }
 
     protected void dealDamage(LivingEntity entity) {
-        if (this.isAlive() && this.hasLineOfSight(entity) && entity.hurt(this.damageSources().mobAttack(this), (float)this.getAttributeValue(Attributes.ATTACK_DAMAGE))) {
+        DamageSource damageSource = this.damageSources().mobAttack(this);
+        if (this.getTrueOwner() != null){
+            damageSource = ModDamageSource.summonAttack(this, this.getTrueOwner());
+        }
+        if (this.isAlive() && this.hasLineOfSight(entity) && entity.hurt(damageSource, (float)this.getAttributeValue(Attributes.ATTACK_DAMAGE))) {
             double d2 = entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE);
             double d1 = Math.max(0.0, 1.0 - d2);
             entity.setDeltaMovement(entity.getDeltaMovement().add(0.0, 0.4D * d1, 0.0));
@@ -223,11 +228,9 @@ public class GSEyesore extends Summoned {
         super.knockback(p_147241_ * 1.5, p_147242_ * 2.0, p_147243_ * 1.5);
     }
 
-    class AvoidRagnoGoal extends AvoidEntityGoal {
-        public AvoidRagnoGoal(PathfinderMob p_25033_, float p_25035_, double p_25036_, double p_25037_) {
-            super(p_25033_, RagnoServant.class, p_25035_, p_25036_, p_25037_, (predicate) -> {
-                return isEntityCrazyRagno((Entity)predicate);
-            });
+    class AvoidRagnoGoal<T extends LivingEntity> extends AvoidEntityGoal<T> {
+        public AvoidRagnoGoal(PathfinderMob p_25033_, Class<T> tClass, float p_25035_, double p_25036_, double p_25037_) {
+            super(p_25033_, tClass, p_25035_, p_25036_, p_25037_, AvoidRagnoGoal::isEntityCrazyRagno);
         }
 
         public static boolean isEntityCrazyRagno(Entity entity) {

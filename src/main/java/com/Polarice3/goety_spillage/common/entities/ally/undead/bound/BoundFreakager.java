@@ -349,7 +349,7 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
 
     public void attackAI(){
         if (this.isAlive()) {
-            if (this.attackType == 1) {
+            if (this.attackType == BOMBS_ATTACK) {
                 if (this.attackTicks == 20) {
                     double y = 0.7;
                     this.playSound(IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_CYMBAL.get(), 1.0F, 1.0F);
@@ -403,7 +403,7 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
                 }
             }
 
-            if (this.attackType == 7) {
+            if (this.attackType == MINIONS_ATTACK) {
                 if (this.attackTicks == 10) {
                     this.setFreakagerFace(1);
                 }
@@ -454,7 +454,7 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
                 }
             }
 
-            if (this.attackType == 2) {
+            if (this.attackType == AXES_ATTACK) {
                 if (this.attackTicks == 4) {
                     this.setItemSlot(EquipmentSlot.MAINHAND, Items.IRON_AXE.getDefaultInstance());
                     this.setItemSlot(EquipmentSlot.OFFHAND, Items.IRON_AXE.getDefaultInstance());
@@ -487,8 +487,7 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
                             double z = this.getZ() - this.getTarget().getZ();
                             ThrownAxe projectile = new ThrownAxe(this.level, this, -x, -y, -z);
                             projectile.moveTo(this.getX(), this.getY() + 1.0, this.getZ());
-                            CompoundTag tag = this.getPersistentData().getCompound("Rotation");
-                            projectile.readAdditionalSaveData(tag);
+                            projectile.setRot(this);
                             projectile.setOwner(this);
                             projectile.setDamage(GSAttributesConfig.BoundFreakagerAxeDamage.get().floatValue());
                             this.level.addFreshEntity(projectile);
@@ -504,7 +503,7 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
                     }
                 }
             }
-            if (this.attackType == 3) {
+            if (this.attackType == ANGRY_AXES_ATTACK) {
                 if (this.attackTicks == 4) {
                     this.setItemSlot(EquipmentSlot.MAINHAND, Items.IRON_AXE.getDefaultInstance());
                     this.setItemSlot(EquipmentSlot.OFFHAND, Items.IRON_AXE.getDefaultInstance());
@@ -535,8 +534,7 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
                         double z = vec3.z - this.getTarget().getZ();
                         ThrownAxe projectile = new ThrownAxe(this.level, this, -x, -y, -z);
                         projectile.moveTo(vec3);
-                        CompoundTag tag = this.getPersistentData().getCompound("Rotation");
-                        projectile.readAdditionalSaveData(tag);
+                        projectile.setRot(this);
                         projectile.shoot(-x, -y, -z, 1.0F, 20.0F);
                         projectile.setOwner(this);
                         projectile.setDamage(GSAttributesConfig.BoundFreakagerAxeDamage.get().floatValue());
@@ -555,7 +553,7 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
                 }
             }
 
-            if (this.attackType == 4) {
+            if (this.attackType == POTIONS_ATTACK) {
                 if (this.attackTicks == 5) {
                     this.playSound(IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_REVEAL.get(), 2.0F, this.getVoicePitch());
                     this.setFreakagerFace(1);
@@ -594,7 +592,7 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
                 }
             }
 
-            if (this.attackType == 5) {
+            if (this.attackType == SCYTHE_ATTACK) {
                 if (this.attackTicks == 3) {
                     this.setShowScythe(true);
                     this.setFreakagerFace(1);
@@ -654,7 +652,7 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
                 }
             }
 
-            if (this.attackType == 6) {
+            if (this.attackType == TRICKORTREAT_ATTACK) {
                 if (this.attackTicks == 21) {
                     this.setFreakagerFace(1);
                     this.playSound(IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_CYMBAL.get(), 2.0F, 1.0F);
@@ -905,7 +903,7 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
         public void start() {
             BoundFreakager.this.playSound(IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_TRICKORTREAT.get(), 2.0F, BoundFreakager.this.getVoicePitch());
             BoundFreakager.this.setAnimationState(8);
-            BoundFreakager.this.attackType = 6;
+            BoundFreakager.this.attackType = TRICKORTREAT_ATTACK;
             if (!BoundFreakager.this.level.isClientSide) {
                 BoundFreakager.this.setShowArms(true);
             }
@@ -949,7 +947,7 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
 
         public void start() {
             BoundFreakager.this.setAnimationState(7);
-            BoundFreakager.this.attackType = 5;
+            BoundFreakager.this.attackType = SCYTHE_ATTACK;
             BoundFreakager.this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
             if (!BoundFreakager.this.level.isClientSide) {
                 BoundFreakager.this.setShowArms(true);
@@ -998,7 +996,7 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
 
         public void start() {
             BoundFreakager.this.setAnimationState(6);
-            BoundFreakager.this.attackType = 4;
+            BoundFreakager.this.attackType = POTIONS_ATTACK;
             if (!BoundFreakager.this.level.isClientSide) {
                 BoundFreakager.this.setShowArms(true);
             }
@@ -1045,7 +1043,7 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
             BoundFreakager.this.setAnimationState(5);
             BoundFreakager.this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
             BoundFreakager.this.setItemSlot(EquipmentSlot.OFFHAND, ItemStack.EMPTY);
-            BoundFreakager.this.attackType = 3;
+            BoundFreakager.this.attackType = ANGRY_AXES_ATTACK;
             if (!BoundFreakager.this.level.isClientSide) {
                 BoundFreakager.this.setShowArms(true);
                 BoundFreakager.this.setFreakagerFace(2);
@@ -1096,7 +1094,7 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
             BoundFreakager.this.setAnimationState(4);
             BoundFreakager.this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
             BoundFreakager.this.setItemSlot(EquipmentSlot.OFFHAND, ItemStack.EMPTY);
-            BoundFreakager.this.attackType = 2;
+            BoundFreakager.this.attackType = AXES_ATTACK;
             if (!BoundFreakager.this.level.isClientSide) {
                 BoundFreakager.this.setShowArms(true);
                 BoundFreakager.this.setFreakagerFace(2);
@@ -1145,7 +1143,7 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
         public void start() {
             BoundFreakager.this.playSound(IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_PUMPKINBOMBS.get(), 2.0F, BoundFreakager.this.getVoicePitch());
             BoundFreakager.this.setAnimationState(3);
-            BoundFreakager.this.attackType = 1;
+            BoundFreakager.this.attackType = BOMBS_ATTACK;
             if (!BoundFreakager.this.level.isClientSide) {
                 BoundFreakager.this.setShowArms(true);
             }
@@ -1191,7 +1189,7 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
         public void start() {
             BoundFreakager.this.playSound(IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_MINIONS.get(), 2.0F, BoundFreakager.this.getVoicePitch());
             BoundFreakager.this.setAnimationState(1);
-            BoundFreakager.this.attackType = 7;
+            BoundFreakager.this.attackType = MINIONS_ATTACK;
             if (!BoundFreakager.this.level.isClientSide) {
                 BoundFreakager.this.setShowArms(true);
             }

@@ -70,5 +70,17 @@
   "entity.goety_spillage.imp": "灵魂",
   "entity.goety_spillage.web_net": "网缚",
   "item.goety_spillage.bound_engineer_spawn_egg": "被绑定的工程师刷怪蛋",
-  "item.goety_spillage.engineer_mallet": "工程师锤"
+  "item.goety_spillage.engineer_mallet": "工程师锤",
+  "advancements.goety_spillage.summon_zombie_absorber.title": "Mighty Glacier",
+  "advancements.goety_spillage.summon_zombie_absorber.description": "Summon a Zombie Absorber.",
+  "entity.goety_spillage.zombie_absorber": "Zombie Absorber",
+  "item.goety_spillage.zombie_absorber_spawn_egg": "Zombie Absorber Spawn Egg",
+  "item.goety_spillage.chagrin_package": "Chagrin Sentry Package",
+  "item.goety_spillage.hinder_package": "Hinder Package",
+  "item.goety_spillage.factory_package": "Factory Package",
+  "item.goety_spillage.ragno_servant_spawn_egg": "Ragno Servant Spawn Egg",
+  "advancements.goety_spillage.craft_freaky_robe.title": "Time to Get \uD835\uDCD5\uD835\uDCFB\uD835\uDCEE\uD835\uDCEA\uD835\uDCF4\uD835\uDD02",
+  "advancements.goety_spillage.craft_freaky_robe.description": "Craft a Freaky Robe, which allows the wearer to perform several of Freakager's attacks.",
+  "advancements.goety_spillage.obtain_mutated_flesh.title": "Your Fantasies Can Never Be Quenched!",
+  "advancements.goety_spillage.obtain_mutated_flesh.description": "Obtain a Mutated Flesh dropped by Ragno."
 }

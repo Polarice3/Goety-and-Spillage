@@ -1,6 +1,5 @@
 package com.Polarice3.goety_spillage.common.entities.ally.undead.bound;
 
-import com.Polarice3.Goety.api.entities.IOwned;
 import com.Polarice3.Goety.api.entities.ally.IServant;
 import com.Polarice3.Goety.common.entities.ai.AvoidTargetGoal;
 import com.Polarice3.Goety.common.entities.ally.undead.bound.AbstractBoundIllager;
@@ -10,7 +9,7 @@ import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
 import com.Polarice3.goety_spillage.common.entities.ally.factory.GSChagrin;
 import com.Polarice3.goety_spillage.common.entities.ally.factory.GSFactory;
 import com.Polarice3.goety_spillage.common.entities.ally.factory.GSHinder;
-import com.Polarice3.goety_spillage.common.entities.ally.factory.IEngineerMachine;
+import com.Polarice3.goety_spillage.common.util.GSMobUtil;
 import com.Polarice3.goety_spillage.config.GSAttributesConfig;
 import com.yellowbrossproductions.illageandspillage.client.model.animation.ICanBeAnimated;
 import com.yellowbrossproductions.illageandspillage.util.IllageAndSpillageSoundEvents;
@@ -34,8 +33,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.Path;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class BoundEngineer extends AbstractBoundIllager implements ICanBeAnimated {
@@ -164,21 +161,6 @@ public class BoundEngineer extends AbstractBoundIllager implements ICanBeAnimate
         }
     }
 
-    public List<LivingEntity> getMachines() {
-        List<LivingEntity> list = new ArrayList<>();
-        if (this.level instanceof ServerLevel serverLevel){
-            for (Entity entity : serverLevel.getAllEntities()) {
-                if (entity instanceof LivingEntity livingEntity && entity instanceof IEngineerMachine && entity instanceof IOwned owned){
-                    if ((owned.getTrueOwner() == this || (this.getTrueOwner() != null && owned.getTrueOwner() == this.getTrueOwner()))
-                            && livingEntity.isAlive()){
-                        list.add(livingEntity);
-                    }
-                }
-            }
-        }
-        return list;
-    }
-
     public void tick() {
         super.tick();
         if (this.level.isClientSide) {
@@ -204,13 +186,14 @@ public class BoundEngineer extends AbstractBoundIllager implements ICanBeAnimate
                 this.playSound(SoundEvents.WITCH_THROW, 1.0F, this.getVoicePitch());
                 if (this.level instanceof ServerLevel serverLevel) {
                     int randomSelection = this.random.nextInt(0, 3);
+                    LivingEntity owner = this.getTrueOwner() != null ? this.getTrueOwner() : this;
                     if (randomSelection == 0) {
                         GSHinder hinder = GSEntityTypes.HINDER.get().create(serverLevel);
                         if (hinder != null) {
                             hinder.setPos(this.getX(), this.getY() + 1.0, this.getZ());
                             hinder.setDeltaMovement((double) (-2 + this.random.nextInt(5)) * 0.4, 0.6, (double) (-2 + this.random.nextInt(5)) * 0.4);
                             hinder.setInMotion(true);
-                            hinder.setTrueOwner(this);
+                            hinder.setTrueOwner(owner);
                             hinder.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(this.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
                             this.level.addFreshEntity(hinder);
                         }
@@ -220,7 +203,7 @@ public class BoundEngineer extends AbstractBoundIllager implements ICanBeAnimate
                             sentry.setPos(this.getX(), this.getY() + 1.0, this.getZ());
                             sentry.setDeltaMovement((double) (-2 + this.random.nextInt(5)) * 0.4, 0.6, (double) (-2 + this.random.nextInt(5)) * 0.4);
                             sentry.setInMotion(true);
-                            sentry.setTrueOwner(this);
+                            sentry.setTrueOwner(owner);
                             sentry.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(this.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
                             this.level.addFreshEntity(sentry);
                         }
@@ -230,7 +213,7 @@ public class BoundEngineer extends AbstractBoundIllager implements ICanBeAnimate
                             factory.setPos(this.getX(), this.getY() + 1.0, this.getZ());
                             factory.setDeltaMovement((double) (-2 + this.random.nextInt(5)) * 0.4, 0.6, (double) (-2 + this.random.nextInt(5)) * 0.4);
                             factory.setInMotion(true);
-                            factory.setTrueOwner(this);
+                            factory.setTrueOwner(owner);
                             factory.setAnimationState(1);
                             factory.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(this.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
                             serverLevel.addFreshEntity(factory);
@@ -279,7 +262,7 @@ public class BoundEngineer extends AbstractBoundIllager implements ICanBeAnimate
             return BoundEngineer.this.attackType == 0
                     && BoundEngineer.this.getTarget() != null
                     && BoundEngineer.this.throwCooldown < 1
-                    && BoundEngineer.this.getMachines().size() < 3;
+                    && GSMobUtil.getMachines(BoundEngineer.this).size() < 3;
         }
 
         public void start() {
@@ -316,7 +299,7 @@ public class BoundEngineer extends AbstractBoundIllager implements ICanBeAnimate
                 double closestDistance = Double.MAX_VALUE;
                 LivingEntity closestToRepair = null;
 
-                for (LivingEntity livingEntity : BoundEngineer.this.getMachines()) {
+                for (LivingEntity livingEntity : GSMobUtil.getMachines(BoundEngineer.this)) {
                     if (livingEntity.getHealth() <= livingEntity.getMaxHealth() / 2.0F) {
                         double distance = BoundEngineer.this.distanceToSqr(livingEntity);
                         if (distance < closestDistance) {

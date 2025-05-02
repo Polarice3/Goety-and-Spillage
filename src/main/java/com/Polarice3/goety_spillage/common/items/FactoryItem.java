@@ -4,8 +4,11 @@ import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
 import com.Polarice3.goety_spillage.common.entities.ally.factory.GSFactory;
 import com.Polarice3.goety_spillage.common.entities.ally.factory.IEngineerMachine;
+import com.Polarice3.goety_spillage.common.util.GSMobUtil;
+import com.Polarice3.goety_spillage.config.GSSpellConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
@@ -32,11 +35,14 @@ public class FactoryItem extends Item {
 
     public InteractionResult useOn(UseOnContext p_40510_) {
         Direction direction = p_40510_.getClickedFace();
+        Level level = p_40510_.getLevel();
+        Player player = p_40510_.getPlayer();
         if (direction == Direction.DOWN) {
             return InteractionResult.FAIL;
+        } else if (player != null && GSMobUtil.getMachines(level, player).size() >= GSSpellConfig.EngineerMachineLimit.get()){
+            player.displayClientMessage(Component.translatable("info.goety.summon.limit"), true);
+            return InteractionResult.FAIL;
         } else {
-            Level level = p_40510_.getLevel();
-            Player player = p_40510_.getPlayer();
             BlockPlaceContext blockplacecontext = new BlockPlaceContext(p_40510_);
             BlockPos blockpos = blockplacecontext.getClickedPos();
             ItemStack itemstack = p_40510_.getItemInHand();
@@ -53,7 +59,7 @@ public class FactoryItem extends Item {
                     Entity entity = entityType.create(serverlevel);
                     if (entity instanceof Owned owned) {
                         float f = (float) Mth.floor((Mth.wrapDegrees(p_40510_.getRotation() - 180.0F) + 22.5F) / 45.0F) * 45.0F;
-                        owned.moveTo(owned.getX(), owned.getY(), owned.getZ(), f, 0.0F);
+                        owned.moveTo(vec3.x(), vec3.y(), vec3.z(), f, 0.0F);
                         owned.setTrueOwner(player);
                         if (owned instanceof IEngineerMachine machine){
                             machine.setInMotion(true);
@@ -61,7 +67,7 @@ public class FactoryItem extends Item {
                                 factory.setAnimationState(1);
                             }
                         }
-                        owned.finalizeSpawn(serverlevel, serverlevel.getCurrentDifficultyAt(player.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
+                        owned.finalizeSpawn(serverlevel, serverlevel.getCurrentDifficultyAt(blockpos), MobSpawnType.MOB_SUMMONED, null, null);
                         serverlevel.addFreshEntityWithPassengers(owned);
                         owned.gameEvent(GameEvent.ENTITY_PLACE, p_40510_.getPlayer());
                     } else {

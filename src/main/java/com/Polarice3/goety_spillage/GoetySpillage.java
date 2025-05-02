@@ -7,6 +7,7 @@ import com.Polarice3.goety_spillage.common.entities.ally.GSSpiritHand;
 import com.Polarice3.goety_spillage.common.entities.ally.RagnoServant;
 import com.Polarice3.goety_spillage.common.entities.ally.undead.bound.BoundEngineer;
 import com.Polarice3.goety_spillage.common.entities.ally.undead.bound.BoundFreakager;
+import com.Polarice3.goety_spillage.common.entities.ally.undead.zombie.ZombieAbsorber;
 import com.Polarice3.goety_spillage.common.entities.neutral.VillagerVictim;
 import com.Polarice3.goety_spillage.common.entities.projectiles.*;
 import com.Polarice3.goety_spillage.common.items.GSItems;
@@ -21,7 +22,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.brewing.BrewingRecipe;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -35,8 +35,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 import org.slf4j.Logger;
 import top.theillusivec4.curios.api.CuriosApi;
-import top.theillusivec4.curios.api.SlotTypeMessage;
-import top.theillusivec4.curios.api.SlotTypePreset;
 
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
@@ -119,7 +117,7 @@ public class GoetySpillage {
     }
 
     private static void addBrewingRecipes(){
-        BrewingRecipeRegistry.addRecipe(new BrewingRecipe(Ingredient.of(ModPotionUtil.setPotion(Potions.AWKWARD)), Ingredient.of(GSItems.MUTATED_FLESH.get()), ModPotionUtil.setPotion(PotionRegisterer.MUTATION.get())));
+        BrewingRecipeRegistry.addRecipe(new ModPotionUtil(ModPotionUtil.setPotion(Potions.AWKWARD), Ingredient.of(GSItems.MUTATED_FLESH.get()), ModPotionUtil.setPotion(PotionRegisterer.MUTATION.get())));
     }
 
     private void setupEntityAttributeCreation(final EntityAttributeCreationEvent event) {
@@ -134,6 +132,7 @@ public class GoetySpillage {
         event.put(GSEntityTypes.IMP.get(), GSImp.setCustomAttributes().build());
         event.put(GSEntityTypes.SPIRIT_HAND.get(), GSSpiritHand.setCustomAttributes().build());
         event.put(GSEntityTypes.CROCOFANG_SERVANT.get(), CrocofangServant.setCustomAttributes().build());
+        event.put(GSEntityTypes.ZOMBIE_ABSORBER.get(), ZombieAbsorber.setCustomAttributes().build());
         event.put(GSEntityTypes.VILLAGER_VICTIM.get(), VillagerVictim.setCustomAttributes().build());
         event.put(GSEntityTypes.BOUND_FREAKAGER.get(), BoundFreakager.setCustomAttributes().build());
         event.put(GSEntityTypes.RAGNO_SERVANT.get(), RagnoServant.setCustomAttributes().build());
@@ -147,8 +146,9 @@ public class GoetySpillage {
         event.put(GSEntityTypes.TRICK_OR_TREAT.get(), TrickOrTreatEntity.createAttributes().build());
     }
 
+    @SuppressWarnings("all")
     private void enqueueIMC(final InterModEnqueueEvent event) {
-        InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.BODY.getMessageBuilder().build());
-        InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.HEAD.getMessageBuilder().build());
+        InterModComms.sendTo(CuriosApi.MODID, top.theillusivec4.curios.api.SlotTypeMessage.REGISTER_TYPE, () -> top.theillusivec4.curios.api.SlotTypePreset.BODY.getMessageBuilder().build());
+        InterModComms.sendTo(CuriosApi.MODID, top.theillusivec4.curios.api.SlotTypeMessage.REGISTER_TYPE, () -> top.theillusivec4.curios.api.SlotTypePreset.HEAD.getMessageBuilder().build());
     }
 }

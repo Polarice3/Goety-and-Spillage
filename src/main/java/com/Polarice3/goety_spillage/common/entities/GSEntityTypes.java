@@ -6,6 +6,7 @@ import com.Polarice3.goety_spillage.common.entities.ally.factory.*;
 import com.Polarice3.goety_spillage.common.entities.ally.undead.GSFunnybone;
 import com.Polarice3.goety_spillage.common.entities.ally.undead.bound.BoundEngineer;
 import com.Polarice3.goety_spillage.common.entities.ally.undead.bound.BoundFreakager;
+import com.Polarice3.goety_spillage.common.entities.ally.undead.zombie.ZombieAbsorber;
 import com.Polarice3.goety_spillage.common.entities.neutral.VillagerVictim;
 import com.Polarice3.goety_spillage.common.entities.projectiles.*;
 import com.Polarice3.goety_spillage.common.entities.util.DarkEffectCloud;
@@ -73,6 +74,10 @@ public class GSEntityTypes {
             EntityType.Builder.of(CrocofangServant::new, MobCategory.MONSTER)
                     .sized(2.0F, 1.4F));
 
+    public static final RegistryObject<EntityType<ZombieAbsorber>> ZOMBIE_ABSORBER = register("zombie_absorber",
+            EntityType.Builder.of(ZombieAbsorber::new, MobCategory.MONSTER)
+                    .sized(1.3F, 2.9F));
+
     public static final RegistryObject<EntityType<VillagerVictim>> VILLAGER_VICTIM = register("villager_victim",
             EntityType.Builder.of(VillagerVictim::new, MobCategory.CREATURE)
                     .sized(0.6F, 1.95F));
@@ -108,7 +113,7 @@ public class GSEntityTypes {
                     .sized(0.75F, 0.75F));
 
     public static final RegistryObject<EntityType<ThrownAxe>> THROWN_AXE = register("thrown_axe",
-            EntityType.Builder.<ThrownAxe>of(ThrownAxe::new, MobCategory.MONSTER)
+            EntityType.Builder.<ThrownAxe>of(ThrownAxe::new, MobCategory.MISC)
                     .sized(0.2F, 0.2F));
 
     public static final RegistryObject<EntityType<FreakyScythe>> FREAKY_SCYTHE = register("freaky_scythe",

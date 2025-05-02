@@ -1,7 +1,6 @@
 package com.Polarice3.goety_spillage.common.items.curios;
 
 import com.Polarice3.Goety.api.entities.ally.IServant;
-import com.Polarice3.Goety.common.effects.GoetyEffects;
 import com.Polarice3.Goety.common.items.curios.SingleStackItem;
 import com.Polarice3.Goety.init.ModKeybindings;
 import com.Polarice3.goety_spillage.common.capabilities.spillage.SpillageCapHelper;
@@ -9,10 +8,7 @@ import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
 import com.Polarice3.goety_spillage.common.entities.ally.GSEyesore;
 import com.Polarice3.goety_spillage.common.entities.ally.GSTot;
 import com.Polarice3.goety_spillage.common.entities.ally.undead.GSFunnybone;
-import com.Polarice3.goety_spillage.common.entities.projectiles.DarkPotion;
-import com.Polarice3.goety_spillage.common.entities.projectiles.FreakyScythe;
-import com.Polarice3.goety_spillage.common.entities.projectiles.GSPumpkinBomb;
-import com.Polarice3.goety_spillage.common.entities.projectiles.GSSkullBomb;
+import com.Polarice3.goety_spillage.common.entities.projectiles.*;
 import com.Polarice3.goety_spillage.config.GSAttributesConfig;
 import com.Polarice3.goety_spillage.config.GSItemConfig;
 import com.yellowbrossproductions.illageandspillage.util.EffectRegisterer;
@@ -26,12 +22,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.level.ClipContext;
@@ -53,11 +49,13 @@ public class FreakyRobeItem extends SingleStackItem {
     private static final String SCYTHE_COOLDOWN = "Scythe Cooldown";
     private static final String TOT_COOLDOWN = "ToT Cooldown";
     private static final String MINION_COOLDOWN = "Minion Cooldown";
+    private static final String AXE_COOLDOWN = "Axe Cooldown";
     private static final int BOMBS_ATTACK = 1;
     private static final int POTIONS_ATTACK = 2;
     private static final int SCYTHE_ATTACK = 3;
     private static final int TOT_ATTACK = 4;
     private static final int MINION_ATTACK = 5;
+    private static final int AXE_ATTACK = 6;
 
     @Override
     public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
@@ -73,9 +71,9 @@ public class FreakyRobeItem extends SingleStackItem {
                 compound.putInt(SCYTHE_COOLDOWN, 0);
                 compound.putInt(TOT_COOLDOWN, 0);
                 compound.putInt(MINION_COOLDOWN, 0);
+                compound.putInt(AXE_COOLDOWN, 0);
             } else {
                 if (getAttackType(stack) > 0){
-                    livingEntity.addEffect(new MobEffectInstance(GoetyEffects.TANGLED.get(), 20, 0, false, false, false));
                     increaseAttackTick(stack);
                 }
                 if (getAttackCooldown(stack) > 0) {
@@ -96,6 +94,9 @@ public class FreakyRobeItem extends SingleStackItem {
                     }
                     if (getAttackTypeCooldown(stack, MINION_COOLDOWN) > 0 && hasFewEnoughMinions(livingEntity)){
                         decreaseAttackTypeCooldown(stack, MINION_COOLDOWN);
+                    }
+                    if (getAttackTypeCooldown(stack, AXE_COOLDOWN) > 0){
+                        decreaseAttackTypeCooldown(stack, AXE_COOLDOWN);
                     }
                 }
                 stopAttacking(stack);
@@ -219,16 +220,27 @@ public class FreakyRobeItem extends SingleStackItem {
 
     public static void startAttack(LivingEntity wearer, ItemStack robe){
         if (canAttack(robe)) {
-            if (getAttackTypeCooldown(robe, TOT_COOLDOWN) < 1 && wearer.getHealth() < wearer.getMaxHealth()) {
-                setAttackType(robe, TOT_ATTACK);
-            } else if (getAttackTypeCooldown(robe, SCYTHE_COOLDOWN) < 1 && getTarget(wearer) != null) {
-                setAttackType(robe, SCYTHE_ATTACK);
-            } else if (getAttackTypeCooldown(robe, MINION_COOLDOWN) < 1 && hasFewEnoughMinions(wearer)) {
-                setAttackType(robe, MINION_ATTACK);
-            } else if (getAttackTypeCooldown(robe, POTION_COOLDOWN) < 1) {
-                setAttackType(robe, POTIONS_ATTACK);
-            } else if (getAttackTypeCooldown(robe, BOMB_COOLDOWN) < 1) {
-                setAttackType(robe, BOMBS_ATTACK);
+            for (int i = 0; i < 16; ++i) {
+                if (getAttackTypeCooldown(robe, AXE_COOLDOWN) < 1
+                        && wearer.getHealth() < (wearer.getMaxHealth() / 2.0D)
+                        && wearer.getMainHandItem().is(Items.IRON_AXE)
+                        && wearer.getOffhandItem().is(Items.IRON_AXE)
+                        && wearer.getRandom().nextInt(16) == 0) {
+                    setAttackType(robe, AXE_ATTACK);
+                } else if (getAttackTypeCooldown(robe, TOT_COOLDOWN) < 1 && wearer.getHealth() < wearer.getMaxHealth() && wearer.getRandom().nextInt(16) == 0) {
+                    setAttackType(robe, TOT_ATTACK);
+                } else if (getAttackTypeCooldown(robe, SCYTHE_COOLDOWN) < 1 && getTarget(wearer) != null && wearer.getRandom().nextInt(16) == 0) {
+                    setAttackType(robe, SCYTHE_ATTACK);
+                } else if (getAttackTypeCooldown(robe, MINION_COOLDOWN) < 1 && hasFewEnoughMinions(wearer) && wearer.getRandom().nextInt(16) == 0) {
+                    setAttackType(robe, MINION_ATTACK);
+                } else if (getAttackTypeCooldown(robe, POTION_COOLDOWN) < 1 && wearer.getRandom().nextInt(16) == 0) {
+                    setAttackType(robe, POTIONS_ATTACK);
+                } else if (getAttackTypeCooldown(robe, BOMB_COOLDOWN) < 1 && wearer.getRandom().nextInt(16) == 0) {
+                    setAttackType(robe, BOMBS_ATTACK);
+                }
+                if (getAttackType(robe) != 0){
+                    break;
+                }
             }
         }
     }
@@ -271,6 +283,14 @@ public class FreakyRobeItem extends SingleStackItem {
                 setAttackTick(robe, 0);
                 setAttackType(robe, 0);
                 setAttackTypeCooldown(robe, MINION_COOLDOWN, 400);
+                setAttackCooldown(robe, 100);
+            }
+        }
+        if (getAttackType(robe) == AXE_ATTACK) {
+            if (getAttackTick(robe) > 115){
+                setAttackTick(robe, 0);
+                setAttackType(robe, 0);
+                setAttackTypeCooldown(robe, AXE_COOLDOWN, 200);
                 setAttackCooldown(robe, 100);
             }
         }
@@ -345,6 +365,18 @@ public class FreakyRobeItem extends SingleStackItem {
             if (getAttackType(robe) == MINION_ATTACK){
                 if (getAttackTick(robe) == 40){
                     summonMinions(wearer);
+                }
+            }
+
+            if (getAttackType(robe) == AXE_ATTACK){
+                if ((getAttackTick(robe) - 40) % 7 == 0) {
+                    wearer.playSound(IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_VILLAGERWAVE.get(), 3.0F, wearer.getVoicePitch());
+                }
+                if (getAttackTick(robe) >= 40 && getAttackTick(robe) < 96){
+                    shootAxe(wearer, robe);
+                    if (!wearer.level.isClientSide) {
+                        SpillageCapHelper.setSpinning(wearer, true);
+                    }
                 }
             }
         }
@@ -501,6 +533,36 @@ public class FreakyRobeItem extends SingleStackItem {
             scythe.setDamage(GSAttributesConfig.BoundFreakagerScytheDamage.get().floatValue());
             wearer.level.addFreshEntity(scythe);
         }
+    }
+
+    public static void shootAxe(LivingEntity wearer, ItemStack robe){
+        LivingEntity target = getTarget(wearer);
+        float f = wearer.yBodyRot * 0.017453292F * 0.25F;
+        float f1 = Mth.cos(f);
+        float f2 = Mth.sin(f);
+        Vec3 vec3;
+        if (getAttackTick(robe) % 2 == 0) {
+            vec3 = new Vec3(wearer.getX() + (double)f1 * 0.6, wearer.getY() + 0.7, wearer.getZ() + (double)f2 * 0.6);
+        } else {
+            vec3 = new Vec3(wearer.getX() - (double)f1 * 0.6, wearer.getY() + 0.7, wearer.getZ() - (double)f2 * 0.6);
+        }
+
+        Vec3 vec31 = wearer.getLookAngle();
+        double x = -vec31.x;
+        double y = -vec31.y;
+        double z = -vec31.z;
+        if (target != null){
+            x = vec3.x - target.getX();
+            y = vec3.y - (target.getY() + (double)(target.getEyeHeight() / 2.0F));
+            z = vec3.z - target.getZ();
+        }
+        ThrownAxe projectile = new ThrownAxe(wearer.level, wearer, -x, -y, -z);
+        projectile.moveTo(vec3);
+        projectile.setRot(wearer);
+        projectile.shoot(-x, -y, -z, 1.0F, 20.0F);
+        projectile.setOwner(wearer);
+        projectile.setDamage(GSAttributesConfig.BoundFreakagerAxeDamage.get().floatValue());
+        wearer.level.addFreshEntity(projectile);
     }
 
     @Nullable

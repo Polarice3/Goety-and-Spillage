@@ -28,7 +28,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Named as to hinder the efforts of foes, these sentries will heal any allied creature near itself. Unfortunately, $(l)they cannot heal the undead.$()"
+      "text": "Named as to hinder the efforts of foes, these sentries will heal any allied creature near itself. Unfortunately, $(l)they cannot heal the undead$() and will enter a period of cooling down after several seconds of healing."
     },
     {
       "type": "patchouli:entity",

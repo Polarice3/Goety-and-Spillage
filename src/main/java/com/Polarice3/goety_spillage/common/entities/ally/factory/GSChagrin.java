@@ -1,9 +1,7 @@
 package com.Polarice3.goety_spillage.common.entities.ally.factory;
 
 import com.Polarice3.Goety.common.entities.ai.SummonTargetGoal;
-import com.Polarice3.Goety.common.entities.ally.Summoned;
 import com.Polarice3.Goety.common.entities.neutral.Owned;
-import com.yellowbrossproductions.illageandspillage.client.model.animation.ICanBeAnimated;
 import com.yellowbrossproductions.illageandspillage.entities.IllagerAttack;
 import com.yellowbrossproductions.illageandspillage.util.IllageAndSpillageSoundEvents;
 import net.minecraft.core.particles.ParticleTypes;
@@ -11,7 +9,6 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -35,10 +32,9 @@ import net.minecraft.world.level.Level;
 
 import java.util.Objects;
 
-public class GSChagrin extends Summoned implements RangedAttackMob, IEngineerMachine, ICanBeAnimated, IllagerAttack {
+public class GSChagrin extends EngineerMachine implements RangedAttackMob, IllagerAttack {
     private static final EntityDataAccessor<Integer> ANIMATION_STATE = SynchedEntityData.defineId(GSChagrin.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Float> PARTIAL_TICKS = SynchedEntityData.defineId(GSChagrin.class, EntityDataSerializers.FLOAT);
-    private static final EntityDataAccessor<Boolean> IN_MOTION = SynchedEntityData.defineId(GSChagrin.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> SHOW_LOCKER = SynchedEntityData.defineId(GSChagrin.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> STUN_TICKS = SynchedEntityData.defineId(GSChagrin.class, EntityDataSerializers.INT);
     public AnimationState introAnimationState = new AnimationState();
@@ -74,36 +70,13 @@ public class GSChagrin extends Summoned implements RangedAttackMob, IEngineerMac
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(ANIMATION_STATE, 0);
-        this.entityData.define(IN_MOTION, false);
         this.entityData.define(SHOW_LOCKER, false);
         this.entityData.define(STUN_TICKS, 0);
         this.entityData.define(PARTIAL_TICKS, 0.0F);
     }
 
-    public boolean canSpawnArmor() {
-        return false;
-    }
-
-    @Override
-    public boolean canUpdateMove() {
-        return false;
-    }
-
-    @Override
-    public boolean isCommanded() {
-        return false;
-    }
-
     public void setAnimationState(int state) {
         this.entityData.set(ANIMATION_STATE, state);
-    }
-
-    public boolean isInMotion() {
-        return this.entityData.get(IN_MOTION);
-    }
-
-    public void setInMotion(boolean motion) {
-        this.entityData.set(IN_MOTION, motion);
     }
 
     public boolean shouldShowLocker() {
@@ -139,14 +112,6 @@ public class GSChagrin extends Summoned implements RangedAttackMob, IEngineerMac
         }
 
         return false;
-    }
-
-    protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
-        return SoundEvents.ZOMBIE_ATTACK_IRON_DOOR;
-    }
-
-    protected SoundEvent getDeathSound() {
-        return IllageAndSpillageSoundEvents.ENTITY_MAGISPELLER_DISPENSER_DESTROY.get();
     }
 
     public AnimationState getAnimationState(String var1) {
@@ -190,9 +155,6 @@ public class GSChagrin extends Summoned implements RangedAttackMob, IEngineerMac
         this.introAnimationState.stop();
         this.shootingAnimationState.stop();
         this.stunAnimationState.stop();
-    }
-
-    public void knockback(double p_147241_, double p_147242_, double p_147243_) {
     }
 
     public void tick() {
@@ -324,22 +286,6 @@ public class GSChagrin extends Summoned implements RangedAttackMob, IEngineerMac
 
     public boolean hurt(DamageSource p_21016_, float p_21017_) {
         return p_21016_.getEntity() != this && super.hurt(p_21016_, p_21017_);
-    }
-
-    public boolean isPersistenceRequired() {
-        return true;
-    }
-
-    public void die(DamageSource p_70645_1_) {
-        super.die(p_70645_1_);
-        if (this.level.isClientSide) {
-            double d0 = this.random.nextGaussian() * 0.02;
-            double d1 = this.random.nextGaussian() * 0.02;
-            double d2 = this.random.nextGaussian() * 0.02;
-            this.level.addParticle(ParticleTypes.EXPLOSION_EMITTER, this.getX(), this.getY(), this.getZ(), d0, d1, d2);
-        }
-
-        this.deathTime = 19;
     }
 
     class StunGoal extends Goal {

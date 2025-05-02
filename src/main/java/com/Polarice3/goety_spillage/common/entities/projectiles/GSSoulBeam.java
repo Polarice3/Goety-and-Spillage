@@ -20,6 +20,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,11 +90,11 @@ public class GSSoulBeam extends Entity {
         pCompound.putInt("Duration", this.getDuration());
     }
 
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
+    public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
-    public PushReaction getPistonPushReaction() {
+    public @NotNull PushReaction getPistonPushReaction() {
         return PushReaction.IGNORE;
     }
 
@@ -135,12 +136,12 @@ public class GSSoulBeam extends Entity {
     public SoulBeamHitResult raytraceEntities(Level world, Vec3 from, Vec3 to, boolean ignoreBlockWithoutBoundingBox) {
         SoulBeamHitResult result = new SoulBeamHitResult();
         result.setBlockHit(world.clip(new ClipContext(from, to, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this)));
-        if (result.blockHit != null) {
-            Vec3 hitVec = result.blockHit.getLocation();
+        if (result.getBlockHit() != null) {
+            Vec3 hitVec = result.getBlockHit().getLocation();
             this.collidePosX = hitVec.x;
             this.collidePosY = hitVec.y;
             this.collidePosZ = hitVec.z;
-            this.blockSide = result.blockHit.getDirection();
+            this.blockSide = result.getBlockHit().getDirection();
         } else {
             this.collidePosX = this.endPosX;
             this.collidePosY = this.endPosY;
@@ -165,15 +166,7 @@ public class GSSoulBeam extends Entity {
         return result;
     }
 
-    public void push(Entity entityIn) {
-    }
-
-    public boolean isPickable() {
-        return false;
-    }
-
-    public boolean isPushable() {
-        return false;
+    public void push(@NotNull Entity entityIn) {
     }
 
     public boolean shouldRenderAtSqrDistance(double distance) {

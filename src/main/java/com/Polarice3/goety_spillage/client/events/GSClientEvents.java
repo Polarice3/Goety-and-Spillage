@@ -7,12 +7,15 @@ import com.Polarice3.goety_spillage.common.network.GSNetwork;
 import com.Polarice3.goety_spillage.common.network.client.CFreakyRobePacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.player.Input;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.event.MovementInputUpdateEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -71,6 +74,29 @@ public class GSClientEvents {
             if (SpillageCapHelper.isCasting(livingEntity) || SpillageCapHelper.isSpinning(livingEntity)){
                 event.setCanceled(true);
             }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onInputInteract(InputEvent.InteractionKeyMappingTriggered event){
+        AbstractClientPlayer player = Minecraft.getInstance().player;
+        if (player != null){
+            if (SpillageCapHelper.isCasting(player) || SpillageCapHelper.isSpinning(player)){
+                if (event.isAttack() || event.isPickBlock() || event.isUseItem()){
+                    event.setCanceled(true);
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void updateInputEvent(MovementInputUpdateEvent event) {
+        Player player = event.getEntity();
+        Input input = event.getInput();
+        if (SpillageCapHelper.isCasting(player) || SpillageCapHelper.isSpinning(player)) {
+            input.leftImpulse = 0.0F;
+            input.forwardImpulse = 0.0F;
+            input.jumping = false;
         }
     }
 

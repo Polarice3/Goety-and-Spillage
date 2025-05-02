@@ -1,17 +1,17 @@
 package com.Polarice3.goety_spillage.common.entities.ally.factory;
 
-import com.Polarice3.Goety.common.entities.ally.Summoned;
 import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.Polarice3.Goety.utils.MobUtil;
-import com.yellowbrossproductions.illageandspillage.client.model.animation.ICanBeAnimated;
+import com.Polarice3.goety_spillage.common.util.GSMobUtil;
+import com.Polarice3.goety_spillage.config.GSMobsConfig;
 import com.yellowbrossproductions.illageandspillage.entities.IllagerAttack;
 import com.yellowbrossproductions.illageandspillage.util.IllageAndSpillageSoundEvents;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AnimationState;
@@ -26,13 +26,15 @@ import net.minecraft.world.level.Level;
 import java.util.List;
 import java.util.Objects;
 
-public class GSHinder extends Summoned implements ICanBeAnimated, IEngineerMachine, IllagerAttack {
+public class GSHinder extends EngineerMachine implements IllagerAttack {
     private static final EntityDataAccessor<Integer> ANIMATION_STATE = SynchedEntityData.defineId(GSHinder.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Boolean> IN_MOTION = SynchedEntityData.defineId(GSHinder.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> HEALING = SynchedEntityData.defineId(GSHinder.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> COOLING = SynchedEntityData.defineId(GSHinder.class, EntityDataSerializers.BOOLEAN);
     public AnimationState introAnimationState = new AnimationState();
     public AnimationState idleAnimationState = new AnimationState();
     private int introTicks;
+    private int healTicks;
+    private int coolTicks;
 
     public GSHinder(EntityType<? extends Owned> type, Level worldIn) {
         super(type, worldIn);
@@ -47,22 +49,26 @@ public class GSHinder extends Summoned implements ICanBeAnimated, IEngineerMachi
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(ANIMATION_STATE, 0);
-        this.entityData.define(IN_MOTION, false);
         this.entityData.define(HEALING, false);
-    }
-
-    public boolean canSpawnArmor() {
-        return false;
+        this.entityData.define(COOLING, false);
     }
 
     @Override
-    public boolean canUpdateMove() {
-        return false;
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        if (compound.contains("HealTick")) {
+            this.healTicks = compound.getInt("HealTick");
+        }
+        if (compound.contains("CoolTick")) {
+            this.coolTicks = compound.getInt("CoolTick");
+        }
     }
 
     @Override
-    public boolean isCommanded() {
-        return false;
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putInt("HealTick", this.healTicks);
+        compound.putInt("CoolTick", this.coolTicks);
     }
 
     public void setAnimationState(int state) {
@@ -87,20 +93,12 @@ public class GSHinder extends Summoned implements ICanBeAnimated, IEngineerMachi
         return false;
     }
 
-    public boolean isInMotion() {
-        return this.entityData.get(IN_MOTION);
+    public boolean isCooling() {
+        return this.entityData.get(COOLING);
     }
 
-    public void setInMotion(boolean motion) {
-        this.entityData.set(IN_MOTION, motion);
-    }
-
-    protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
-        return SoundEvents.ZOMBIE_ATTACK_IRON_DOOR;
-    }
-
-    protected SoundEvent getDeathSound() {
-        return IllageAndSpillageSoundEvents.ENTITY_MAGISPELLER_DISPENSER_DESTROY.get();
+    public void setCooling(boolean cooling) {
+        this.entityData.set(COOLING, cooling);
     }
 
     public AnimationState getAnimationState(String var1) {
@@ -133,9 +131,6 @@ public class GSHinder extends Summoned implements ICanBeAnimated, IEngineerMachi
     private void stopAllAnimationStates() {
         this.introAnimationState.stop();
         this.idleAnimationState.stop();
-    }
-
-    public void knockback(double p_147241_, double p_147242_, double p_147243_) {
     }
 
     public void makeParticleTrail(double srcX, double srcY, double srcZ, double destX, double destY, double destZ) {
@@ -178,57 +173,84 @@ public class GSHinder extends Summoned implements ICanBeAnimated, IEngineerMachi
             this.setAnimationState(2);
         }
 
+        if (this.coolTicks > 0){
+            --this.coolTicks;
+        }
+
         if (!this.isInMotion()) {
-            if (this.entityData.get(ANIMATION_STATE) != 1 && (Integer)this.entityData.get(ANIMATION_STATE) != 2) {
+            if (this.entityData.get(ANIMATION_STATE) != 1 && this.entityData.get(ANIMATION_STATE) != 2) {
                 this.setAnimationState(0);
                 this.setAnimationState(2);
             }
 
             if (this.entityData.get(ANIMATION_STATE) == 2) {
-                List<LivingEntity> list = this.level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(5.0), (predicate) -> {
-                    return !(predicate instanceof IllagerAttack) && MobUtil.areAllies(this, predicate) && this.hasLineOfSight(predicate) && predicate.isAlive() && predicate.getHealth() < predicate.getMaxHealth() && predicate.getMobType() != MobType.UNDEAD;
-                });
-                if (list.isEmpty()) {
-                    this.setHealing(false);
+                List<LivingEntity> list = this.level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(5.0D), (predicate) -> !(predicate instanceof IllagerAttack) && MobUtil.areAllies(this, predicate) && this.hasLineOfSight(predicate) && predicate.isAlive() && predicate.getHealth() < predicate.getMaxHealth() && predicate.getMobType() != MobType.UNDEAD);
+                if (list.isEmpty() || this.isCooling()) {
+                    if (this.isHealing()) {
+                        this.setHealing(false);
+                    }
                 } else {
+                    if (!this.isHealing()) {
+                        this.setHealing(true);
+                        GSMobUtil.mobFollowingSound(this.level(), this, IllageAndSpillageSoundEvents.ENTITY_ENGINEER_HINDER_HEAL.get(), 0.5F, 2.0F, true);
+                    } else {
+                        if (GSMobsConfig.HinderCool.get()) {
+                            ++this.healTicks;
+                        }
+                    }
                     for (LivingEntity entity : list) {
                         this.makeParticleTrail(this.getX(), this.getY() + 0.6, this.getZ(), entity.getBoundingBox().getCenter().x, entity.getBoundingBox().getCenter().y, entity.getBoundingBox().getCenter().z);
-                        this.setHealing(true);
                         if (this.tickCount % 2 == 0) {
-                            this.playSound(IllageAndSpillageSoundEvents.ENTITY_ENGINEER_HINDER_HEAL.get(), 0.5F, 2.0F);
                             entity.heal(1.0F);
                         }
                     }
                 }
             }
 
-            this.setDeltaMovement(0.0, this.getDeltaMovement().y, 0.0);
+            if (GSMobsConfig.HinderCool.get()) {
+                if (this.healTicks >= GSMobsConfig.HinderHealTime.get()) {
+                    this.coolTicks = GSMobsConfig.HinderCoolTime.get();
+                    if (!this.level.isClientSide) {
+                        this.level.broadcastEntityEvent(this, (byte) 4);
+                    }
+                    this.healTicks = 0;
+                }
+
+                this.setCooling(this.coolTicks > 0);
+            }
+
+            this.setDeltaMovement(0.0D, this.getDeltaMovement().y, 0.0D);
+        }
+
+        if (this.isCooling()){
+            if (this.level instanceof ServerLevel serverLevel){
+                for(int i = 0; i < 1; ++i) {
+                    serverLevel.sendParticles(ParticleTypes.SMOKE, this.getRandomX(0.15) + (-0.5 + this.random.nextDouble()) * 2.5, this.getRandomY() + (-0.5 + this.random.nextDouble()) * 1.5, this.getRandomZ(0.15) + (-0.5 + this.random.nextDouble()) * 2.5, 1, 0.0F, 0.0F, 0.0F, 0.0F);
+                }
+            }
+            if (!GSMobsConfig.HinderCool.get()) {
+                this.setCooling(false);
+            }
         }
 
         if (this.onGround() && this.isInMotion()) {
             if (this.introTicks < 1) {
                 this.introTicks = 1;
             }
-
+            this.setAnimationState(1);
             this.setInMotion(false);
         }
 
         super.tick();
     }
 
-    public boolean isPersistenceRequired() {
-        return true;
-    }
-
-    public void die(DamageSource p_70645_1_) {
-        super.die(p_70645_1_);
-        if (this.level.isClientSide) {
-            double d0 = this.random.nextGaussian() * 0.02;
-            double d1 = this.random.nextGaussian() * 0.02;
-            double d2 = this.random.nextGaussian() * 0.02;
-            this.level.addParticle(ParticleTypes.EXPLOSION_EMITTER, this.getX(), this.getY(), this.getZ(), d0, d1, d2);
+    @Override
+    public void handleEntityEvent(byte p_21375_) {
+        if (p_21375_ == 4){
+            this.coolTicks = GSMobsConfig.HinderCoolTime.get();
+            this.playSound(SoundEvents.GENERIC_EXTINGUISH_FIRE);
+        } else {
+            super.handleEntityEvent(p_21375_);
         }
-
-        this.deathTime = 19;
     }
 }

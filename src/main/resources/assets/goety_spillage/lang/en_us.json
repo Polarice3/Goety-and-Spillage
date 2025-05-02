@@ -3,6 +3,10 @@
   "advancements.goety_spillage.root.description": "Of Goety and Spillage",
   "advancements.goety_spillage.craft_spirit_hand_focus.title": "Showing These Hands",
   "advancements.goety_spillage.craft_spirit_hand_focus.description": "Craft a Spirit Hand Focus",
+  "advancements.goety_spillage.craft_freaky_robe.title": "Time to Get \uD835\uDCD5\uD835\uDCFB\uD835\uDCEE\uD835\uDCEA\uD835\uDCF4\uD835\uDD02",
+  "advancements.goety_spillage.craft_freaky_robe.description": "Craft a Freaky Robe, which allows the wearer to perform several of Freakager's attacks.",
+  "advancements.goety_spillage.obtain_mutated_flesh.title": "Your Fantasies Can Never Be Quenched!",
+  "advancements.goety_spillage.obtain_mutated_flesh.description": "Obtain a Mutated Flesh dropped by Ragno.",
   "advancements.goety_spillage.obtain_dark_potion.title": "You Freakin' Freaks!",
   "advancements.goety_spillage.obtain_dark_potion.description": "Obtain a Dark Potion.",
   "advancements.goety_spillage.obtain_mutation_potion.title": "When Will You Learn?",
@@ -13,6 +17,8 @@
   "advancements.goety_spillage.obtain_engineer_mallet.description": "Obtain an Engineer's Mallet. Rarely dropped by Engineers.",
   "advancements.goety_spillage.summon_bound_engineer.title": "Being Dead Just Got Me Mad!",
   "advancements.goety_spillage.summon_bound_engineer.description": "Summon a Bound Engineer.",
+  "advancements.goety_spillage.summon_zombie_absorber.title": "Mighty Glacier",
+  "advancements.goety_spillage.summon_zombie_absorber.description": "Summon a Zombie Absorber.",
 
   "entity.goety_spillage.dark_cloud_effect": "Dark Cloud Effect",
   "entity.goety_spillage.bound_engineer": "Bound Engineer",
@@ -26,6 +32,7 @@
   "entity.goety_spillage.imp": "Imp",
   "entity.goety_spillage.spirit_hand": "Spirit Hand",
   "entity.goety_spillage.crocofang_servant": "Crocofang",
+  "entity.goety_spillage.zombie_absorber": "Zombie Absorber",
   "entity.goety_spillage.villager_victim": "Villager",
   "entity.goety_spillage.bound_freakager": "Bound Freakager",
   "entity.goety_spillage.ragno_servant": "Ragno",
@@ -41,6 +48,8 @@
   "entity.goety_spillage.web": "Web",
   "entity.goety_spillage.web_net": "Web Net",
 
+  "item.goety_spillage.zombie_absorber_spawn_egg": "Zombie Absorber Spawn Egg",
+  "item.goety_spillage.ragno_servant_spawn_egg": "Ragno Servant Spawn Egg",
   "item.goety_spillage.bound_engineer_spawn_egg": "Bound Engineer Spawn Egg",
   "item.goety_spillage.bound_freakager_spawn_egg": "Bound Freakager Spawn Egg",
 
@@ -51,6 +60,10 @@
 
   "item.goety_spillage.pumpkin_bomb": "Pumpkin Bomb",
   "item.goety_spillage.skull_bomb": "Skull Bomb",
+
+  "item.goety_spillage.chagrin_package": "Chagrin Sentry Package",
+  "item.goety_spillage.hinder_package": "Hinder Package",
+  "item.goety_spillage.factory_package": "Factory Package",
 
   "item.goety_spillage.mutation_potion": "Potion of Mutation",
   "item.goety_spillage.engineer_mallet": "Engineer's Mallet",

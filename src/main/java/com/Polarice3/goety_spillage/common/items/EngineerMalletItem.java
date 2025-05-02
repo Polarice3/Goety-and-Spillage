@@ -1,6 +1,5 @@
 package com.Polarice3.goety_spillage.common.items;
 
-import com.Polarice3.Goety.api.entities.IOwned;
 import com.Polarice3.Goety.api.entities.ally.IServant;
 import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.Polarice3.Goety.common.network.ModNetwork;
@@ -13,9 +12,12 @@ import com.Polarice3.goety_spillage.common.entities.ally.factory.GSChagrin;
 import com.Polarice3.goety_spillage.common.entities.ally.factory.GSFactory;
 import com.Polarice3.goety_spillage.common.entities.ally.factory.GSHinder;
 import com.Polarice3.goety_spillage.common.entities.ally.factory.IEngineerMachine;
+import com.Polarice3.goety_spillage.common.util.GSMobUtil;
+import com.Polarice3.goety_spillage.config.GSSpellConfig;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.yellowbrossproductions.illageandspillage.util.IllageAndSpillageSoundEvents;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
@@ -37,8 +39,6 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
 
 public class EngineerMalletItem extends Item implements Vanishable {
     private final Multimap<Attribute, AttributeModifier> defaultModifiers;
@@ -105,25 +105,11 @@ public class EngineerMalletItem extends Item implements Vanishable {
         return super.interactLivingEntity(stack, player, entity, hand);
     }
 
-    public List<LivingEntity> getMachines(Level level, Player player) {
-        List<LivingEntity> list = new ArrayList<>();
-        if (level instanceof ServerLevel serverLevel){
-            for (Entity entity : serverLevel.getAllEntities()) {
-                if (entity instanceof LivingEntity livingEntity && entity instanceof IEngineerMachine servant && entity instanceof IOwned owned){
-                    if (owned.getMasterOwner() == player && livingEntity.isAlive()){
-                        list.add(livingEntity);
-                    }
-                }
-            }
-        }
-        return list;
-    }
-
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         if (level instanceof ServerLevel serverLevel) {
             boolean flag = false;
-            if (!SEHelper.getFocusCoolDown(player).isOnCooldown(this) && this.getMachines(level, player).size() < 3) {
+            if (!SEHelper.getFocusCoolDown(player).isOnCooldown(this) && GSMobUtil.getMachines(level, player).size() < GSSpellConfig.EngineerMachineLimit.get()) {
                 player.playSound(SoundEvents.WITCH_THROW, 1.0F, player.getVoicePitch());
                 ModNetwork.sendTo(player, new SPlayPlayerSoundPacket(SoundEvents.WITCH_THROW, 1.0F, player.getVoicePitch()));
                 int randomSelection = level.getRandom().nextInt(0, 3);
@@ -171,6 +157,9 @@ public class EngineerMalletItem extends Item implements Vanishable {
                 ItemHelper.hurtAndBreak(player.getItemInHand(hand), 5, player);
                 SEHelper.addCooldown(player, this, level.getRandom().nextInt(300, 501));
                 return InteractionResultHolder.consume(player.getItemInHand(hand));
+            } else if (GSMobUtil.getMachines(level, player).size() >= GSSpellConfig.EngineerMachineLimit.get()){
+                player.displayClientMessage(Component.translatable("info.goety.summon.limit"), true);
+                return InteractionResultHolder.fail(player.getItemInHand(hand));
             }
         }
         return super.use(level, player, hand);

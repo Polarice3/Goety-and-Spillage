@@ -1,0 +1,36 @@
+{
+  "parent": "goety_spillage:obtain_mutated_flesh",
+  "display": {
+    "icon": {
+      "item": "goety_spillage:freaky_robe"
+    },
+    "title": {
+      "translate": "advancements.goety_spillage.craft_freaky_robe.title"
+    },
+    "description": {
+      "translate": "advancements.goety_spillage.craft_freaky_robe.description"
+    },
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden" : true
+  },
+  "criteria": {
+    "item": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "goety_spillage:freaky_robe"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "item"
+    ]
+  ]
+}

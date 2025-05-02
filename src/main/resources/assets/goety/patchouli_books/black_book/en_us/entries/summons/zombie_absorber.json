@@ -1,0 +1,28 @@
+{
+  "name": "Zombie Absorber",
+  "icon": "goety:great_hammer",
+  "category": "goety:spillage/summons",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The veteran brute has returned, now rotting but still strong enough to weather powerful blows as though they were made of paper."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:zombie_absorber",
+      "scale": 0.5
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety_spillage:thrall/summon_zombie_absorber"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The zombie can be healed by feeding it Rotten Flesh or wearing Necro Cape, though the latter case takes far longer to passively heal than most other undead servants."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Baby Zombie Servants can ride upon these brutes by commanding them towards them. When at or below half their max health, the brute will throw their rider towards their foe."
+    }
+  ]
+}

@@ -81,6 +81,10 @@ public class VillagerVictim extends Summoned implements VillagerDataHolder {
         return false;
     }
 
+    @Override
+    public void mobSense() {
+    }
+
     public void tick() {
         if (this.level.isClientSide){
             this.transformAnimationState.startIfStopped(this.tickCount);

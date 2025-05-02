@@ -1,0 +1,28 @@
+{
+  "name": "ゾンビアブソーバー",
+  "icon": "goety:great_hammer",
+  "category": "goety:spillage/summons",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "野獣のようなイリジャーが戻ってきました。今は腐りきっていますが、依然として紙でできたかのように強力な打撃に耐えられるほどに強い。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:zombie_absorber",
+      "scale": 0.5
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety_spillage:thrall/summon_zombie_absorber"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "ゾンビは腐った肉を食べさせたり、ネクロケープを着ることで治癒できます。後者の場合は他のほとんどのアンデッドの召使いよりも自動的な治癒にかなり長い時間がかかります。"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "ベビーゾンビの従者は、これらの野獣にコマンドのフォーカスで命令することで、その上に乗ることができます。体力が最大体力の半分以下になると、野獣は乗り手を敵に向かって投げ飛ばします。"
+    }
+  ]
+}

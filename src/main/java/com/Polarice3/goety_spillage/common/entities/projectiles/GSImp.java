@@ -9,7 +9,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -77,8 +76,8 @@ public class GSImp extends Owned implements IllagerAttack, IAttackMyOwner {
         this.setInvulnerable(true);
         if (this.tickCount == 1 + this.getWaitTime()) {
             this.setInvisible(false);
-            this.playSound((SoundEvent) IllageAndSpillageSoundEvents.ENTITY_SPIRITCALLER_BLOCKALERT.get(), 2.0F, 1.0F);
-            this.playSound((SoundEvent)IllageAndSpillageSoundEvents.ENTITY_SPIRITCALLER_EARTHRUMBLE.get(), 2.0F, 1.0F);
+            this.playSound(IllageAndSpillageSoundEvents.ENTITY_SPIRITCALLER_BLOCKALERT.get(), 2.0F, 1.0F);
+            this.playSound(IllageAndSpillageSoundEvents.ENTITY_SPIRITCALLER_EARTHRUMBLE.get(), 2.0F, 1.0F);
         }
 
         if (this.tickCount >= 46 + this.getWaitTime() && this.getStage() == 1) {
@@ -103,7 +102,7 @@ public class GSImp extends Owned implements IllagerAttack, IAttackMyOwner {
                     this.setStage(3);
                 }
 
-                this.playSound((SoundEvent)IllageAndSpillageSoundEvents.ENTITY_SPIRITCALLER_IMPLAUGH.get(), 2.0F, this.getVoicePitch());
+                this.playSound(IllageAndSpillageSoundEvents.ENTITY_SPIRITCALLER_IMPLAUGH.get(), 2.0F, this.getVoicePitch());
             } else if (!this.level.isClientSide) {
                 this.setStage(5);
             }
@@ -123,7 +122,7 @@ public class GSImp extends Owned implements IllagerAttack, IAttackMyOwner {
     }
 
     public int getStage() {
-        return (Integer)this.entityData.get(STAGE);
+        return this.entityData.get(STAGE);
     }
 
     public void setStage(int stage) {
@@ -135,7 +134,7 @@ public class GSImp extends Owned implements IllagerAttack, IAttackMyOwner {
     }
 
     public int getWaitTime() {
-        return (Integer)this.entityData.get(WAIT);
+        return this.entityData.get(WAIT);
     }
 
     public void setWaitTime(int waitTime) {
@@ -147,10 +146,6 @@ public class GSImp extends Owned implements IllagerAttack, IAttackMyOwner {
     }
 
     public boolean canCollideWith(Entity entity) {
-        return false;
-    }
-
-    public boolean canBeCollidedWith() {
         return false;
     }
 

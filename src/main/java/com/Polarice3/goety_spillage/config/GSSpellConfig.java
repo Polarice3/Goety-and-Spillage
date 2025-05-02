@@ -27,6 +27,9 @@ public class GSSpellConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> SoulBeamCoolDown;
     public static final ForgeConfigSpec.ConfigValue<Double> SoulBeamDamage;
 
+    public static final ForgeConfigSpec.ConfigValue<Integer> EngineerMachineLimit;
+    public static final ForgeConfigSpec.ConfigValue<Integer> FactoryServantLimit;
+    public static final ForgeConfigSpec.ConfigValue<Integer> ZombieAbsorberLimit;
     public static final ForgeConfigSpec.ConfigValue<Integer> RagnoLimit;
 
     static {
@@ -67,6 +70,12 @@ public class GSSpellConfig {
             BUILDER.pop();
         BUILDER.pop();
         BUILDER.push("Servant Limits");
+        EngineerMachineLimit = BUILDER.comment("How many Engineer Machines (Chagrin, Hinder, Factory) owned by a player or servant can be placed 100 blocks near them, Default: 3")
+                .defineInRange("engineerMachineLimit", 3, 1, Integer.MAX_VALUE);
+        FactoryServantLimit = BUILDER.comment("How many Factory Servants (Beeper, Sniper, Poker) made by a Factory owned by a player or servant can be placed 100 blocks near them, Default: 5")
+                .defineInRange("factoryServantLimit", 5, 1, Integer.MAX_VALUE);
+        ZombieAbsorberLimit = BUILDER.comment("Number of Zombie Absorbers that an individual player can have in total, Default: 2")
+                .defineInRange("zombieAbsorberLimit", 2, 1, Integer.MAX_VALUE);
         RagnoLimit = BUILDER.comment("Number of Ragnos that an individual player can have in total, Default: 1")
                 .defineInRange("ragnoLimit", 1, 1, Integer.MAX_VALUE);
         BUILDER.pop();

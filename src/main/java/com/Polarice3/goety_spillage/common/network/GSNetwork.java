@@ -3,7 +3,7 @@ package com.Polarice3.goety_spillage.common.network;
 import com.Polarice3.goety_spillage.GoetySpillage;
 import com.Polarice3.goety_spillage.common.capabilities.spillage.SpillageCapUpdatePacket;
 import com.Polarice3.goety_spillage.common.network.client.CFreakyRobePacket;
-import com.Polarice3.goety_spillage.common.network.client.CSetDeltaMovement;
+import com.Polarice3.goety_spillage.common.network.server.SMobFollowSoundPacket;
 import com.Polarice3.goety_spillage.common.network.server.SSetDeltaMovement;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -26,8 +26,8 @@ public class GSNetwork {
         INSTANCE = NetworkRegistry.newSimpleChannel(new ResourceLocation(GoetySpillage.MOD_ID, "channel"), () -> "1.0", s -> true, s -> true);
 
         INSTANCE.registerMessage(nextID(), CFreakyRobePacket.class, CFreakyRobePacket::encode, CFreakyRobePacket::decode, CFreakyRobePacket::consume);
-        INSTANCE.registerMessage(nextID(), CSetDeltaMovement.class, CSetDeltaMovement::encode, CSetDeltaMovement::decode, CSetDeltaMovement::consume);
         INSTANCE.registerMessage(nextID(), SSetDeltaMovement.class, SSetDeltaMovement::encode, SSetDeltaMovement::decode, SSetDeltaMovement::consume);
+        INSTANCE.registerMessage(nextID(), SMobFollowSoundPacket.class, SMobFollowSoundPacket::encode, SMobFollowSoundPacket::decode, SMobFollowSoundPacket::consume);
         INSTANCE.registerMessage(nextID(), SpillageCapUpdatePacket.class, SpillageCapUpdatePacket::encode, SpillageCapUpdatePacket::decode, SpillageCapUpdatePacket::consume);
     }
 

@@ -5,9 +5,12 @@ import com.Polarice3.Goety.api.entities.ally.IServant;
 import com.Polarice3.Goety.api.items.magic.IWand;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.ally.Summoned;
+import com.Polarice3.Goety.common.entities.neutral.AbstractHauntedArmor;
 import com.Polarice3.Goety.common.entities.neutral.Owned;
+import com.Polarice3.Goety.config.MobsConfig;
 import com.Polarice3.Goety.utils.MobUtil;
 import com.Polarice3.Goety.utils.ModDamageSource;
+import com.Polarice3.goety_spillage.common.util.GSMobUtil;
 import com.Polarice3.goety_spillage.config.GSAttributesConfig;
 import com.yellowbrossproductions.illageandspillage.client.model.animation.ICanBeAnimated;
 import com.yellowbrossproductions.illageandspillage.util.EntityUtil;
@@ -162,6 +165,9 @@ public class CrocofangServant extends Summoned implements PlayerRideable, IAutoR
         if (!this.isNoAi()) {
             Entity entity = this.getFirstPassenger();
             if (entity instanceof Mob mob){
+                if (MobsConfig.ServantRideAutonomous.get()) {
+                    return null;
+                }
                 return mob;
             } else if (entity instanceof LivingEntity
                     && this.notClientAttacking()
@@ -343,20 +349,23 @@ public class CrocofangServant extends Summoned implements PlayerRideable, IAutoR
                     double motionX = this.getDeltaMovement().x - chargeX / charged * (double)power * 0.2;
                     double motionZ = this.getDeltaMovement().z - chargeZ / charged * (double)power * 0.2;
                     if (this.chargeTime == 30) {
-                        this.playSound(IllageAndSpillageSoundEvents.ENTITY_CROCOFANG_CHARGE.get(), 3.0F, 1.0F);
-                        this.setAnimationState(3);
                         if (!this.level.isClientSide) {
                             this.setCharging(true);
                         }
 
+                        this.setAnimationState(3);
                         this.setCharge(motionX, motionZ);
+                    }
+
+                    if (this.chargeTime == 31) {
+                        GSMobUtil.mobFollowingSound(this.level(), this, IllageAndSpillageSoundEvents.ENTITY_CROCOFANG_CHARGE.get(), 3.0F, 1.0F, false);
                     }
 
                     if (this.chargeTime > 30 && this.chargeTime <= 64) {
                         this.setDeltaMovement(this.chargeX, this.getDeltaMovement().y, this.chargeZ);
 
                         for (Entity entity : this.level.getEntities(this, this.getBoundingBox().inflate(15.0))) {
-                            if (!MobUtil.areAllies(entity, this) && entity instanceof LivingEntity && entity.isAlive()) {
+                            if (!MobUtil.areAllies(entity, this) && entity instanceof LivingEntity target && entity.isAlive()) {
                                 double x = this.getX() - entity.getX();
                                 double y = this.getY() - entity.getY();
                                 double z = this.getZ() - entity.getZ();
@@ -369,10 +378,13 @@ public class CrocofangServant extends Summoned implements PlayerRideable, IAutoR
                                         entity.setDeltaMovement(-x / d * 2.0, -y / d * 2.0 + 0.5, -z / d * 2.0);
                                     }
 
-                                    if (((LivingEntity) entity).isBlocking()) {
-                                        EntityUtil.disableShield((LivingEntity) entity, 100);
+                                    if (target.isBlocking()) {
+                                        EntityUtil.disableShield(target, 100);
+                                        if (target instanceof AbstractHauntedArmor armor){
+                                            armor.disableShield(true);
+                                        }
                                         this.playSound(SoundEvents.SHIELD_BLOCK, 1.0F, 0.7F);
-                                        this.hurt(this.damageSources().mobAttack((LivingEntity) entity), 4.0F);
+                                        this.hurt(damageSource, 4.0F);
                                         this.setAnimationState(4);
                                         if (!this.level.isClientSide) {
                                             this.setCharging(false);

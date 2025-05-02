@@ -6,8 +6,8 @@
   },
   "craftType": "animation",
   "entity_to_summon": "goety_spillage:crocofang_servant",
-  "soulCost": 5,
-  "duration": 30,
+  "soulCost": 15,
+  "duration": 10,
   "research": "ravaging",
   "ingredients": [
     {

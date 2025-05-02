@@ -1,0 +1,7 @@
+{
+  "name": "Crafts",
+  "description": "More illagers? More crafting!",
+  "icon": "goety_spillage:freaky_hat",
+  "parent": "goety:spillage",
+  "sortnum": 1
+}

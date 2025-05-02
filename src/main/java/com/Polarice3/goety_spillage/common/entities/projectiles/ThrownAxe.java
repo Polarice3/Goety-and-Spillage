@@ -1,10 +1,15 @@
 package com.Polarice3.goety_spillage.common.entities.projectiles;
 
 import com.Polarice3.Goety.api.entities.IOwned;
+import com.Polarice3.Goety.common.entities.neutral.AbstractHauntedArmor;
 import com.Polarice3.Goety.utils.MobUtil;
 import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
 import com.yellowbrossproductions.illageandspillage.util.EntityUtil;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
@@ -22,6 +27,7 @@ import net.minecraft.world.phys.HitResult;
 import java.util.List;
 
 public class ThrownAxe extends AbstractHurtingProjectile {
+    private static final EntityDataAccessor<Float> Y_ROT = SynchedEntityData.defineId(ThrownAxe.class, EntityDataSerializers.FLOAT);
     private boolean canExplode = false;
     public float damage = 8.0F;
 
@@ -41,6 +47,32 @@ public class ThrownAxe extends AbstractHurtingProjectile {
     public ThrownAxe(Level p_181151_, LivingEntity p_181152_, double p_181153_, double p_181154_, double p_181155_) {
         super(GSEntityTypes.THROWN_AXE.get(), p_181152_, p_181153_, p_181154_, p_181155_, p_181151_);
         this.setOwner(p_181152_);
+    }
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.getEntityData().define(Y_ROT, 0.0F);
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        this.setDamage(compound.getFloat("Damage"));
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putFloat("Damage", this.getDamage());
+    }
+
+    public float getYRot() {
+        return this.entityData.get(Y_ROT);
+    }
+
+    public void setYRot(float f) {
+        this.entityData.set(Y_ROT, f);
     }
 
     public void setDamage(float damage) {
@@ -155,6 +187,10 @@ public class ThrownAxe extends AbstractHurtingProjectile {
         return source.is(DamageTypes.GENERIC_KILL) && super.hurt(source, amount);
     }
 
+    public void setRot(Entity shooter){
+        this.setYRot(shooter.getYHeadRot());
+    }
+
     private void explode(double size) {
         List<Entity> list = this.level.getEntities(this, new AABB(this.getX() - size, this.getY() - size, this.getZ() - size, this.getX() + size, this.getY() + size, this.getZ() + size), Entity::isAlive);
         Entity attacker = this.getOwner() != null ? this.getOwner() : this;
@@ -163,10 +199,15 @@ public class ThrownAxe extends AbstractHurtingProjectile {
 
         for (Entity entity : list){
             if (entity instanceof LivingEntity living) {
-                if (entity != attacker && entity.isAlive() && !entity.isInvulnerable() && !entity.isSpectator()) {
+                if (entity != attacker && !MobUtil.areAllies(entity, attacker) && entity.isAlive() && !entity.isInvulnerable() && !entity.isSpectator()) {
                     living.hurt(this.damageSources().thrown(this, attacker), this.getDamage());
                     living.invulnerableTime = 0;
                     EntityUtil.disableShield(living, 200);
+                    if (entity instanceof AbstractHauntedArmor armor){
+                        if (armor.isBlocking()) {
+                            armor.disableShield(true);
+                        }
+                    }
                 }
             }
         }

@@ -1,5 +1,5 @@
 {
-  "parent": "goety_spillage:root",
+  "parent": "goety_spillage:obtain_mutated_flesh",
   "display": {
     "icon": {
       "item": "minecraft:potion",

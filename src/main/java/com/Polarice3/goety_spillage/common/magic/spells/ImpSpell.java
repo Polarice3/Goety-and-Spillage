@@ -2,6 +2,7 @@ package com.Polarice3.goety_spillage.common.magic.spells;
 
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.magic.Spell;
+import com.Polarice3.Goety.common.magic.SpellStat;
 import com.Polarice3.Goety.utils.WandUtil;
 import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
 import com.Polarice3.goety_spillage.common.entities.projectiles.GSImp;
@@ -13,7 +14,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.state.BlockState;
@@ -54,22 +54,22 @@ public class ImpSpell extends Spell {
     }
 
     @Override
-    public void SpellResult(ServerLevel serverLevel, LivingEntity livingEntity, ItemStack itemStack) {
-        HitResult hitResult = this.rayTrace(serverLevel, livingEntity, 16, 3);
-        int random = serverLevel.random.nextInt(3) + 1;
+    public void SpellResult(ServerLevel worldIn, LivingEntity caster, ItemStack staff, SpellStat spellStat) {
+        HitResult hitResult = this.rayTrace(worldIn, caster, spellStat.getRange(), spellStat.getRadius());
+        int random = worldIn.random.nextInt(3) + 1;
         if (random == 1) {
-            this.createLineImps(livingEntity, hitResult.getLocation());
+            this.createLineImps(caster, hitResult.getLocation());
         }
 
         if (random == 2) {
-            this.createRandomImps(livingEntity, hitResult.getLocation());
+            this.createRandomImps(caster, hitResult.getLocation());
         }
 
         if (random == 3) {
-            this.createRingImps(livingEntity, hitResult.getLocation());
+            this.createRingImps(caster, hitResult.getLocation());
         }
 
-        serverLevel.playSound((Player)null, livingEntity.getX(), livingEntity.getY(), livingEntity.getZ(), IllageAndSpillageSoundEvents.ENTITY_SPIRITCALLER_CLAP.get(), this.getSoundSource(), 2.0F, 1.0F);
+        this.playSound(worldIn, caster, IllageAndSpillageSoundEvents.ENTITY_SPIRITCALLER_CLAP.get(), 2.0F, 1.0F);
     }
 
     protected void createLineImps(LivingEntity livingEntity, Vec3 vec3) {

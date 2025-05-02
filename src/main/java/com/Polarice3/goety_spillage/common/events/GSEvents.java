@@ -1,5 +1,6 @@
 package com.Polarice3.goety_spillage.common.events;
 
+import com.Polarice3.Goety.common.entities.ally.undead.zombie.ZombieServant;
 import com.Polarice3.Goety.common.entities.neutral.AbstractHauntedArmor;
 import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.Polarice3.Goety.utils.CuriosFinder;
@@ -12,6 +13,7 @@ import com.Polarice3.goety_spillage.common.capabilities.spillage.SpillageProvide
 import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
 import com.Polarice3.goety_spillage.common.entities.IAttackMyOwner;
 import com.Polarice3.goety_spillage.common.entities.ally.RagnoServant;
+import com.Polarice3.goety_spillage.common.entities.ally.undead.zombie.ZombieAbsorber;
 import com.Polarice3.goety_spillage.common.entities.neutral.VillagerVictim;
 import com.Polarice3.goety_spillage.common.entities.projectiles.ThrownAxe;
 import com.Polarice3.goety_spillage.common.items.MutationPotion;
@@ -23,6 +25,7 @@ import com.yellowbrossproductions.illageandspillage.entities.*;
 import com.yellowbrossproductions.illageandspillage.entities.projectile.AxeEntity;
 import com.yellowbrossproductions.illageandspillage.util.EffectRegisterer;
 import com.yellowbrossproductions.illageandspillage.util.ItemRegisterer;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionResult;
@@ -100,6 +103,17 @@ public class GSEvents {
                     mob.setTarget(null);
                 }
             }
+            if (mob instanceof ZombieServant servant){
+                if (servant.isBaby()){
+                    if (servant.getCommandPosEntity() instanceof ZombieAbsorber absorber && servant.getBoundingBox().inflate(1.25).intersects(absorber.getBoundingBox())){
+                        if (!absorber.isVehicle() && servant.startRiding(absorber)) {
+                            if (servant.getTrueOwner() instanceof Player player) {
+                                player.displayClientMessage(Component.translatable("info.goety.servant.dismount"), true);
+                            }
+                        }
+                    }
+                }
+            }
             if (mob instanceof Villager villager){
                 if (!villager.level.isClientSide) {
                     Brain<?> brain = villager.getBrain();
@@ -141,6 +155,9 @@ public class GSEvents {
                 event.setAmount(event.getAmount() / 2.0F);
             }
         }
+        if (victim instanceof ZombieAbsorber) {
+            victim.invulnerableTime = 0;
+        }
     }
 
     @SubscribeEvent
@@ -169,14 +186,6 @@ public class GSEvents {
             }
         }
         if (killed.level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
-            if (killed instanceof RagnoEntity ragno) {
-                if (ragno.level.getServer() != null) {
-                    LootTable loottable = ragno.level.getServer().getLootData().getLootTable(GSLootTables.RAGNO_EXTRA);
-                    LootParams.Builder lootcontext$builder = MobUtil.createLootContext(event.getSource(), ragno);
-                    LootParams ctx = lootcontext$builder.create(LootContextParamSets.ENTITY);
-                    loottable.getRandomItems(ctx).forEach((loot) -> event.getDrops().add(ItemHelper.itemEntityDrop(ragno, loot)));
-                }
-            }
             if (killed instanceof LivingEntity livingEntity) {
                 if (killed instanceof FreakagerEntity || killed instanceof RagnoEntity || killed instanceof MagispellerEntity || killed instanceof SpiritcallerEntity) {
                     if (livingEntity.level.getServer() != null) {

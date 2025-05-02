@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "goety_spillage:item/package/hinder_package"
+  }
+}

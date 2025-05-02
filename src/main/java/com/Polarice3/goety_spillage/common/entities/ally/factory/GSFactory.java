@@ -1,37 +1,37 @@
 package com.Polarice3.goety_spillage.common.entities.ally.factory;
 
-import com.Polarice3.Goety.common.entities.ally.Summoned;
+import com.Polarice3.Goety.api.items.magic.IWand;
 import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
-import com.yellowbrossproductions.illageandspillage.client.model.animation.ICanBeAnimated;
-import com.yellowbrossproductions.illageandspillage.util.IllageAndSpillageSoundEvents;
-import net.minecraft.core.particles.ParticleTypes;
+import com.Polarice3.goety_spillage.common.items.EngineerMalletItem;
+import com.Polarice3.goety_spillage.config.GSSpellConfig;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AnimationState;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class GSFactory extends Summoned implements ICanBeAnimated, IEngineerMachine {
+public class GSFactory extends EngineerMachine {
     private static final EntityDataAccessor<Integer> ANIMATION_STATE = SynchedEntityData.defineId(GSFactory.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Boolean> IN_MOTION = SynchedEntityData.defineId(GSFactory.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> ACTIVE = SynchedEntityData.defineId(GSFactory.class, EntityDataSerializers.BOOLEAN);
     public AnimationState introAnimationState = new AnimationState();
     public AnimationState spinAnimationState = new AnimationState();
     private int introTicks;
@@ -50,7 +50,7 @@ public class GSFactory extends Summoned implements ICanBeAnimated, IEngineerMach
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(ANIMATION_STATE, 0);
-        this.entityData.define(IN_MOTION, false);
+        this.entityData.define(ACTIVE, true);
     }
 
     @Override
@@ -59,34 +59,16 @@ public class GSFactory extends Summoned implements ICanBeAnimated, IEngineerMach
         if (compound.contains("SpawnTicks")){
             this.spawnTicks = compound.getInt("SpawnTicks");
         }
+        if (compound.contains("Active")){
+            this.setActive(compound.getBoolean("Active"));
+        }
     }
 
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("SpawnTicks", this.spawnTicks);
-    }
-
-    public boolean canSpawnArmor() {
-        return false;
-    }
-
-    @Override
-    public boolean canUpdateMove() {
-        return false;
-    }
-
-    @Override
-    public boolean isCommanded() {
-        return false;
-    }
-
-    protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
-        return SoundEvents.ZOMBIE_ATTACK_IRON_DOOR;
-    }
-
-    protected SoundEvent getDeathSound() {
-        return IllageAndSpillageSoundEvents.ENTITY_MAGISPELLER_DISPENSER_DESTROY.get();
+        compound.putBoolean("Active", this.isActive());
     }
 
     public void setAnimationState(int state) {
@@ -135,29 +117,16 @@ public class GSFactory extends Summoned implements ICanBeAnimated, IEngineerMach
         return false;
     }
 
-    public boolean isInMotion() {
-        return this.entityData.get(IN_MOTION);
+    public boolean isActive() {
+        return this.entityData.get(ACTIVE);
     }
 
-    public void setInMotion(boolean motion) {
-        this.entityData.set(IN_MOTION, motion);
-    }
-
-    public void knockback(double p_147241_, double p_147242_, double p_147243_) {
+    public void setActive(boolean active) {
+        this.entityData.set(ACTIVE, active);
     }
 
     public List<FactoryServant> getMinions() {
-        List<FactoryServant> list = new ArrayList<>();
-        if (this.level instanceof ServerLevel serverLevel){
-            for (Entity entity : serverLevel.getAllEntities()) {
-                if (entity instanceof FactoryServant servant){
-                    if (servant.getTrueOwner() == this && servant.isAlive()){
-                        list.add(servant);
-                    }
-                }
-            }
-        }
-        return list;
+        return this.level.getEntitiesOfClass(FactoryServant.class, this.getBoundingBox().inflate(100.0D), servant -> servant.getFactory() != null && servant.getFactory() == this && servant.isAlive());
     }
 
     public void tick() {
@@ -184,35 +153,38 @@ public class GSFactory extends Summoned implements ICanBeAnimated, IEngineerMach
         if (!this.isInMotion()) {
             this.setDeltaMovement(0.0, this.getDeltaMovement().y, 0.0);
             if (this.level instanceof ServerLevel serverLevel){
-                ++this.spawnTicks;
-                if (this.spawnTicks > 60 && this.isAlive() && this.getMinions().size() < 5) {
-                    this.playSound(SoundEvents.DISPENSER_LAUNCH, 1.0F, 1.0F);
-                    int randomSelection = this.random.nextInt(0, 3);
-                    float f = this.yBodyRot * 0.017453292F * 0.25F;
-                    float f1 = Mth.cos(f);
-                    double jump = 0.5D;
-                    FactoryServant summoned;
-                    Vec3 vec3;
-                    if (randomSelection == 0) {
-                        summoned = GSEntityTypes.BEEPER.get().create(serverLevel);
-                        vec3 = new Vec3(this.getX(), this.getY(), this.getZ() + (double)f1 * -0.1);
-                    } else if (randomSelection == 1) {
-                        summoned = GSEntityTypes.SNIPER.get().create(serverLevel);
-                        vec3 = new Vec3(this.getX() + (double)f1 * 0.45, this.getY(), this.getZ() + (double)f1 * -0.2);
-                        jump = 0.1D;
-                    } else {
-                        summoned = GSEntityTypes.POKER.get().create(serverLevel);
-                        vec3 = new Vec3(this.getX() + (double)f1 * -0.55, this.getY(), this.getZ() + (double)f1 * 0.05);
-                    }
-                    if (summoned != null) {
-                        summoned.setPos(vec3);
-                        summoned.setDeltaMovement(0.0D, jump, 0.0D);
-                        summoned.setTrueOwner(this.getTrueOwner() != null ? this.getTrueOwner() : this);
-                        summoned.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(this.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
-                        serverLevel.addFreshEntity(summoned);
-                    }
+                if (this.isActive()) {
+                    ++this.spawnTicks;
+                    if (this.spawnTicks > 60 && this.isAlive() && this.getMinions().size() < GSSpellConfig.FactoryServantLimit.get()) {
+                        this.playSound(SoundEvents.DISPENSER_LAUNCH, 1.0F, 1.0F);
+                        int randomSelection = this.random.nextInt(0, 3);
+                        float f = this.yBodyRot * 0.017453292F * 0.25F;
+                        float f1 = Mth.cos(f);
+                        double jump = 0.5D;
+                        FactoryServant summoned;
+                        Vec3 vec3;
+                        if (randomSelection == 0) {
+                            summoned = GSEntityTypes.BEEPER.get().create(serverLevel);
+                            vec3 = new Vec3(this.getX(), this.getY(), this.getZ() + (double) f1 * -0.1);
+                        } else if (randomSelection == 1) {
+                            summoned = GSEntityTypes.SNIPER.get().create(serverLevel);
+                            vec3 = new Vec3(this.getX() + (double) f1 * 0.45, this.getY(), this.getZ() + (double) f1 * -0.2);
+                            jump = 0.1D;
+                        } else {
+                            summoned = GSEntityTypes.POKER.get().create(serverLevel);
+                            vec3 = new Vec3(this.getX() + (double) f1 * -0.55, this.getY(), this.getZ() + (double) f1 * 0.05);
+                        }
+                        if (summoned != null) {
+                            summoned.setPos(vec3);
+                            summoned.setDeltaMovement(0.0D, jump, 0.0D);
+                            summoned.setTrueOwner(this.getTrueOwner() != null ? this.getTrueOwner() : this);
+                            summoned.setFactory(this);
+                            summoned.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(this.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
+                            serverLevel.addFreshEntity(summoned);
+                        }
 
-                    this.spawnTicks = 0;
+                        this.spawnTicks = 0;
+                    }
                 }
             }
         }
@@ -229,19 +201,38 @@ public class GSFactory extends Summoned implements ICanBeAnimated, IEngineerMach
         super.tick();
     }
 
-    public boolean isPersistenceRequired() {
-        return true;
+    @Override
+    public void handleEntityEvent(byte p_21375_) {
+        if (p_21375_ == 4){
+            this.setActive(true);
+        } else if (p_21375_ == 5){
+            this.setActive(false);
+        } else {
+            super.handleEntityEvent(p_21375_);
+        }
     }
 
-    public void die(DamageSource p_70645_1_) {
-        super.die(p_70645_1_);
-        if (this.level.isClientSide) {
-            double d0 = this.random.nextGaussian() * 0.02;
-            double d1 = this.random.nextGaussian() * 0.02;
-            double d2 = this.random.nextGaussian() * 0.02;
-            this.level.addParticle(ParticleTypes.EXPLOSION_EMITTER, this.getX(), this.getY(), this.getZ(), d0, d1, d2);
+    @Override
+    public InteractionResult mobInteract(Player pPlayer, InteractionHand pHand) {
+        ItemStack itemstack = pPlayer.getMainHandItem();
+        if (pPlayer == this.getTrueOwner() && !this.isInMotion()) {
+            if (!(itemstack.getItem() instanceof IWand) && !(itemstack.getItem() instanceof EngineerMalletItem)) {
+                if (!this.level.isClientSide) {
+                    float f = 0.6F;
+                    if (this.isActive()) {
+                        this.setActive(false);
+                        this.level.broadcastEntityEvent(this, (byte) 5);
+                    } else {
+                        this.setActive(true);
+                        this.level.broadcastEntityEvent(this, (byte) 4);
+                        f = 0.5F;
+                    }
+                    this.playSound(SoundEvents.LEVER_CLICK, 1.0F, f);
+                }
+                return InteractionResult.SUCCESS;
+            }
         }
 
-        this.deathTime = 19;
+        return super.mobInteract(pPlayer, pHand);
     }
 }

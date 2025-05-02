@@ -2,6 +2,7 @@ package com.Polarice3.goety_spillage.common.magic.spells;
 
 import com.Polarice3.Goety.common.enchantments.ModEnchantments;
 import com.Polarice3.Goety.common.magic.Spell;
+import com.Polarice3.Goety.common.magic.SpellStat;
 import com.Polarice3.Goety.utils.SEHelper;
 import com.Polarice3.Goety.utils.WandUtil;
 import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
@@ -21,6 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RequiemSpell extends Spell {
+
+    @Override
+    public SpellStat defaultStats() {
+        return super.defaultStats().setPotency(2);
+    }
 
     @Override
     public int defaultSoulCost() {
@@ -66,11 +72,11 @@ public class RequiemSpell extends Spell {
     }
 
     @Override
-    public void useSpell(ServerLevel worldIn, LivingEntity entityLiving, ItemStack staff, int castTime) {
-        int soulPower = 2;
+    public void useSpell(ServerLevel worldIn, LivingEntity caster, ItemStack staff, int castTime, SpellStat spellStat) {
+        int soulPower = spellStat.getPotency();
 
-        if (WandUtil.enchantedFocus(entityLiving)){
-            soulPower += WandUtil.getLevels(ModEnchantments.POTENCY.get(), entityLiving) * 2;
+        if (WandUtil.enchantedFocus(caster)){
+            soulPower += WandUtil.getLevels(ModEnchantments.POTENCY.get(), caster) * 2;
         }
 
         soulPower = Math.min(soulPower, 8);
@@ -79,22 +85,17 @@ public class RequiemSpell extends Spell {
             for(int i = 0; i < soulPower; ++i) {
                 GSIllagerSoul soul = GSEntityTypes.ILLAGER_SOUL.get().create(worldIn);
                 if (soul != null) {
-                    soul.setPos(entityLiving.getX() + (double) (-10 - soulPower + worldIn.random.nextInt(20 + soulPower * 2)), entityLiving.getY() + (double) (-1 + worldIn.random.nextInt(10 + soulPower * 2)), entityLiving.getZ() + (double) (-10 - soulPower + worldIn.random.nextInt(20 + soulPower * 2)));
-                    soul.setTrueOwner(entityLiving);
+                    soul.setPos(caster.getX() + (double) (-10 - soulPower + worldIn.random.nextInt(20 + soulPower * 2)), caster.getY() + (double) (-1 + worldIn.random.nextInt(10 + soulPower * 2)), caster.getZ() + (double) (-10 - soulPower + worldIn.random.nextInt(20 + soulPower * 2)));
+                    soul.setTrueOwner(caster);
                     soul.setAngelOrDevil(worldIn.random.nextBoolean());
-                    if (this.getTarget(entityLiving) != null) {
-                        soul.setTarget(this.getTarget(entityLiving));
+                    if (this.getTarget(caster) != null) {
+                        soul.setTarget(this.getTarget(caster));
                     }
                     soul.setDeltaMovement(0.0, 0.1, 0.0);
                     worldIn.addFreshEntity(soul);
                 }
             }
         }
-
-    }
-
-    @Override
-    public void SpellResult(ServerLevel serverLevel, LivingEntity livingEntity, ItemStack itemStack) {
 
     }
 }

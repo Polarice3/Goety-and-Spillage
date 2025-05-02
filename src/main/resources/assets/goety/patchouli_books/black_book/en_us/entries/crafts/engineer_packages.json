@@ -1,0 +1,21 @@
+{
+  "name": "Engineering Packages",
+  "icon": "goety_spillage:chagrin_package",
+  "category": "goety:spillage/crafts",
+  "advancement": "goety_spillage:obtain_engineer_mallet",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "With the mallet, you're able to create individual machines of the Engineer that you can place wherever you place them."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety_spillage:chagrin_package",
+      "recipe2": "goety_spillage:hinder_package"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety_spillage:factory_package"
+    }
+  ]
+}

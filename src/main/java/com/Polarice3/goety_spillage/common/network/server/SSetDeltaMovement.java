@@ -1,9 +1,9 @@
 package com.Polarice3.goety_spillage.common.network.server;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
+import com.yellowbrossproductions.illageandspillage.util.ClientHelper;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -37,9 +37,9 @@ public class SSetDeltaMovement {
         ctx.get().enqueueWork(() -> {
             assert ctx.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT;
 
-            ClientLevel clientLevel = Minecraft.getInstance().level;
-            if (clientLevel != null){
-                Entity entity = clientLevel.getEntity(packet.mob);
+            Level level = ClientHelper.getLevel();
+            if (level != null){
+                Entity entity = level.getEntity(packet.mob);
                 if (entity != null) {
                     entity.setDeltaMovement(packet.x, packet.y, packet.z);
                     entity.hasImpulse = true;

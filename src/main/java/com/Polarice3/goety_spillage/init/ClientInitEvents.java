@@ -49,6 +49,7 @@ public class ClientInitEvents {
         event.registerEntityRenderer(GSEntityTypes.IMP.get(), GSImpRenderer::new);
         event.registerEntityRenderer(GSEntityTypes.SPIRIT_HAND.get(), GSSpiritHandRenderer::new);
         event.registerEntityRenderer(GSEntityTypes.CROCOFANG_SERVANT.get(), CrocofangServantRenderer::new);
+        event.registerEntityRenderer(GSEntityTypes.ZOMBIE_ABSORBER.get(), ZombieAbsorberRenderer::new);
         event.registerEntityRenderer(GSEntityTypes.VILLAGER_VICTIM.get(), VillagerVictimRenderer::new);
         event.registerEntityRenderer(GSEntityTypes.BOUND_FREAKAGER.get(), BoundFreakagerRenderer::new);
         event.registerEntityRenderer(GSEntityTypes.RAGNO_SERVANT.get(), RagnoServantRenderer::new);

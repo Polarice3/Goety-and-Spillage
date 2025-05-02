@@ -1,0 +1,38 @@
+{
+  "parent": "goety_spillage:root",
+  "display": {
+    "icon": {
+      "item": "goety_spillage:zombie_absorber_spawn_egg"
+    },
+    "title": {
+      "translate": "advancements.goety_spillage.summon_zombie_absorber.title"
+    },
+    "description": {
+      "translate": "advancements.goety_spillage.summon_zombie_absorber.description"
+    },
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "criteria": {
+    "summon": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "goety_spillage:zombie_absorber"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:summoned_entity"
+    }
+  },
+  "requirements": [
+    [
+      "summon"
+    ]
+  ]
+}

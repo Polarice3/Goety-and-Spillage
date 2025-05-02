@@ -12,7 +12,6 @@ import com.Polarice3.goety_spillage.common.items.curios.FreakyRobeItem;
 import com.Polarice3.goety_spillage.config.GSAttributesConfig;
 import com.yellowbrossproductions.illageandspillage.util.IllageAndSpillageSoundEvents;
 import com.yellowbrossproductions.illageandspillage.util.ItemRegisterer;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
@@ -80,10 +79,7 @@ public abstract class ItemMixin {
                     float power = 3.5F;
                     Vec3 vec3 = vector3d.multiply(power, power, power);
                     ThrownAxe projectile = new ThrownAxe(entityLiving.getX() + vector3d.x / 2, entityLiving.getY() + 1.0D, entityLiving.getZ() + vector3d.z / 2, vec3.x, vec3.y, vec3.z, worldIn);
-                    projectile.setYHeadRot(entityLiving.getYHeadRot());
-                    projectile.setYRot(entityLiving.getYHeadRot());
-                    CompoundTag tag = entityLiving.getPersistentData().getCompound("Rotation");
-                    projectile.readAdditionalSaveData(tag);
+                    projectile.setRot(entityLiving);
                     projectile.setOwner(entityLiving);
                     projectile.setDamage(GSAttributesConfig.BoundFreakagerAxeDamage.get().floatValue());
                     if (worldIn.addFreshEntity(projectile)) {

@@ -14,6 +14,10 @@ public class GSAttributesConfig {
     public static final ForgeConfigSpec.ConfigValue<Double> CrocofangServantArmor;
     public static final ForgeConfigSpec.ConfigValue<Double> CrocofangServantDamage;
 
+    public static final ForgeConfigSpec.ConfigValue<Double> ZombieAbsorberHealth;
+    public static final ForgeConfigSpec.ConfigValue<Double> ZombieAbsorberArmor;
+    public static final ForgeConfigSpec.ConfigValue<Double> ZombieAbsorberDamage;
+
     public static final ForgeConfigSpec.ConfigValue<Double> BoundEngineerHealth;
     public static final ForgeConfigSpec.ConfigValue<Double> BoundEngineerArmor;
     public static final ForgeConfigSpec.ConfigValue<Double> BoundEngineerDamage;
@@ -39,6 +43,14 @@ public class GSAttributesConfig {
                 CrocofangServantDamage = BUILDER.comment("How much damage Crocofang Servants deals, Default: 8.0")
                         .defineInRange("crocofangServantDamage", 8.0, 1.0, Double.MAX_VALUE);
                 BUILDER.pop();
+                BUILDER.push("Zombie Absorber");
+                ZombieAbsorberHealth = BUILDER.comment("How much Max Health Zombie Absorbers have, Default: 200.0")
+                        .defineInRange("zombieAbsorberHealth", 100.0, 1.0, Double.MAX_VALUE);
+                ZombieAbsorberArmor = BUILDER.comment("How much natural armor points Zombie Absorbers have, Default: 0.0")
+                        .defineInRange("zombieAbsorberArmor", 0.0, 0.0, Double.MAX_VALUE);
+                ZombieAbsorberDamage = BUILDER.comment("How much damage Zombie Absorbers deals, Default: 15.0")
+                        .defineInRange("zombieAbsorberDamage", 15.0, 1.0, Double.MAX_VALUE);
+                BUILDER.pop();
                 BUILDER.push("Bound Engineer");
                 BoundEngineerHealth = BUILDER.comment("How much Max Health Bound Engineers have, Default: 30.0")
                         .defineInRange("boundEngineerHealth", 30.0, 1.0, Double.MAX_VALUE);
@@ -62,8 +74,8 @@ public class GSAttributesConfig {
                 BUILDER.push("Ragno Servant");
                 RagnoServantHealth = BUILDER.comment("How much Max Health Ragno Servants have, Default: 180.0")
                         .defineInRange("ragnoServantHealth", 180.0, 1.0, Double.MAX_VALUE);
-                RagnoServantArmor = BUILDER.comment("How much natural armor points Ragno Servants have, Default: 0.0")
-                        .defineInRange("ragnoServantArmor", 0.0, 0.0, Double.MAX_VALUE);
+                RagnoServantArmor = BUILDER.comment("How much natural armor points Ragno Servants have, Default: 10.0")
+                        .defineInRange("ragnoServantArmor", 10.0, 0.0, Double.MAX_VALUE);
                 RagnoServantDamage = BUILDER.comment("How much damage Ragno Servants deals, Default: 5.0")
                         .defineInRange("ragnoServantDamage", 5.0, 1.0, Double.MAX_VALUE);
                 BUILDER.pop();
