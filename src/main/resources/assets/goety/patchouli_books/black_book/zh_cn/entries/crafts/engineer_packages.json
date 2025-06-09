@@ -1,0 +1,21 @@
+{
+  "name": "工程师的套件包",
+  "icon": "goety_spillage:chagrin_package",
+  "category": "goety:spillage/crafts",
+  "advancement": "goety_spillage:obtain_engineer_mallet",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "需使用工程师锤合成，随后你可以直接创造一个特定的工程师机械，并把它放在任何位置"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety_spillage:chagrin_package",
+      "recipe2": "goety_spillage:hinder_package"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety_spillage:factory_package"
+    }
+  ]
+}

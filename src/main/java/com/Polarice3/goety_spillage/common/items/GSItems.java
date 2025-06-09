@@ -1,5 +1,6 @@
 package com.Polarice3.goety_spillage.common.items;
 
+import com.Polarice3.Goety.common.items.ItemBase;
 import com.Polarice3.Goety.common.items.ServantSpawnEggItem;
 import com.Polarice3.Goety.common.items.ServantSpawnEggs;
 import com.Polarice3.Goety.common.items.curios.SingleStackItem;
@@ -31,6 +32,7 @@ public class GSItems {
     public static final FoodProperties MUTATED_FLESH_FOOD = (new FoodProperties.Builder()).nutrition(4).saturationMod(0.1F).effect(() -> new MobEffectInstance(EffectRegisterer.MUTATION.get(), 600, 0), 1.0F).meat().build();
 
     public static RegistryObject<Item> MUTATED_FLESH = ITEMS.register("mutated_flesh", () -> new Item(new Item.Properties().food(MUTATED_FLESH_FOOD)));
+    public static RegistryObject<Item> MISCONDUCTED_SOUL = ITEMS.register("misconducted_soul", ItemBase::new);
 
     public static RegistryObject<Item> PUMPKIN_BOMB = ITEMS.register("pumpkin_bomb", PumpkinBombItem::new);
     public static RegistryObject<Item> SKULL_BOMB = ITEMS.register("skull_bomb", SkullBombItem::new);
@@ -63,5 +65,8 @@ public class GSItems {
             () -> new ServantSpawnEggItem(GSEntityTypes.BOUND_ENGINEER, 0x292c30, 0xbfb177, ServantSpawnEggs.egg()));
     public static final RegistryObject<ServantSpawnEggItem> BOUND_FREAKAGER_SPAWN_EGG = ITEMS.register("bound_freakager_spawn_egg",
             () -> new ServantSpawnEggItem(GSEntityTypes.BOUND_FREAKAGER, 0x202226, 0x3b3e47, ServantSpawnEggs.egg()));
-
+    public static final RegistryObject<ServantSpawnEggItem> IGNITER_SERVANT_SPAWN_EGG = ITEMS.register("igniter_servant_spawn_egg",
+            () -> new ServantSpawnEggItem(GSEntityTypes.IGNITER_SERVANT, 0x1f1f1f, 0x9e6500, ServantSpawnEggs.egg()));
+    public static final RegistryObject<ServantSpawnEggItem> PRESERVER_SERVANT_SPAWN_EGG = ITEMS.register("preserver_servant_spawn_egg",
+            () -> new ServantSpawnEggItem(GSEntityTypes.PRESERVER_SERVANT, 0xac8d08, 0xa4512b, ServantSpawnEggs.egg()));
 }

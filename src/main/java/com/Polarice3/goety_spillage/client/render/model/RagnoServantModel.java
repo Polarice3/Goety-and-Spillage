@@ -1,7 +1,7 @@
 package com.Polarice3.goety_spillage.client.render.model;
 
 import com.Polarice3.goety_spillage.client.render.animation.RagnoServantAnimations;
-import com.Polarice3.goety_spillage.common.entities.ally.RagnoServant;
+import com.Polarice3.goety_spillage.common.entities.ally.illager.RagnoServant;
 import com.yellowbrossproductions.illageandspillage.client.model.RagnoModel;
 import com.yellowbrossproductions.illageandspillage.client.model.animation.RagnoAnimation;
 import com.yellowbrossproductions.illageandspillage.client.model.animation.RagnoAnimation2;

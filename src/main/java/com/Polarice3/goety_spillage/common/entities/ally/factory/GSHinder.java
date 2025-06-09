@@ -2,8 +2,8 @@ package com.Polarice3.goety_spillage.common.entities.ally.factory;
 
 import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.Polarice3.Goety.utils.MobUtil;
-import com.Polarice3.goety_spillage.common.util.GSMobUtil;
 import com.Polarice3.goety_spillage.config.GSMobsConfig;
+import com.Polarice3.goety_spillage.util.GSMobUtil;
 import com.yellowbrossproductions.illageandspillage.entities.IllagerAttack;
 import com.yellowbrossproductions.illageandspillage.util.IllageAndSpillageSoundEvents;
 import net.minecraft.core.particles.ParticleTypes;

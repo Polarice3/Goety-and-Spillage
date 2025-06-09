@@ -39,6 +39,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -112,6 +113,26 @@ public class ZombieAbsorber extends Summoned implements ICanBeAnimated {
         return MobType.UNDEAD;
     }
 
+    @Nullable
+    @Override
+    public LivingEntity getControllingPassenger() {
+        return null;
+    }
+
+    @Override
+    public boolean canBeRidden(LivingEntity livingEntity) {
+        if (livingEntity instanceof ZombieServant servant){
+            if (servant.isBaby()){
+                if (!this.isVehicle()) {
+                    if (servant.getTrueOwner() == this.getTrueOwner()) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return super.canBeRidden(livingEntity);
+    }
+
     public void tick() {
         super.tick();
         if (this.hurtTime >= 3) {
@@ -173,9 +194,9 @@ public class ZombieAbsorber extends Summoned implements ICanBeAnimated {
     }
 
     @Override
-    public void healServant(LivingEntity livingEntity) {
+    public void healServant() {
         if (GSMobsConfig.ZombieAbsorberHeal.get()) {
-            super.healServant(livingEntity);
+            super.healServant();
         }
     }
 

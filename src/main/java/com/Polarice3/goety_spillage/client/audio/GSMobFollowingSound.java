@@ -1,7 +1,7 @@
 package com.Polarice3.goety_spillage.client.audio;
 
-import com.Polarice3.goety_spillage.common.entities.ally.CrocofangServant;
 import com.Polarice3.goety_spillage.common.entities.ally.factory.GSHinder;
+import com.Polarice3.goety_spillage.common.entities.ally.illager.CrocofangServant;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.sounds.SoundEvent;

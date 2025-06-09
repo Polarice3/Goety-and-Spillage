@@ -1,8 +1,14 @@
 package com.Polarice3.goety_spillage.common.entities;
 
 import com.Polarice3.goety_spillage.GoetySpillage;
-import com.Polarice3.goety_spillage.common.entities.ally.*;
+import com.Polarice3.goety_spillage.common.entities.ally.GSEyesore;
+import com.Polarice3.goety_spillage.common.entities.ally.GSSpiritHand;
+import com.Polarice3.goety_spillage.common.entities.ally.GSTot;
 import com.Polarice3.goety_spillage.common.entities.ally.factory.*;
+import com.Polarice3.goety_spillage.common.entities.ally.illager.CrocofangServant;
+import com.Polarice3.goety_spillage.common.entities.ally.illager.IgniterServant;
+import com.Polarice3.goety_spillage.common.entities.ally.illager.PreserverServant;
+import com.Polarice3.goety_spillage.common.entities.ally.illager.RagnoServant;
 import com.Polarice3.goety_spillage.common.entities.ally.undead.GSFunnybone;
 import com.Polarice3.goety_spillage.common.entities.ally.undead.bound.BoundEngineer;
 import com.Polarice3.goety_spillage.common.entities.ally.undead.bound.BoundFreakager;
@@ -26,6 +32,10 @@ public class GSEntityTypes {
                     .sized(6.0F, 0.5F)
                     .clientTrackingRange(10)
                     .updateInterval(Integer.MAX_VALUE));
+
+    public static final RegistryObject<EntityType<IgniterServant>> IGNITER_SERVANT = register("igniter_servant",
+            EntityType.Builder.of(IgniterServant::new, MobCategory.MONSTER)
+                    .sized(0.6F, 1.95F));
 
     public static final RegistryObject<EntityType<BoundEngineer>> BOUND_ENGINEER = register("bound_engineer",
             EntityType.Builder.of(BoundEngineer::new, MobCategory.MONSTER)
@@ -77,6 +87,10 @@ public class GSEntityTypes {
     public static final RegistryObject<EntityType<ZombieAbsorber>> ZOMBIE_ABSORBER = register("zombie_absorber",
             EntityType.Builder.of(ZombieAbsorber::new, MobCategory.MONSTER)
                     .sized(1.3F, 2.9F));
+
+    public static final RegistryObject<EntityType<PreserverServant>> PRESERVER_SERVANT = register("preserver_servant",
+            EntityType.Builder.of(PreserverServant::new, MobCategory.MONSTER)
+                    .sized(0.6F, 1.95F));
 
     public static final RegistryObject<EntityType<VillagerVictim>> VILLAGER_VICTIM = register("villager_victim",
             EntityType.Builder.of(VillagerVictim::new, MobCategory.CREATURE)

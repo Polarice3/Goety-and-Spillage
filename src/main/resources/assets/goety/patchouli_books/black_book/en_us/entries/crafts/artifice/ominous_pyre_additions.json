@@ -1,0 +1,25 @@
+{
+  "name": "Ominous Pyre Additions",
+  "icon": "goety:ominous_pyre",
+  "category": "goety:spillage/crafts/artifice",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "With new Illagers on the rise, new training grounds must be made."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "More info on Ominous Pyre $(l:goety:crafts/artifice/ominous_pyre)here$()."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Igniter Servants",
+      "text": "Requirements: $(li)Neollager $(li)32 Magma Blocks $(li)16 Snow Blocks $(li)1 Crafting Table $(li)2 Blocks of Iron $(li)4 Blocks of Coal $(li)4 Blocks of Redstone $(li)64 Cobblestone"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Preserver Servants",
+      "text": "Requirements: $(li)Neollager $(li)64 Hay Blocks $(li)16 Piston Blocks $(li)16 Barrels"
+    }
+  ]
+}

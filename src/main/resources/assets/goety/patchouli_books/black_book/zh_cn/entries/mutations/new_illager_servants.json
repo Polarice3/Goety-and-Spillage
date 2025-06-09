@@ -1,0 +1,33 @@
+{
+  "name": "More Illager Servants",
+  "icon": "goety:magic_emerald",
+  "category": "goety:spillage/mutations",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "你最近发现了更多种不同定位的灾厄村民，也许你的新刌民可以训练成其中几种"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "关于新刌民与灾厄村民仆从的信息请点$(l:goety:mutations/illager_servants)这里$()."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:igniter_servant",
+      "scale": 0.75
+    },
+    {
+      "type": "patchouli:text",
+      "text": "这些脾气暴躁的纵火者要么会把他的敌人烤的酥脆，要么就用雪球扑灭其他队友身上的火焰"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:preserver_servant",
+      "scale": 0.75
+    },
+    {
+      "type": "patchouli:text",
+      "text": "尽管这个职业在灾厄村民的社会中非常丢人现眼，但你还是设法将你的灾厄村民训练成了其中一个......这个职业其实非常有用，他可以用干草甲为其它灾厄村民提供防护"
+    }
+  ]
+}

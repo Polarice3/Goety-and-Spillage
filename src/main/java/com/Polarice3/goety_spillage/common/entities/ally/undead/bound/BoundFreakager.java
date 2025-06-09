@@ -8,10 +8,11 @@ import com.Polarice3.Goety.utils.MobUtil;
 import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
 import com.Polarice3.goety_spillage.common.entities.ally.GSEyesore;
 import com.Polarice3.goety_spillage.common.entities.ally.GSTot;
-import com.Polarice3.goety_spillage.common.entities.ally.RagnoServant;
+import com.Polarice3.goety_spillage.common.entities.ally.illager.RagnoServant;
 import com.Polarice3.goety_spillage.common.entities.ally.undead.GSFunnybone;
 import com.Polarice3.goety_spillage.common.entities.projectiles.*;
 import com.Polarice3.goety_spillage.config.GSAttributesConfig;
+import com.Polarice3.goety_spillage.config.GSMobsConfig;
 import com.yellowbrossproductions.illageandspillage.client.model.animation.ICanBeAnimated;
 import com.yellowbrossproductions.illageandspillage.util.EffectRegisterer;
 import com.yellowbrossproductions.illageandspillage.util.IllageAndSpillageSoundEvents;
@@ -173,6 +174,11 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
         if (pCompound.contains("ToTCoolDown")) {
             this.trickOrTreatCooldown = pCompound.getInt("ToTCoolDown");
         }
+    }
+
+    @Override
+    protected boolean isSunSensitive() {
+        return GSMobsConfig.BoundFreakagerSun.get();
     }
 
     public boolean canBeAffected(MobEffectInstance effectInstance) {
@@ -787,6 +793,10 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
         }
 
         return !source.is(DamageTypes.IN_WALL) && super.hurt(source, amount);
+    }
+
+    public SoundEvent getCelebrateSound() {
+        return IllageAndSpillageSoundEvents.ENTITY_FREAKAGER_LAUGH.get();
     }
 
     protected SoundEvent getAmbientSound() {

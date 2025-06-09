@@ -1,0 +1,7 @@
+{
+  "name": "Artifices",
+  "description": "More magical machinations.",
+  "icon": "goety:ominous_pyre",
+  "parent": "goety:spillage/crafts",
+  "sortnum": 3
+}

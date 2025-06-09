@@ -2,9 +2,11 @@ package com.Polarice3.goety_spillage;
 
 import com.Polarice3.Goety.utils.ModPotionUtil;
 import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
-import com.Polarice3.goety_spillage.common.entities.ally.CrocofangServant;
 import com.Polarice3.goety_spillage.common.entities.ally.GSSpiritHand;
-import com.Polarice3.goety_spillage.common.entities.ally.RagnoServant;
+import com.Polarice3.goety_spillage.common.entities.ally.illager.CrocofangServant;
+import com.Polarice3.goety_spillage.common.entities.ally.illager.IgniterServant;
+import com.Polarice3.goety_spillage.common.entities.ally.illager.PreserverServant;
+import com.Polarice3.goety_spillage.common.entities.ally.illager.RagnoServant;
 import com.Polarice3.goety_spillage.common.entities.ally.undead.bound.BoundEngineer;
 import com.Polarice3.goety_spillage.common.entities.ally.undead.bound.BoundFreakager;
 import com.Polarice3.goety_spillage.common.entities.ally.undead.zombie.ZombieAbsorber;
@@ -121,6 +123,7 @@ public class GoetySpillage {
     }
 
     private void setupEntityAttributeCreation(final EntityAttributeCreationEvent event) {
+        event.put(GSEntityTypes.IGNITER_SERVANT.get(), IgniterServant.setCustomAttributes().build());
         event.put(GSEntityTypes.BOUND_ENGINEER.get(), BoundEngineer.setCustomAttributes().build());
         event.put(GSEntityTypes.CHAGRIN.get(), ChagrinSentryEntity.createAttributes().build());
         event.put(GSEntityTypes.HINDER.get(), HinderEntity.createAttributes().build());
@@ -133,6 +136,7 @@ public class GoetySpillage {
         event.put(GSEntityTypes.SPIRIT_HAND.get(), GSSpiritHand.setCustomAttributes().build());
         event.put(GSEntityTypes.CROCOFANG_SERVANT.get(), CrocofangServant.setCustomAttributes().build());
         event.put(GSEntityTypes.ZOMBIE_ABSORBER.get(), ZombieAbsorber.setCustomAttributes().build());
+        event.put(GSEntityTypes.PRESERVER_SERVANT.get(), PreserverServant.setCustomAttributes().build());
         event.put(GSEntityTypes.VILLAGER_VICTIM.get(), VillagerVictim.setCustomAttributes().build());
         event.put(GSEntityTypes.BOUND_FREAKAGER.get(), BoundFreakager.setCustomAttributes().build());
         event.put(GSEntityTypes.RAGNO_SERVANT.get(), RagnoServant.setCustomAttributes().build());

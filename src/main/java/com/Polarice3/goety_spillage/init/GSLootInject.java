@@ -19,6 +19,9 @@ public class GSLootInject {
         if (name.equals("illageandspillage:entities/old_ragno")) {
             evt.getTable().addPool(getInjectPool("entities/ragno"));
         }
+        if (name.equals("illageandspillage:entities/spiritcaller")) {
+            evt.getTable().addPool(getInjectPool("entities/spiritcaller"));
+        }
     }
 
     private static LootPool getInjectPool(String entryName) {

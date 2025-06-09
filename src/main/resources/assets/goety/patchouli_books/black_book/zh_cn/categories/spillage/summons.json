@@ -1,7 +1,7 @@
 {
   "name": "仆从",
   "description": "更多黑暗巫师的仆从。",
-  "icon": "goety_spillage:mutation_potion",
+  "icon": "goety_spillage:factory_package",
   "parent": "goety:spillage",
   "sortnum": 3
 }

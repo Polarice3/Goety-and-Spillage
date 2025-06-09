@@ -1,0 +1,33 @@
+{
+  "name": "追加されたイリジャーの従者",
+  "icon": "goety:magic_emerald",
+  "category": "goety:spillage/mutations",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "より多くのイリジャーが発見されています。おそらくあなたのイリジャーも訓練して、それらの1つになれるかもしれません。"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "イリジャーの従者の詳細については$(l:goety:mutations/illager_servants)ことら$()。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:igniter_servant",
+      "scale": 0.75
+    },
+    {
+      "type": "patchouli:text",
+      "text": "これらの短気なイリジャーは、燃え盛る火の玉で敵を焼き尽くしたり、雪玉で味方や主人の炎を消したりします。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:preserver_servant",
+      "scale": 0.75
+    },
+    {
+      "type": "patchouli:text",
+      "text": "あなたは、干し草の鎧で他のイリジャーを守るという、非常に役立つ役割を持つイリジャーを訓練することに成功しました...しかし、イリジャーの社会では非常に屈辱的なことです。"
+    }
+  ]
+}

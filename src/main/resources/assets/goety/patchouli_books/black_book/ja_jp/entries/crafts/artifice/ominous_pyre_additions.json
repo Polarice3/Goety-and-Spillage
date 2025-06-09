@@ -1,0 +1,25 @@
+{
+  "name": "追加されたトレーニング",
+  "icon": "goety:ominous_pyre",
+  "category": "goety:spillage/crafts/artifice",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "新たなイリジャーが増えているため、新しい訓練場を作る必要があります。"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "不吉な炎の台の詳細は$(l:goety:crafts/artifice/ominous_pyre)こちら$()。"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "イグナイターの従者",
+      "text": "必要: $(li)ネオラジャー $(li)32 マグマブロック $(li)16 雪ブロック $(li)1 作業台 $(li)2 鉄ブロック $(li)4 石炭ブロック $(li)4 レッドストーンブロック $(li)64 丸石"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "プリザーバーの従者",
+      "text": "必要: $(li)ネオラジャー $(li)64 干し草の俵 $(li)16 ピストン $(li)16 樽"
+    }
+  ]
+}

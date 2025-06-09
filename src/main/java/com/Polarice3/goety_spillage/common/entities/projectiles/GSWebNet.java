@@ -1,7 +1,7 @@
 package com.Polarice3.goety_spillage.common.entities.projectiles;
 
 import com.Polarice3.Goety.utils.MobUtil;
-import com.Polarice3.goety_spillage.common.entities.ally.RagnoServant;
+import com.Polarice3.goety_spillage.common.entities.ally.illager.RagnoServant;
 import com.yellowbrossproductions.illageandspillage.entities.IllagerAttack;
 import com.yellowbrossproductions.illageandspillage.util.EntityUtil;
 import com.yellowbrossproductions.illageandspillage.util.IllageAndSpillageSoundEvents;

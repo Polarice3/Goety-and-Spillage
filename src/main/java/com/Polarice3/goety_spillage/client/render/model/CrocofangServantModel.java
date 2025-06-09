@@ -1,6 +1,6 @@
 package com.Polarice3.goety_spillage.client.render.model;
 
-import com.Polarice3.goety_spillage.common.entities.ally.CrocofangServant;
+import com.Polarice3.goety_spillage.common.entities.ally.illager.CrocofangServant;
 import com.yellowbrossproductions.illageandspillage.client.model.CrocofangModel;
 import com.yellowbrossproductions.illageandspillage.client.model.animation.CrocofangAnimation;
 import net.minecraft.client.model.geom.ModelPart;

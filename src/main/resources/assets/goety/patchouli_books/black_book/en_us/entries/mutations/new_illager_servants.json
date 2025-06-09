@@ -1,0 +1,33 @@
+{
+  "name": "More Illager Servants",
+  "icon": "goety:magic_emerald",
+  "category": "goety:spillage/mutations",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "More Illager variants have been spotted lately, perhaps your Illagers can train to become one of them."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "More info on Illager Servants $(l:goety:mutations/illager_servants)here$()."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:igniter_servant",
+      "scale": 0.75
+    },
+    {
+      "type": "patchouli:text",
+      "text": "These hot tempered Illagers will either burn their enemies to crisp with blazing fireballs, or extinguish flames on their allies and master with snowballs."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:preserver_servant",
+      "scale": 0.75
+    },
+    {
+      "type": "patchouli:text",
+      "text": "You've managed to get an Illager to train into one of these, a very useful role protecting other Illagers with an armor of hay... but very humiliating in Illager society."
+    }
+  ]
+}

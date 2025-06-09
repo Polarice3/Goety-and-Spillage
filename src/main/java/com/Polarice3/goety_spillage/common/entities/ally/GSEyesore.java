@@ -4,6 +4,7 @@ import com.Polarice3.Goety.common.entities.ally.Summoned;
 import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.Polarice3.Goety.utils.MobUtil;
 import com.Polarice3.Goety.utils.ModDamageSource;
+import com.Polarice3.goety_spillage.common.entities.ally.illager.RagnoServant;
 import com.yellowbrossproductions.illageandspillage.entities.goal.StareAtDeadFreakGoal;
 import com.yellowbrossproductions.illageandspillage.particle.ParticleRegisterer;
 import com.yellowbrossproductions.illageandspillage.util.EffectRegisterer;

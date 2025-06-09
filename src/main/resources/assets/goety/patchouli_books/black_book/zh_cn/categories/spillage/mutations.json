@@ -1,0 +1,7 @@
+{
+  "name": "变异",
+  "description": "把一个生物变成某些怪异的东西",
+  "icon": "goety_spillage:mutation_potion",
+  "parent": "goety:spillage",
+  "sortnum": 4
+}

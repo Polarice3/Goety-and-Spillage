@@ -1,0 +1,7 @@
+{
+  "name": "设备",
+  "description": "策划更怪奇的阴谋",
+  "icon": "goety:ominous_pyre",
+  "parent": "goety:spillage/crafts",
+  "sortnum": 3
+}

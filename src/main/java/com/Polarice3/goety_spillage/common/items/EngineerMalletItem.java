@@ -12,8 +12,8 @@ import com.Polarice3.goety_spillage.common.entities.ally.factory.GSChagrin;
 import com.Polarice3.goety_spillage.common.entities.ally.factory.GSFactory;
 import com.Polarice3.goety_spillage.common.entities.ally.factory.GSHinder;
 import com.Polarice3.goety_spillage.common.entities.ally.factory.IEngineerMachine;
-import com.Polarice3.goety_spillage.common.util.GSMobUtil;
 import com.Polarice3.goety_spillage.config.GSSpellConfig;
+import com.Polarice3.goety_spillage.util.GSMobUtil;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.yellowbrossproductions.illageandspillage.util.IllageAndSpillageSoundEvents;
@@ -58,11 +58,15 @@ public class EngineerMalletItem extends Item implements Vanishable {
         return true;
     }
 
+    public boolean hasCraftingRemainingItem(ItemStack stack) {
+        return true;
+    }
+
     @Nonnull
     public ItemStack getCraftingRemainingItem(ItemStack itemStack) {
         ItemStack container = itemStack.copy();
         if (container.getDamageValue() <= container.getMaxDamage()) {
-            container.setDamageValue(itemStack.getDamageValue() + 5);
+            container.setDamageValue(itemStack.getDamageValue() + 1);
         } else {
             container = ItemStack.EMPTY;
         }

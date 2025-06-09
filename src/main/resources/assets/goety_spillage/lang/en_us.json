@@ -17,10 +17,16 @@
   "advancements.goety_spillage.obtain_engineer_mallet.description": "Obtain an Engineer's Mallet. Rarely dropped by Engineers.",
   "advancements.goety_spillage.summon_bound_engineer.title": "Being Dead Just Got Me Mad!",
   "advancements.goety_spillage.summon_bound_engineer.description": "Summon a Bound Engineer.",
+  "advancements.goety_spillage.summon_bound_freakager.title": "Under New Management",
+  "advancements.goety_spillage.summon_bound_freakager.description": "Summon a Bound Freakager.",
   "advancements.goety_spillage.summon_zombie_absorber.title": "Mighty Glacier",
   "advancements.goety_spillage.summon_zombie_absorber.description": "Summon a Zombie Absorber.",
 
+  "effect.illageandspillage.disability": "Disability",
+  "effect.illageandspillage.preserved": "Preserved",
+
   "entity.goety_spillage.dark_cloud_effect": "Dark Cloud Effect",
+  "entity.goety_spillage.igniter_servant": "Igniter Servant",
   "entity.goety_spillage.bound_engineer": "Bound Engineer",
   "entity.goety_spillage.chagrin_sentry": "Chagrin Sentry",
   "entity.goety_spillage.hinder": "Hinder",
@@ -33,6 +39,7 @@
   "entity.goety_spillage.spirit_hand": "Spirit Hand",
   "entity.goety_spillage.crocofang_servant": "Crocofang",
   "entity.goety_spillage.zombie_absorber": "Zombie Absorber",
+  "entity.goety_spillage.preserver_servant": "Preserver Servant",
   "entity.goety_spillage.villager_victim": "Villager",
   "entity.goety_spillage.bound_freakager": "Bound Freakager",
   "entity.goety_spillage.ragno_servant": "Ragno",
@@ -52,11 +59,14 @@
   "item.goety_spillage.ragno_servant_spawn_egg": "Ragno Servant Spawn Egg",
   "item.goety_spillage.bound_engineer_spawn_egg": "Bound Engineer Spawn Egg",
   "item.goety_spillage.bound_freakager_spawn_egg": "Bound Freakager Spawn Egg",
+  "item.goety_spillage.igniter_servant_spawn_egg": "Igniter Servant Spawn Egg",
+  "item.goety_spillage.preserver_servant_spawn_egg": "Preserver Servant Spawn Egg",
 
   "item.goety_spillage.freaky_hat": "Freaky Hat",
   "item.goety_spillage.freaky_robe": "Freaky Robe",
 
   "item.goety_spillage.mutated_flesh": "Mutated Flesh",
+  "item.goety_spillage.misconducted_soul": "Misconducted Soul",
 
   "item.goety_spillage.pumpkin_bomb": "Pumpkin Bomb",
   "item.goety_spillage.skull_bomb": "Skull Bomb",
@@ -82,5 +92,10 @@
   "info.goety_spillage.freaky_hat": "Halves incoming attacks while riding a Ragno.",
   "info.goety_spillage.freaky_hat_axe": "Iron Axes uses durability, instead of being fully used, when thrown.",
   "info.goety_spillage.freaky_robe_power": "Press %s to perform a freaky ability.",
-  "info.goety_spillage.freaky_robe_axe": "Iron Axes can be thrown."
+  "info.goety_spillage.freaky_robe_axe": "Iron Axes can be thrown.",
+
+  "info.goety_spillage.freaky_simp": "<%s> HEY EVERYONE %s IS A SIMP",
+
+  "death.attack.goety_spillage.frickYou": "'frick you' - %2$s",
+  "death.attack.goety_spillage.frickYou.player": "'frick you' - %2$s"
 }

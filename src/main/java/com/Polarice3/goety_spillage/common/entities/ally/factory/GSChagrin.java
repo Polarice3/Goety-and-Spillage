@@ -1,7 +1,8 @@
 package com.Polarice3.goety_spillage.common.entities.ally.factory;
 
-import com.Polarice3.Goety.common.entities.ai.SummonTargetGoal;
 import com.Polarice3.Goety.common.entities.neutral.Owned;
+import com.Polarice3.Goety.common.entities.projectiles.GhostArrow;
+import com.Polarice3.goety_spillage.config.GSMobsConfig;
 import com.yellowbrossproductions.illageandspillage.entities.IllagerAttack;
 import com.yellowbrossproductions.illageandspillage.util.IllageAndSpillageSoundEvents;
 import net.minecraft.core.particles.ParticleTypes;
@@ -24,6 +25,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
@@ -57,7 +59,6 @@ public class GSChagrin extends EngineerMachine implements RangedAttackMob, Illag
         this.goalSelector.addGoal(1, new RapidFireGoal());
         this.goalSelector.addGoal(9, new ChagrinSentryLookAtEntityGoal(this, Player.class, 15.0F, 1.0F));
         this.goalSelector.addGoal(10, new ChagrinSentryLookAtEntityGoal(this, Mob.class, 15.0F));
-        this.targetSelector.addGoal(1, new SummonTargetGoal(this));
     }
 
     public static AttributeSupplier.Builder setCustomAttributes() {
@@ -281,6 +282,15 @@ public class GSChagrin extends EngineerMachine implements RangedAttackMob, Illag
     }
 
     protected AbstractArrow getArrow(ItemStack p_213624_1_, float p_213624_2_) {
+        if (GSMobsConfig.ChagrinGhostArrow.get()) {
+            Arrow arrow = new GhostArrow(this.level, this);
+            arrow.setEnchantmentEffectsFromEntity(this, p_213624_2_);
+            if (p_213624_1_.is(Items.TIPPED_ARROW)) {
+                arrow.setEffectsFromItem(p_213624_1_);
+            }
+
+            return arrow;
+        }
         return ProjectileUtil.getMobArrow(this, p_213624_1_, p_213624_2_);
     }
 

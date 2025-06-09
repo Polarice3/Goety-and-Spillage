@@ -1,17 +1,18 @@
-package com.Polarice3.goety_spillage.common.entities.ally;
+package com.Polarice3.goety_spillage.common.entities.ally.illager;
 
 import com.Polarice3.Goety.api.entities.IAutoRideable;
 import com.Polarice3.Goety.api.entities.ally.IServant;
 import com.Polarice3.Goety.api.items.magic.IWand;
 import com.Polarice3.Goety.client.particles.ModParticleTypes;
 import com.Polarice3.Goety.common.entities.ally.Summoned;
+import com.Polarice3.Goety.common.entities.ally.illager.RaiderServant;
 import com.Polarice3.Goety.common.entities.neutral.AbstractHauntedArmor;
 import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.Polarice3.Goety.config.MobsConfig;
 import com.Polarice3.Goety.utils.MobUtil;
 import com.Polarice3.Goety.utils.ModDamageSource;
-import com.Polarice3.goety_spillage.common.util.GSMobUtil;
 import com.Polarice3.goety_spillage.config.GSAttributesConfig;
+import com.Polarice3.goety_spillage.util.GSMobUtil;
 import com.yellowbrossproductions.illageandspillage.client.model.animation.ICanBeAnimated;
 import com.yellowbrossproductions.illageandspillage.util.EntityUtil;
 import com.yellowbrossproductions.illageandspillage.util.IllageAndSpillageSoundEvents;
@@ -56,7 +57,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-public class CrocofangServant extends Summoned implements PlayerRideable, IAutoRideable, ICanBeAnimated {
+public class CrocofangServant extends RaiderServant implements PlayerRideable, IAutoRideable, ICanBeAnimated {
     private static final UUID SPEED_PENALTY_UUID = UUID.fromString("5BD14A52-AB9A-42D3-A649-90FDE044281E");
     private static final AttributeModifier SPEED_PENALTY = new AttributeModifier(SPEED_PENALTY_UUID, "STOP MOVING AROUND STUPID", -0.35, AttributeModifier.Operation.ADDITION);
     private static final EntityDataAccessor<Integer> ANIMATION_STATE = SynchedEntityData.defineId(CrocofangServant .class, EntityDataSerializers.INT);
@@ -86,7 +87,7 @@ public class CrocofangServant extends Summoned implements PlayerRideable, IAutoR
         this.goalSelector.addGoal(0, new AttackGoal());
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.0, false));
-        this.goalSelector.addGoal(5, new WanderGoal<>(this, 0.4));
+        this.goalSelector.addGoal(5, new RaiderWanderGoal<>(this, 0.4));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 6.0F));
         this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 8.0F));
     }
@@ -231,7 +232,7 @@ public class CrocofangServant extends Summoned implements PlayerRideable, IAutoR
             LivingEntity rider = this.getControllingPassenger();
             if (this.hasPassenger()
                     && ((rider instanceof Player && !this.isAutonomous())
-                    || (rider instanceof IServant servant && (servant.isStaying() || servant.isCommanded() || servant.isPatrolling())))
+                    || (rider instanceof IServant servant && (servant.isStaying() || servant.isCommanded() || servant.isGuardingArea())))
                     && this.notClientAttacking()) {
                 this.setYRot(rider.getYRot());
                 this.yRotO = this.getYRot();
@@ -270,6 +271,10 @@ public class CrocofangServant extends Summoned implements PlayerRideable, IAutoR
 
     public float getStepHeight() {
         return 1.0F;
+    }
+
+    public SoundEvent getCelebrateSound() {
+        return IllageAndSpillageSoundEvents.ENTITY_CROCOFANG_AMBIENT.get();
     }
 
     protected @Nullable SoundEvent getAmbientSound() {

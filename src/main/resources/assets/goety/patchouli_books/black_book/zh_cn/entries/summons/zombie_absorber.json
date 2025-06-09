@@ -1,0 +1,28 @@
+{
+  "name": "僵尸伤害吸收者",
+  "icon": "goety:great_hammer",
+  "category": "goety:spillage/summons",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "退伍老兵再就业，虽然已经腐烂了，但他依旧强壮，可以像纸制品一样应对一些猛烈的打击"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:zombie_absorber",
+      "scale": 0.5
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety_spillage:thrall/summon_zombie_absorber"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "僵尸伤害吸收者可以使用腐肉治愈，或是在穿戴死灵长袍的情况下被动回血，不过在后一种情况下，他被动回血的间隔比一般亡灵仆从更长"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "幼年的僵尸类仆从会主动骑上僵尸伤害吸收者并指挥他行动，当僵尸伤害吸收者的血量低于一半时，僵尸伤害吸收者会将骑着的僵尸扔向敌人"
+    }
+  ]
+}

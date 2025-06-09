@@ -38,6 +38,7 @@ public class ClientInitEvents {
     @SubscribeEvent
     public static void onRegisterRenders(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(GSEntityTypes.DARK_CLOUD_EFFECT.get(), NoopRenderer::new);
+        event.registerEntityRenderer(GSEntityTypes.IGNITER_SERVANT.get(), IgniterServantRenderer::new);
         event.registerEntityRenderer(GSEntityTypes.BOUND_ENGINEER.get(), BoundEngineerRenderer::new);
         event.registerEntityRenderer(GSEntityTypes.CHAGRIN.get(), GSChagrinRenderer::new);
         event.registerEntityRenderer(GSEntityTypes.HINDER.get(), GSHinderRenderer::new);
@@ -50,6 +51,7 @@ public class ClientInitEvents {
         event.registerEntityRenderer(GSEntityTypes.SPIRIT_HAND.get(), GSSpiritHandRenderer::new);
         event.registerEntityRenderer(GSEntityTypes.CROCOFANG_SERVANT.get(), CrocofangServantRenderer::new);
         event.registerEntityRenderer(GSEntityTypes.ZOMBIE_ABSORBER.get(), ZombieAbsorberRenderer::new);
+        event.registerEntityRenderer(GSEntityTypes.PRESERVER_SERVANT.get(), PreserverServantRenderer::new);
         event.registerEntityRenderer(GSEntityTypes.VILLAGER_VICTIM.get(), VillagerVictimRenderer::new);
         event.registerEntityRenderer(GSEntityTypes.BOUND_FREAKAGER.get(), BoundFreakagerRenderer::new);
         event.registerEntityRenderer(GSEntityTypes.RAGNO_SERVANT.get(), RagnoServantRenderer::new);

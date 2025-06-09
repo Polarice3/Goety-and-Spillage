@@ -9,8 +9,9 @@ import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
 import com.Polarice3.goety_spillage.common.entities.ally.factory.GSChagrin;
 import com.Polarice3.goety_spillage.common.entities.ally.factory.GSFactory;
 import com.Polarice3.goety_spillage.common.entities.ally.factory.GSHinder;
-import com.Polarice3.goety_spillage.common.util.GSMobUtil;
 import com.Polarice3.goety_spillage.config.GSAttributesConfig;
+import com.Polarice3.goety_spillage.config.GSMobsConfig;
+import com.Polarice3.goety_spillage.util.GSMobUtil;
 import com.yellowbrossproductions.illageandspillage.client.model.animation.ICanBeAnimated;
 import com.yellowbrossproductions.illageandspillage.util.IllageAndSpillageSoundEvents;
 import net.minecraft.core.particles.ParticleTypes;
@@ -125,8 +126,17 @@ public class BoundEngineer extends AbstractBoundIllager implements ICanBeAnimate
     }
 
     @Override
+    protected boolean isSunSensitive() {
+        return GSMobsConfig.BoundEngineerSun.get();
+    }
+
+    @Override
     protected SoundEvent getCastingSoundEvent() {
         return null;
+    }
+
+    public SoundEvent getCelebrateSound() {
+        return IllageAndSpillageSoundEvents.ENTITY_ENGINEER_AMBIENT.get();
     }
 
     protected @Nullable SoundEvent getAmbientSound() {

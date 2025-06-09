@@ -1,0 +1,25 @@
+{
+  "name": "不祥火盆内容追加",
+  "icon": "goety:ominous_pyre",
+  "category": "goety:spillage/crafts/artifice",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "随着新型灾厄村民的普及，你的训练场也要与时俱进"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "与不祥火盆相关的更多内容请点击$(l:goety:crafts/artifice/ominous_pyre)此处$()."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "纵火者仆从",
+      "text": "需求：$(li)新刌民 $(li)32个岩浆块 $(li)16个雪块 $(li)1个工作台 $(li)2个铁块 $(li)4个煤炭块 $(li)4个红石块 $(li)64个圆石"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "保护者仆从",
+      "text": "需求：$(li)新刌民 $(li)64个干草块 $(li)16个活塞 $(li)16个木桶"
+    }
+  ]
+}

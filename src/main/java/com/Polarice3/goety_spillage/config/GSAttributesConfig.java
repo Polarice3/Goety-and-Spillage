@@ -10,6 +10,9 @@ public class GSAttributesConfig {
     public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
     public static final ForgeConfigSpec SPEC;
 
+    public static final ForgeConfigSpec.ConfigValue<Double> IgniterServantHealth;
+    public static final ForgeConfigSpec.ConfigValue<Double> IgniterServantArmor;
+
     public static final ForgeConfigSpec.ConfigValue<Double> CrocofangServantHealth;
     public static final ForgeConfigSpec.ConfigValue<Double> CrocofangServantArmor;
     public static final ForgeConfigSpec.ConfigValue<Double> CrocofangServantDamage;
@@ -17,6 +20,9 @@ public class GSAttributesConfig {
     public static final ForgeConfigSpec.ConfigValue<Double> ZombieAbsorberHealth;
     public static final ForgeConfigSpec.ConfigValue<Double> ZombieAbsorberArmor;
     public static final ForgeConfigSpec.ConfigValue<Double> ZombieAbsorberDamage;
+
+    public static final ForgeConfigSpec.ConfigValue<Double> PreserverServantHealth;
+    public static final ForgeConfigSpec.ConfigValue<Double> PreserverServantArmor;
 
     public static final ForgeConfigSpec.ConfigValue<Double> BoundEngineerHealth;
     public static final ForgeConfigSpec.ConfigValue<Double> BoundEngineerArmor;
@@ -35,6 +41,12 @@ public class GSAttributesConfig {
     static {
         BUILDER.push("Attributes");
             BUILDER.push("Summoned Mobs");
+                BUILDER.push("Igniter Servant");
+                IgniterServantHealth = BUILDER.comment("How much Max Health Igniter Servants have, Default: 24.0")
+                        .defineInRange("igniterServantHealth", 24.0, 1.0, Double.MAX_VALUE);
+                IgniterServantArmor = BUILDER.comment("How much natural armor points Igniter Servants have, Default: 0.0")
+                        .defineInRange("igniterServantArmor", 0.0, 0.0, Double.MAX_VALUE);
+                BUILDER.pop();
                 BUILDER.push("Crocofang Servant");
                 CrocofangServantHealth = BUILDER.comment("How much Max Health Crocofang Servants have, Default: 40.0")
                         .defineInRange("crocofangServantHealth", 40.0, 1.0, Double.MAX_VALUE);
@@ -44,12 +56,18 @@ public class GSAttributesConfig {
                         .defineInRange("crocofangServantDamage", 8.0, 1.0, Double.MAX_VALUE);
                 BUILDER.pop();
                 BUILDER.push("Zombie Absorber");
-                ZombieAbsorberHealth = BUILDER.comment("How much Max Health Zombie Absorbers have, Default: 200.0")
+                ZombieAbsorberHealth = BUILDER.comment("How much Max Health Zombie Absorbers have, Default: 100.0")
                         .defineInRange("zombieAbsorberHealth", 100.0, 1.0, Double.MAX_VALUE);
                 ZombieAbsorberArmor = BUILDER.comment("How much natural armor points Zombie Absorbers have, Default: 0.0")
                         .defineInRange("zombieAbsorberArmor", 0.0, 0.0, Double.MAX_VALUE);
                 ZombieAbsorberDamage = BUILDER.comment("How much damage Zombie Absorbers deals, Default: 15.0")
                         .defineInRange("zombieAbsorberDamage", 15.0, 1.0, Double.MAX_VALUE);
+                BUILDER.pop();
+                BUILDER.push("Preserver Servant");
+                PreserverServantHealth = BUILDER.comment("How much Max Health Preserver Servants have, Default: 20.0")
+                        .defineInRange("preserverServantHealth", 20.0, 1.0, Double.MAX_VALUE);
+                PreserverServantArmor = BUILDER.comment("How much natural armor points Preserver Servants have, Default: 0.0")
+                        .defineInRange("preserverServantArmor", 0.0, 0.0, Double.MAX_VALUE);
                 BUILDER.pop();
                 BUILDER.push("Bound Engineer");
                 BoundEngineerHealth = BUILDER.comment("How much Max Health Bound Engineers have, Default: 30.0")

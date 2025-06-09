@@ -1,7 +1,7 @@
 package com.Polarice3.goety_spillage.common.items;
 
 import com.Polarice3.Goety.utils.MathHelper;
-import com.Polarice3.goety_spillage.common.entities.ally.RagnoServant;
+import com.Polarice3.goety_spillage.common.entities.ally.illager.RagnoServant;
 import com.Polarice3.goety_spillage.config.GSSpellConfig;
 import com.yellowbrossproductions.illageandspillage.util.EffectRegisterer;
 import net.minecraft.network.chat.Component;

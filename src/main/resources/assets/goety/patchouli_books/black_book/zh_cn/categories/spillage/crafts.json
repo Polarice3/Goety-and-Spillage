@@ -1,7 +1,7 @@
 {
   "name": "制作",
   "description": "更多的灾厄村民？更多的艺术！",
-  "icon": "goety_spillage:freaky_hat",
+  "icon": "goety_spillage:engineer_mallet",
   "parent": "goety:spillage",
   "sortnum": 1
 }

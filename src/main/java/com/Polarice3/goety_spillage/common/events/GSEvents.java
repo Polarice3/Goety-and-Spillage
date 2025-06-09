@@ -1,8 +1,9 @@
 package com.Polarice3.goety_spillage.common.events;
 
-import com.Polarice3.Goety.common.entities.ally.undead.zombie.ZombieServant;
+import com.Polarice3.Goety.api.entities.ally.illager.IllagerType;
 import com.Polarice3.Goety.common.entities.neutral.AbstractHauntedArmor;
 import com.Polarice3.Goety.common.entities.neutral.Owned;
+import com.Polarice3.Goety.common.events.TimedEvents;
 import com.Polarice3.Goety.utils.CuriosFinder;
 import com.Polarice3.Goety.utils.ItemHelper;
 import com.Polarice3.Goety.utils.MobUtil;
@@ -12,7 +13,8 @@ import com.Polarice3.goety_spillage.common.capabilities.spillage.SpillageCapHelp
 import com.Polarice3.goety_spillage.common.capabilities.spillage.SpillageProvider;
 import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
 import com.Polarice3.goety_spillage.common.entities.IAttackMyOwner;
-import com.Polarice3.goety_spillage.common.entities.ally.RagnoServant;
+import com.Polarice3.goety_spillage.common.entities.ally.illager.IgniterServant;
+import com.Polarice3.goety_spillage.common.entities.ally.illager.RagnoServant;
 import com.Polarice3.goety_spillage.common.entities.ally.undead.zombie.ZombieAbsorber;
 import com.Polarice3.goety_spillage.common.entities.neutral.VillagerVictim;
 import com.Polarice3.goety_spillage.common.entities.projectiles.ThrownAxe;
@@ -20,14 +22,17 @@ import com.Polarice3.goety_spillage.common.items.MutationPotion;
 import com.Polarice3.goety_spillage.common.items.curios.FreakyHatItem;
 import com.Polarice3.goety_spillage.common.items.curios.FreakyRobeItem;
 import com.Polarice3.goety_spillage.config.GSMobsConfig;
+import com.Polarice3.goety_spillage.init.GSIllagerTypes;
 import com.Polarice3.goety_spillage.init.GSLootTables;
+import com.Polarice3.goety_spillage.util.GSMobUtil;
 import com.yellowbrossproductions.illageandspillage.entities.*;
 import com.yellowbrossproductions.illageandspillage.entities.projectile.AxeEntity;
 import com.yellowbrossproductions.illageandspillage.util.EffectRegisterer;
 import com.yellowbrossproductions.illageandspillage.util.ItemRegisterer;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
@@ -41,6 +46,7 @@ import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Snowball;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -48,9 +54,11 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -73,6 +81,21 @@ public class GSEvents {
         player.getCapability(SpillageProvider.CAPABILITY)
                 .ifPresent(spillage ->
                         spillage.setSpinning(false));
+    }
+
+    @SubscribeEvent
+    public static void worldLoad(LevelEvent.Load event) {
+        GSIllagerTypes.addIllagers();
+    }
+
+    @SubscribeEvent
+    public static void worldUnload(LevelEvent.Unload event) {
+        IllagerType[] members = IllagerType.values();
+        for (IllagerType member : members) {
+            if (GSIllagerTypes.NEW_ILLAGER_TYPES.contains(member)) {
+                ArrayUtils.remove(members, member.ordinal());
+            }
+        }
     }
 
     @SubscribeEvent
@@ -101,17 +124,6 @@ public class GSEvents {
                     mob.setTarget(victim.getTrueOwner());
                 } else {
                     mob.setTarget(null);
-                }
-            }
-            if (mob instanceof ZombieServant servant){
-                if (servant.isBaby()){
-                    if (servant.getCommandPosEntity() instanceof ZombieAbsorber absorber && servant.getBoundingBox().inflate(1.25).intersects(absorber.getBoundingBox())){
-                        if (!absorber.isVehicle() && servant.startRiding(absorber)) {
-                            if (servant.getTrueOwner() instanceof Player player) {
-                                player.displayClientMessage(Component.translatable("info.goety.servant.dismount"), true);
-                            }
-                        }
-                    }
                 }
             }
             if (mob instanceof Villager villager){
@@ -143,6 +155,13 @@ public class GSEvents {
         if (direct instanceof ThrownAxe || direct instanceof AxeEntity){
             if (victim instanceof AbstractHauntedArmor armor){
                 armor.disableShield(true);
+            }
+        }
+        if (event.getSource().getEntity() instanceof IgniterServant){
+            if (direct instanceof Snowball) {
+                if (victim.isOnFire()) {
+                    victim.clearFire();
+                }
             }
         }
     }
@@ -256,6 +275,24 @@ public class GSEvents {
         if (event.getEffectInstance().getEffect() == EffectRegisterer.MUTATION.get()) {
             if (CuriosFinder.hasCurio(event.getEntity(), itemStack -> itemStack.getItem() instanceof FreakyRobeItem)) {
                 event.setResult(Event.Result.DENY);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void InteractEntityEvent(PlayerInteractEvent.EntityInteractSpecific event){
+        if (event.getLevel() instanceof ServerLevel serverLevel) {
+            if (event.getTarget() instanceof FreakagerEntity freakagerEntity && !freakagerEntity.getPersistentData().contains("frick")) {
+                if (event.getHand() == InteractionHand.MAIN_HAND) {
+                    if (event.getItemStack().is(ItemTags.FLOWERS)) {
+                        event.setCanceled(true);
+                        event.setCancellationResult(InteractionResult.SUCCESS);
+                        event.getItemStack().shrink(1);
+                        MobUtil.instaLook(freakagerEntity, event.getEntity());
+                        freakagerEntity.getPersistentData().putBoolean("frick", true);
+                        TimedEvents.submitTask("goety_spillage:frickager", new GSMobUtil.FreakagerExplodeTask(freakagerEntity.getUUID(), event.getEntity().getUUID(), serverLevel));
+                    }
+                }
             }
         }
     }

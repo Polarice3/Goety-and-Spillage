@@ -59,8 +59,8 @@ public class GSSpellConfig {
                     .defineInRange("requiemCoolDown", 200, 0, Integer.MAX_VALUE);
             BUILDER.pop();
             BUILDER.push("Soul Beam Spell");
-            SoulBeamCost = BUILDER.comment("Soul Beam Spell Cost, Default: 16")
-                    .defineInRange("soulBeamCost", 16, 0, Integer.MAX_VALUE);
+            SoulBeamCost = BUILDER.comment("Soul Beam Spell Cost, Default: 64")
+                    .defineInRange("soulBeamCost", 64, 0, Integer.MAX_VALUE);
             SoulBeamDuration = BUILDER.comment("Time to cast Soul Beam Spell, Default: 100")
                     .defineInRange("soulBeamDuration", 100, 0, 72000);
             SoulBeamCoolDown = BUILDER.comment("Soul Beam Spell Cooldown, Default: 140")

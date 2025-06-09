@@ -1,7 +1,7 @@
 {
   "name": "Summons",
   "description": "More Servants for a Darker Wizard.",
-  "icon": "goety_spillage:mutation_potion",
+  "icon": "goety_spillage:factory_package",
   "parent": "goety:spillage",
   "sortnum": 3
 }

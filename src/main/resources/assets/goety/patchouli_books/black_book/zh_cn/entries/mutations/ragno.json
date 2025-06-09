@@ -1,7 +1,7 @@
 {
   "name": "腐败蜘蛛",
   "icon": "goety_spillage:mutation_potion",
-  "category": "goety:spillage/summons",
+  "category": "goety:spillage/mutations",
   "advancement": "goety_spillage:obtain_bag_of_horrors",
   "pages": [
     {

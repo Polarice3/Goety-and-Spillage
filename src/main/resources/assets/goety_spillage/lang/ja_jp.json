@@ -72,5 +72,17 @@
   "info.goety_spillage.freaky_robe_axe": "Iron Axes can be thrown.",
   "advancements.goety_spillage.craft_freaky_robe.description": "フリーケイジャーのローブを作成します。これにより、着用者はフリーケイジャーの攻撃を一部模倣できます！",
   "advancements.goety_spillage.obtain_mutated_flesh.title": "空想は決して満たされることはありません！",
-  "advancements.goety_spillage.obtain_mutated_flesh.description": "ラグノが落とす変異肉を入手する。"
+  "advancements.goety_spillage.obtain_mutated_flesh.description": "ラグノが落とす変異肉を入手する。",
+  "advancements.goety_spillage.summon_bound_freakager.title": "Under New Management",
+  "advancements.goety_spillage.summon_bound_freakager.description": "Summon a Bound Freakager.",
+  "effect.illageandspillage.disability": "Disability",
+  "effect.illageandspillage.preserved": "Preserved",
+  "entity.goety_spillage.igniter_servant": "Igniter Servant",
+  "entity.goety_spillage.preserver_servant": "Preserver Servant",
+  "item.goety_spillage.igniter_servant_spawn_egg": "Igniter Servant Spawn Egg",
+  "item.goety_spillage.preserver_servant_spawn_egg": "Preserver Servant Spawn Egg",
+  "item.goety_spillage.misconducted_soul": "葛藤する魂",
+  "info.goety_spillage.freaky_simp": "<%s> HEY EVERYONE %s IS A SIMP",
+  "death.attack.goety_spillage.frickYou": "'frick you' - %2$s",
+  "death.attack.goety_spillage.frickYou.player": "'frick you' - %2$s"
 }

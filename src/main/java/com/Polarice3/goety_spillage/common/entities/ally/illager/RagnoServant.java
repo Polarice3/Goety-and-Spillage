@@ -1,9 +1,10 @@
-package com.Polarice3.goety_spillage.common.entities.ally;
+package com.Polarice3.goety_spillage.common.entities.ally.illager;
 
 import com.Polarice3.Goety.api.entities.IAutoRideable;
 import com.Polarice3.Goety.api.entities.ally.IServant;
 import com.Polarice3.Goety.api.items.magic.IWand;
 import com.Polarice3.Goety.common.entities.ally.Summoned;
+import com.Polarice3.Goety.common.entities.ally.illager.RaiderServant;
 import com.Polarice3.Goety.common.entities.neutral.AbstractHauntedArmor;
 import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.Polarice3.Goety.common.network.ModNetwork;
@@ -12,6 +13,7 @@ import com.Polarice3.Goety.config.MobsConfig;
 import com.Polarice3.Goety.utils.MobUtil;
 import com.Polarice3.Goety.utils.ModDamageSource;
 import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
+import com.Polarice3.goety_spillage.common.entities.ally.GSTot;
 import com.Polarice3.goety_spillage.common.entities.ally.undead.GSFunnybone;
 import com.Polarice3.goety_spillage.common.entities.projectiles.GSPumpkinBomb;
 import com.Polarice3.goety_spillage.common.entities.projectiles.GSWebNet;
@@ -86,7 +88,7 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Predicate;
 
-public class RagnoServant extends Summoned implements PlayerRideableJumping, IAutoRideable, ICanBeAnimated {
+public class RagnoServant extends RaiderServant implements PlayerRideableJumping, IAutoRideable, ICanBeAnimated {
     private static final UUID SPEED_PENALTY_UUID = UUID.fromString("5CD17A52-AB9A-42D3-A629-90FDE04B281E");
     private static final AttributeModifier SPEED_PENALTY = new AttributeModifier(SPEED_PENALTY_UUID, "STOP MOVING AROUND STUPID", -0.35, AttributeModifier.Operation.ADDITION);
     private static final EntityDataAccessor<Byte> DATA_FLAGS_ID = SynchedEntityData.defineId(RagnoServant.class, EntityDataSerializers.BYTE);
@@ -177,7 +179,7 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
         this.goalSelector.addGoal(0, new ChargeGoal());
         this.goalSelector.addGoal(0, new CoughGoal());
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(8, new WanderGoal<>(this, 0.6));
+        this.goalSelector.addGoal(8, new RaiderWanderGoal<>(this, 0.6));
         this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 15.0F));
         this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 15.0F));
     }
@@ -1213,29 +1215,31 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
                 }
             }
 
-            if (this.getAttackType() == BURROW_ATTACK) {
+            if (this.getAttackType() == this.BURROW_ATTACK) {
                 if (this.getAttackTicks() > 6 && this.getAttackTicks() <= 30) {
                     this.playSound(SoundEvents.GRAVEL_BREAK, 2.0F, 0.7F);
                     this.makeBlockParticles(this.getBlockStateOn());
                     this.setBurrowing(true);
                 }
 
-                if (this.getAttackTicks() >= 30 && this.getTarget() != null) {
+                if (this.getAttackTicks() >= 30) {
                     this.clearFire();
                     if (this.getAttackTicks() < (this.halfHealth() ? 40 : 100)) {
                         this.playSound(SoundEvents.STONE_BREAK, 2.0F, 0.5F);
                     }
 
-                    if (this.getAttackTicks() < (this.halfHealth() ? 40 : 100)) {
+                    Entity target = this.getTarget();
+                    if (this.getAttackTicks() < (this.halfHealth() ? 40 : 100) && target != null) {
                         this.setInvisible(true);
-                        double targetX = this.getTarget().getX();
-                        double deltaX = this.getTarget().getZ();
-                        double deltaY = Math.min(this.getTarget().getY(), this.getY());
-                        double deltaZ = Math.max(this.getTarget().getY(), this.getY());
-                        this.setPos(this.getBurrowPosition(targetX, deltaX, deltaY, deltaZ));
+                        double targetX = target.getX();
+                        double targetZ = target.getZ();
+                        double d0 = Math.min(target.getY(), this.getY());
+                        double d1 = Math.max(target.getY(), this.getY());
+                        this.setPos(this.getBurrowPosition(targetX, targetZ, d0, d1));
                     }
 
                     this.setDeltaMovement(0.0, 0.0, 0.0);
+
                     if (this.getAttackTicks() == (this.halfHealth() ? 49 : 119)) {
                         this.setAnimationState(7);
                     }
@@ -1246,22 +1250,27 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
                         CameraShakeEntity.cameraShake(this.level(), this.position(), 50.0F, 0.05F, 0, 30);
                         this.playSound(IllageAndSpillageSoundEvents.ENTITY_RAGNO_SLAM.get(), 2.0F, 1.6F);
                         this.playSound(IllageAndSpillageSoundEvents.ENTITY_RAGNO_SLAM.get(), 2.0F, 1.2F);
-
-                        for (LivingEntity entity : this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(15.0D),
-                                livingEntity -> !MobUtil.areAllies(livingEntity, this) && livingEntity.isAlive())){
-                            double deltaX = this.getX() - entity.getX();
-                            double deltaY = this.getY() - entity.getY();
-                            double deltaZ = this.getZ() - entity.getZ();
-                            double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
-                            if (this.distanceToSqr(entity) < 9.0 && entity.invulnerableTime <= 0) {
-                                this.playSound(SoundEvents.PLAYER_ATTACK_KNOCKBACK, 1.0F, 1.0F);
-                                entity.hurt(damageSource, 8.0F);
-                                entity.hurtMarked = true;
-                                entity.setDeltaMovement(-deltaX / distance * 2.0, -deltaY / distance * 2.0 + 0.8, -deltaZ / distance * 2.0);
-                                entity.lerpMotion(-deltaX / distance * 2.0, -deltaY / distance * 2.0 + 0.8, -deltaZ / distance * 2.0);
+                        for (Entity entity : this.level.getEntities(this, this.getBoundingBox().inflate(15.0D))) {
+                            if (!MobUtil.areAllies(this, entity) && entity instanceof LivingEntity livingEntity && entity.isAlive() && entity != this) {
+                                double deltaX = this.getX() - entity.getX();
+                                double deltaY = this.getY() - entity.getY();
+                                double deltaZ = this.getZ() - entity.getZ();
+                                double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
+                                if (this.distanceToSqr(entity) < 9.0 && entity.invulnerableTime <= 0) {
+                                    this.playSound(SoundEvents.PLAYER_ATTACK_KNOCKBACK, 1.0F, 1.0F);
+                                    entity.hurt(damageSource, 8.0F);
+                                    entity.hurtMarked = true;
+                                    entity.setDeltaMovement(-deltaX / distance * 2.0, -deltaY / distance * 2.0 + 0.8, -deltaZ / distance * 2.0);
+                                    entity.lerpMotion(-deltaX / distance * 2.0, -deltaY / distance * 2.0 + 0.8, -deltaZ / distance * 2.0);
+                                    if (livingEntity.isBlocking()) {
+                                        EntityUtil.disableShield(livingEntity, 100);
+                                        if (livingEntity instanceof AbstractHauntedArmor armor){
+                                            armor.disableShield(true);
+                                        }
+                                    }
+                                }
                             }
                         }
-
                         this.setDeltaMovement(0.0, 0.0, 0.0);
                     }
                 }
@@ -1842,8 +1851,12 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
         }
     }
 
+    public SoundEvent getCelebrateSound() {
+        return this.entityData.get(ANIMATION_STATE) == 6 ? null : IllageAndSpillageSoundEvents.ENTITY_RAGNO_AMBIENT.get();
+    }
+
     protected SoundEvent getAmbientSound() {
-        return IllageAndSpillageSoundEvents.ENTITY_RAGNO_AMBIENT.get();
+        return this.entityData.get(ANIMATION_STATE) == 6 ? null : IllageAndSpillageSoundEvents.ENTITY_RAGNO_AMBIENT.get();
     }
 
     protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
@@ -2126,7 +2139,7 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
             if (this.hasPassenger()
                     && !this.isCrazy()
                     && ((rider instanceof Player && !this.isAutonomous())
-                    || (rider instanceof IServant servant && (servant.isStaying() || servant.isCommanded() || servant.isPatrolling())))
+                    || (rider instanceof IServant servant && (servant.isStaying() || servant.isCommanded() || servant.isGuardingArea())))
                     && this.notClientAttacking() && !this.isPlayingIntro()) {
                 this.setYRot(rider.getYRot());
                 this.yRotO = this.getYRot();
@@ -2575,7 +2588,8 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
 
         public boolean canUse() {
             return RagnoServant.this.doesAttackMeetNormalRequirements()
-                    && RagnoServant.this.random.nextInt(16) == 0
+                    && RagnoServant.this.onGround()
+                    && (RagnoServant.this.halfHealth() || RagnoServant.this.getRandom().nextInt(16) == 0)
                     && RagnoServant.this.burrowCooldown < 1
                     && !RagnoServant.this.isStaying()
                     && !RagnoServant.this.hasPassenger();
@@ -2617,7 +2631,7 @@ public class RagnoServant extends Summoned implements PlayerRideableJumping, IAu
 
         public boolean canUse() {
             return RagnoServant.this.doesAttackMeetNormalRequirements()
-                    && RagnoServant.this.random.nextInt(16) == 0
+                    && (RagnoServant.this.halfHealth() || RagnoServant.this.random.nextInt(16) == 0)
                     && RagnoServant.this.chargeCooldown < 1
                     && !RagnoServant.this.isStaying()
                     && RagnoServant.this.isCrazy();
