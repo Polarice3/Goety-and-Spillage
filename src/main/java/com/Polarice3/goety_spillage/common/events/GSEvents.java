@@ -21,6 +21,7 @@ import com.Polarice3.goety_spillage.common.entities.projectiles.ThrownAxe;
 import com.Polarice3.goety_spillage.common.items.MutationPotion;
 import com.Polarice3.goety_spillage.common.items.curios.FreakyHatItem;
 import com.Polarice3.goety_spillage.common.items.curios.FreakyRobeItem;
+import com.Polarice3.goety_spillage.config.GSItemConfig;
 import com.Polarice3.goety_spillage.config.GSMobsConfig;
 import com.Polarice3.goety_spillage.init.GSIllagerTypes;
 import com.Polarice3.goety_spillage.init.GSLootTables;
@@ -31,9 +32,11 @@ import com.yellowbrossproductions.illageandspillage.util.EffectRegisterer;
 import com.yellowbrossproductions.illageandspillage.util.ItemRegisterer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
@@ -56,6 +59,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.commons.lang3.ArrayUtils;
@@ -132,7 +136,7 @@ public class GSEvents {
                     Player player = brain.getMemory(MemoryModuleType.NEAREST_VISIBLE_PLAYER).orElse(null);
                     if (player != null) {
                         if (GSMobsConfig.VillagerHateRagno.get()) {
-                            for (Owned owned : player.level.getEntitiesOfClass(Owned.class, player.getBoundingBox().inflate(16.0D))) {
+                            for (Owned owned : player.level.getEntitiesOfClass(Owned.class, player.getBoundingBox().inflate(8.0D))) {
                                 if (owned instanceof RagnoServant) {
                                     if (owned.getTrueOwner() == player || owned.getMasterOwner() == player) {
                                         if (villager.getPlayerReputation(player) > -200) {
@@ -157,21 +161,14 @@ public class GSEvents {
                 armor.disableShield(true);
             }
         }
-        if (event.getSource().getEntity() instanceof IgniterServant){
-            if (direct instanceof Snowball) {
-                if (victim.isOnFire()) {
-                    victim.clearFire();
-                }
-            }
-        }
     }
 
     @SubscribeEvent
     public static void HurtEvent(LivingHurtEvent event){
         LivingEntity victim = event.getEntity();
         if (CuriosFinder.hasCurio(victim, item -> (item.getItem() instanceof FreakyHatItem))){
-            if (victim.getVehicle() instanceof RagnoServant || victim.getVehicle() instanceof RagnoEntity){
-                event.setAmount(event.getAmount() / 2.0F);
+            if (victim.getVehicle() instanceof RagnoServant ragno && !ragno.isStunned()&& (!(event.getSource().getEntity() instanceof Player player) || !player.getAbilities().instabuild)){
+                event.setAmount(event.getAmount() / GSItemConfig.FreakyHatRagnoReduce.get().floatValue());
             }
         }
         if (victim instanceof ZombieAbsorber) {

@@ -33,6 +33,7 @@ public class GSTot extends Summoned {
     private static final EntityDataAccessor<Integer> TREAT = SynchedEntityData.defineId(GSTot.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> BOUNCE = SynchedEntityData.defineId(GSTot.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> GOOPY = SynchedEntityData.defineId(GSTot.class, EntityDataSerializers.BOOLEAN);
+    public boolean distract = false;
     public int circleTime;
     public int bounceTime;
     public double accelerationX;
@@ -81,11 +82,13 @@ public class GSTot extends Summoned {
     public void addAdditionalSaveData(CompoundTag p_21484_) {
         super.addAdditionalSaveData(p_21484_);
         p_21484_.putInt("Treat", this.getTreat());
+        p_21484_.putBoolean("Distract", this.distract);
     }
 
     public void readAdditionalSaveData(CompoundTag p_21450_) {
         super.readAdditionalSaveData(p_21450_);
         this.setTreat(p_21450_.getInt("Treat"));
+        this.distract = p_21450_.getBoolean("Distract");
     }
 
     public boolean canBeAffected(MobEffectInstance p_21197_) {
@@ -102,14 +105,18 @@ public class GSTot extends Summoned {
             ++this.circleTime;
         }
 
-        if (this.getOwner() != null) {
-            if ((double)this.distanceTo(this.getOwner()) > 30.0) {
-                this.getNavigation().moveTo(this.getOwner(), 2.0);
+        if (this.distract) {
+            this.distractAttackers();
+        }
+
+        if (this.getTrueOwner() != null) {
+            if ((double)this.distanceTo(this.getTrueOwner()) > 30.0) {
+                this.getNavigation().moveTo(this.getTrueOwner(), 2.0);
             } else {
-                this.circleOwner(this.getOwner(), this.circleTime, Mth.cos((float)this.tickCount / 15.0F));
+                this.circleOwner(this.getTrueOwner(), this.circleTime, Mth.cos((float)this.tickCount / 15.0F));
             }
 
-            this.getLookControl().setLookAt(this.getOwner(), 100.0F, 100.0F);
+            this.getLookControl().setLookAt(this.getTrueOwner(), 100.0F, 100.0F);
             int timeLimit = 300 + this.bounceTime * 20;
             if (this.tickCount >= timeLimit) {
                 if (this.tickCount == timeLimit) {
@@ -123,7 +130,7 @@ public class GSTot extends Summoned {
                 }
 
                 if (this.tickCount >= timeLimit + 10) {
-                    LivingEntity entity = this.getOwner();
+                    LivingEntity entity = this.getTrueOwner();
                     double x = this.getX() - entity.getX();
                     double y = this.getY() - (entity.getY() + 2.2);
                     double z = this.getZ() - entity.getZ();
@@ -177,6 +184,35 @@ public class GSTot extends Summoned {
                 double d1 = -0.5 + this.random.nextGaussian();
                 double d2 = -0.5 + this.random.nextGaussian();
                 serverLevel.sendParticles(ParticleTypes.HEART, caught.getRandomX(0.5), caught.getRandomY(), caught.getRandomZ(0.5), 0, d0, d1, d2, 0.5F);
+            }
+        }
+    }
+
+    public void distractAttackers() {
+        if (this.distract) {
+            if (this.getTrueOwner() != null) {
+                List<Mob> list = this.level.getEntitiesOfClass(Mob.class, this.getBoundingBox().inflate(100.0D));
+                for (Mob attacker : list) {
+                    if (attacker.getLastHurtByMob() == this.getTrueOwner()) {
+                        attacker.setLastHurtByMob(this);
+                    }
+
+                    if (attacker.getTarget() == this.getTrueOwner()) {
+                        attacker.setTarget(this);
+                    }
+
+                    if (attacker instanceof Warden warden) {
+                        if (warden.getTarget() == this.getTrueOwner()) {
+                            warden.increaseAngerAt(this, AngerLevel.ANGRY.getMinimumAnger() + 100, false);
+                            warden.setAttackTarget(this);
+                        }
+                    } else {
+                        if (attacker.getBrain().hasMemoryValue(MemoryModuleType.ATTACK_TARGET) && attacker.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).isPresent() && attacker.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).get() == this.getTrueOwner()) {
+                            attacker.getBrain().setMemoryWithExpiry(MemoryModuleType.ANGRY_AT, this.getUUID(), 600L);
+                            attacker.getBrain().setMemoryWithExpiry(MemoryModuleType.ATTACK_TARGET, this, 600L);
+                        }
+                    }
+                }
             }
         }
     }

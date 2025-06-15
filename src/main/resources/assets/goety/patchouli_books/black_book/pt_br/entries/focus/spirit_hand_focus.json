@@ -1,0 +1,18 @@
+{
+  "name": "Foco da Mão Espectral",
+  "icon": "goety_spillage:spirit_hand_focus",
+  "category": "goety:spillage/focus",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Consegues criar duas mãos formadas por energia espiritual que te auxiliarão autonomamente em combate."
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety_spillage:focus/spirit_hand_focus"
+    }
+  ],
+  "extra_recipe_mappings": {
+    "goety_spillage:spirit_hand_focus": 1
+  }
+}

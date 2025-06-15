@@ -1,0 +1,7 @@
+{
+  "name": "Crafts",
+  "description": "Mais illagers? Mais crafting!",
+  "icon": "goety_spillage:engineer_mallet",
+  "parent": "goety:spillage",
+  "sortnum": 1
+}

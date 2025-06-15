@@ -1,0 +1,28 @@
+{
+  "name": "Absorvedor Zombie",
+  "icon": "goety:great_hammer",
+  "category": "goety:spillage/summons",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "O brutamontes veterano regressou, agora em decomposição, mas ainda suficientemente forte para aguentar golpes poderosos como se fossem feitos de papel."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:zombie_absorber",
+      "scale": 0.5
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety_spillage:thrall/summon_zombie_absorber"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "O zombie pode ser curado alimentando-o com Carne Podre ou usando a Capa Necrótica, embora neste último caso a cura passiva seja muito mais lenta do que noutros servos mortos-vivos."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Servos Zombies Bebés podem montar estes brutamontes ao serem comandados para tal. Quando a saúde do brutamonte estiver a metade ou menos, ele atirará o seu cavaleiro contra o inimigo."
+    }
+  ]
+}

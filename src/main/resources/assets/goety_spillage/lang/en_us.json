@@ -89,7 +89,7 @@
 
   "itemGroup.goety_spillage": "Goety & Spillage",
 
-  "info.goety_spillage.freaky_hat": "Halves incoming attacks while riding a Ragno.",
+  "info.goety_spillage.freaky_hat": "Reduce incoming attacks while riding an unstunned Ragno.",
   "info.goety_spillage.freaky_hat_axe": "Iron Axes uses durability, instead of being fully used, when thrown.",
   "info.goety_spillage.freaky_robe_power": "Press %s to perform a freaky ability.",
   "info.goety_spillage.freaky_robe_axe": "Iron Axes can be thrown.",

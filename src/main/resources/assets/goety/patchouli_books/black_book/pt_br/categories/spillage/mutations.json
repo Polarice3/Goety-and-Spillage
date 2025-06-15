@@ -1,0 +1,7 @@
+{
+  "name": "Mutações",
+  "description": "Transformando uma criatura em algo bizarro.",
+  "icon": "goety_spillage:mutation_potion",
+  "parent": "goety:spillage",
+  "sortnum": 4
+}

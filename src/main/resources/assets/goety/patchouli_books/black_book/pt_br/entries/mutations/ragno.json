@@ -1,0 +1,40 @@
+{
+  "name": "Ragno",
+  "icon": "goety_spillage:mutation_potion",
+  "category": "goety:spillage/mutations",
+  "advancement": "goety_spillage:obtain_bag_of_horrors",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "A criação mais horrenda dos illagers, esta criatura atormentada surge ao alimentar um Aldeão com uma poção mutagénica que conseguiste descobrir."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:ragno_servant",
+      "scale": 0.5
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety_spillage:mutation_potion"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Assim que obtiveres esta poção abominável, basta forçá-la goela abaixo de algum Aldeão (clicando nele com o botão direito) e observar o espetáculo."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "O Ragno tem apenas três ataques, dois quando montado. Num deles, ele pisa o chão com as patas antes de saltar sobre o alvo; no outro, dispara múltiplas teias. Quando não está a ser montado, escava rapidamente no chão, faz um túnel até ao alvo e depois emerge, causando dano a criaturas não aliadas próximas."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Se deres um Saco dos Horrores ao Ragno, ou se deixares um cair ao morreres enquanto o montas, ele irá devorá-lo e ganhar novas habilidades. Além de poder usar o saco para lançar bombas de abóbora ou doces, também pode investir contra os inimigos, afastando criaturas não aliadas no seu caminho. Infelizmente, a besta não pode ser montada neste estado."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Podes recuperar o saco do horror clicando nele com o botão direito enquanto estás agachado e ele não estiver a atacar. O Ragno pode ser curado alimentando-o com carne."
+    }
+  ],
+  "extra_recipe_mappings": {
+    "goety_spillage:mutation_potion": 3
+  }
+}

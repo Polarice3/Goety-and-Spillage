@@ -1,0 +1,7 @@
+{
+  "name": "Artefatos",
+  "description": "Mais maquinações mágicas.",
+  "icon": "goety:ominous_pyre",
+  "parent": "goety:spillage/crafts",
+  "sortnum": 3
+}

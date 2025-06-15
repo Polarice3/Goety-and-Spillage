@@ -1,0 +1,7 @@
+{
+  "name": "Focos",
+  "description": "Mais feitiços para spill!",
+  "icon": "goety_spillage:impish_focus",
+  "parent": "goety:spillage",
+  "sortnum": 2
+}

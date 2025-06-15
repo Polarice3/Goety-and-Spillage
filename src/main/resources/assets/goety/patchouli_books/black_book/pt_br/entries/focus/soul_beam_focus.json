@@ -1,0 +1,18 @@
+{
+  "name": "Foco do Feixe de Almas",
+  "icon": "goety_spillage:soul_beam_focus",
+  "category": "goety:spillage/focus",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Este foco permite disparar um feixe de energia de almas concentrada, causando dano mágico a quaisquer criaturas não aliadas no seu caminho."
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety_spillage:focus/soul_beam_focus"
+    }
+  ],
+  "extra_recipe_mappings": {
+    "goety_spillage:soul_beam_focus": 1
+  }
+}

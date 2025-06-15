@@ -1,0 +1,29 @@
+{
+  "name": "Freakager Aprisionado",
+  "icon": "illageandspillage:bag_of_horrors",
+  "category": "goety:spillage/summons",
+  "advancement": "goety_spillage:obtain_bag_of_horrors",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "O saco deixado por aquele illager diabólico revelou-se também conter a sua alma, alimentando a magia do saco para lançar quantidades infinitas de bombas, doces e outros artefactos assustadores, com algum tempo de recarga."
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety_spillage:thrall/summon_bound_freakager"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Bem, não querendo desperdiçar tal alma, decidiste ajudar este pobre biólogo trazendo-o de volta dos mortos... com algumas limitações."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:bound_freakager",
+      "scale": 0.75
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Tal como outros illagers aprisionados, o Freakager regressado pode pairar acima do solo e não é afetado pela gravidade. Apesar do seu aspeto espiritual, não consegue atravessar paredes e ainda pode ser ferido com armamento convencional. A alma vinculada pode ser curada ao clicar nela com Ectoplasma."
+    }
+  ]
+}

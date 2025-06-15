@@ -11,12 +11,15 @@ public class GSItemConfig {
     public static final ForgeConfigSpec SPEC;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> FreakyPotionSpin;
+    public static final ForgeConfigSpec.ConfigValue<Double> FreakyHatRagnoReduce;
 
     static {
         BUILDER.push("Curios");
             BUILDER.push("Robes");
             FreakyPotionSpin = BUILDER.comment("Whether performing potion spin with Freaky Robe spins the wearer around, Default: false")
                     .define("freakyPotionSpin", false);
+            FreakyHatRagnoReduce = BUILDER.comment("How much damage is divided when riding an unstunned Ragno Servant while wearing a Freaky Hat, Default: 3.5")
+                    .defineInRange("freakyHatRagnoReduce", 3.5, 1.0, Double.MAX_VALUE);
             BUILDER.pop();
         BUILDER.pop();
         SPEC = BUILDER.build();

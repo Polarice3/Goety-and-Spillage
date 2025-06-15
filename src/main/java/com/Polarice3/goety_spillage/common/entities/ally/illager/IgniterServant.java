@@ -4,7 +4,6 @@ import com.Polarice3.Goety.common.entities.ally.illager.AbstractIllagerServant;
 import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.Polarice3.Goety.common.entities.projectiles.ModFireball;
 import com.Polarice3.Goety.utils.MobUtil;
-import com.Polarice3.goety_spillage.common.entities.ai.GSNATGoal;
 import com.Polarice3.goety_spillage.config.GSAttributesConfig;
 import com.yellowbrossproductions.illageandspillage.Config;
 import com.yellowbrossproductions.illageandspillage.util.IllageAndSpillageSoundEvents;
@@ -30,6 +29,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Snowball;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.EntityHitResult;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
@@ -41,6 +42,7 @@ public class IgniterServant extends AbstractIllagerServant {
     private static final EntityDataAccessor<Boolean> TORCH_BURNT_OUT = SynchedEntityData.defineId(IgniterServant.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Float> FIREBALLS_SHOT = SynchedEntityData.defineId(IgniterServant.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> COOLDOWN_TICKS = SynchedEntityData.defineId(IgniterServant.class, EntityDataSerializers.FLOAT);
+    private LivingEntity shootTarget;
     private int shootTicks;
     private int fireballTimer;
 
@@ -67,7 +69,6 @@ public class IgniterServant extends AbstractIllagerServant {
         this.targetSelector.addGoal(1, new NaturalAttackGoal<>(this, Sheep.class, 10, false, false, (p_234199_0_) -> {
             return p_234199_0_ instanceof Sheep sheep && sheep.getColor() == DyeColor.PINK;
         }));
-        this.targetSelector.addGoal(1, new GSNATGoal<>(this, LivingEntity.class, 10, false, false, TargetingConditions.forNonCombat().range(this.getAttributeValue(Attributes.FOLLOW_RANGE)).selector(livingEntity -> livingEntity.isOnFire() && (MobUtil.areAllies(this, livingEntity) || this.getTrueOwner() != null && this.getTrueOwner() == livingEntity))));
     }
 
     public static AttributeSupplier.Builder setCustomAttributes() {
@@ -93,18 +94,36 @@ public class IgniterServant extends AbstractIllagerServant {
         this.entityData.define(COOLDOWN_TICKS, 0.0F);
     }
 
-    @Override
-    public void normalSetTarget(@Nullable LivingEntity target) {
-        if ((this.getTrueOwner() != null && target == this.getTrueOwner()) || MobUtil.areAllies(this, target)) {
-            this.target = target;
+    public boolean isAlliedBurning(Entity target) {
+        if (this.getTrueOwner() != null) {
+            return (target == this.getTrueOwner() || MobUtil.getOwner(target) == this.getTrueOwner());
         } else {
-            super.normalSetTarget(target);
+            return MobUtil.areAllies(this, target);
         }
+    }
+
+    public LivingEntity getShootTarget() {
+        return this.shootTarget;
+    }
+
+    public void setShootTarget(@Nullable LivingEntity target) {
+        this.shootTarget = target;
     }
 
     public void tick() {
         super.tick();
         if (this.isAlive()) {
+            if (this.level instanceof ServerLevel serverLevel) {
+                int i = serverLevel.getServer().getTickCount() + this.getId();
+                if (i % 2 != 0 && this.tickCount > 1) {
+                    this.findTarget();
+                }
+                if (this.getShootTarget() == null) {
+                    if (this.getTarget() != null && this.getTarget().isAlive()) {
+                        this.setShootTarget(this.getTarget());
+                    }
+                }
+            }
             if (this.isAttacking()) {
                 ++this.shootTicks;
             } else {
@@ -140,12 +159,12 @@ public class IgniterServant extends AbstractIllagerServant {
 
             if (this.shootTicks >= 4) {
                 this.playSound(SoundEvents.DISPENSER_LAUNCH, 1.0F, 1.0F);
-                if (this.getTarget() != null) {
+                if (this.getShootTarget() != null) {
                     if (this.isTorchBurntOut()) {
-                        this.shootSnowball(this.getTarget());
+                        this.shootSnowball(this.getShootTarget());
                     } else {
                         this.playSound(SoundEvents.FIRECHARGE_USE, 1.0F, 1.0F);
-                        this.shootFireball(this.getTarget());
+                        this.shootFireball(this.getShootTarget());
                         this.setFireballsShot(this.getFireballsShot() + 1.0F);
                     }
                 }
@@ -153,19 +172,32 @@ public class IgniterServant extends AbstractIllagerServant {
                 this.shootTicks = 0;
             }
 
-            if (MobUtil.areAllies(this, this.getTarget()) || (this.getTrueOwner() != null && this.getTarget() == this.getTrueOwner())) {
-                if (!this.level().isClientSide) {
-                    this.setTorchBurntOut(true);
+            if (!this.level().isClientSide) {
+                if (this.getShootTarget() != null) {
+                    if (this.isAlliedBurning(this.getShootTarget())) {
+                        this.setTorchBurntOut(true);
+                        if (!this.getShootTarget().isOnFire()) {
+                            this.setShootTarget(null);
+                        }
+                    } else {
+                        this.setTorchBurntOut(false);
+                    }
                 }
-
-                if (!this.getTarget().isOnFire()) {
-                    this.setTarget(null);
-                }
-            } else if (!this.level().isClientSide) {
-                this.setTorchBurntOut(false);
             }
+
         }
 
+    }
+
+    protected AABB getTargetSearchArea(double p_26069_) {
+        return this.getBoundingBox().inflate(p_26069_, 4.0D, p_26069_);
+    }
+
+    protected void findTarget() {
+        this.shootTarget = this.level.getNearestEntity(this.level.getEntitiesOfClass(LivingEntity.class, this.getTargetSearchArea(this.getAttributeValue(Attributes.FOLLOW_RANGE)), (p_148152_) -> {
+            return true;
+        }), TargetingConditions.forNonCombat().range(this.getAttributeValue(Attributes.FOLLOW_RANGE))
+                .selector(livingEntity -> livingEntity.isOnFire() && this.isAlliedBurning(livingEntity)), this, this.getX(), this.getEyeY(), this.getZ());
     }
 
     public void makeOverheatParticles() {
@@ -175,7 +207,17 @@ public class IgniterServant extends AbstractIllagerServant {
     }
 
     public void shootSnowball(LivingEntity p_82196_1_) {
-        Snowball snowballentity = new Snowball(this.level(), this);
+        Snowball snowballentity = new Snowball(this.level(), this){
+            protected void onHitEntity(EntityHitResult p_37404_) {
+                super.onHitEntity(p_37404_);
+                Entity entity = p_37404_.getEntity();
+                if (this.getOwner() instanceof IgniterServant servant) {
+                    if (servant.isAlliedBurning(entity)) {
+                        entity.clearFire();
+                    }
+                }
+            }
+        };
         double d0 = p_82196_1_.getEyeY() - 1.1D;
         double d1 = p_82196_1_.getX() - this.getX();
         double d2 = d0 - snowballentity.getY();
@@ -268,7 +310,10 @@ public class IgniterServant extends AbstractIllagerServant {
         }
 
         public boolean canUse() {
-            return IgniterServant.this.getTarget() != null && IgniterServant.this.distanceToSqr(IgniterServant.this.getTarget()) < 90.0 && IgniterServant.this.hasLineOfSight(IgniterServant.this.getTarget()) && !IgniterServant.this.isOverheated();
+            return IgniterServant.this.getShootTarget() != null
+                    && IgniterServant.this.distanceToSqr(IgniterServant.this.getShootTarget()) < 90.0
+                    && IgniterServant.this.hasLineOfSight(IgniterServant.this.getShootTarget())
+                    && !IgniterServant.this.isOverheated();
         }
 
         public void start() {
@@ -277,13 +322,17 @@ public class IgniterServant extends AbstractIllagerServant {
         }
 
         public boolean canContinueToUse() {
-            return IgniterServant.this.getTarget() != null && IgniterServant.this.distanceToSqr(IgniterServant.this.getTarget()) < 90.0 && IgniterServant.this.getTarget().isAlive() && IgniterServant.this.hasLineOfSight(IgniterServant.this.getTarget()) && !IgniterServant.this.isOverheated();
+            return IgniterServant.this.getShootTarget() != null
+                    && IgniterServant.this.distanceToSqr(IgniterServant.this.getShootTarget()) < 90.0
+                    && IgniterServant.this.getShootTarget().isAlive()
+                    && IgniterServant.this.hasLineOfSight(IgniterServant.this.getShootTarget())
+                    && !IgniterServant.this.isOverheated();
         }
 
         public void tick() {
             IgniterServant.this.getNavigation().stop();
-            if (IgniterServant.this.getTarget() != null) {
-                IgniterServant.this.getLookControl().setLookAt(IgniterServant.this.getTarget(), 30.0F, 30.0F);
+            if (IgniterServant.this.getShootTarget() != null) {
+                IgniterServant.this.getLookControl().setLookAt(IgniterServant.this.getShootTarget(), 30.0F, 30.0F);
             }
 
             IgniterServant.this.navigation.stop();

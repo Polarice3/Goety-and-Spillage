@@ -1,5 +1,5 @@
 {
-  "name": "不祥火盆内容追加",
+  "name": "不祥火炬内容追加",
   "icon": "goety:ominous_pyre",
   "category": "goety:spillage/crafts/artifice",
   "pages": [
@@ -9,7 +9,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "与不祥火盆相关的更多内容请点击$(l:goety:crafts/artifice/ominous_pyre)此处$()."
+      "text": "与不祥火炬相关的更多内容请点击$(l:goety:crafts/artifice/ominous_pyre)此处$()."
     },
     {
       "type": "patchouli:text",

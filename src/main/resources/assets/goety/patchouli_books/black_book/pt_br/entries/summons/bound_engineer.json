@@ -1,0 +1,29 @@
+{
+  "name": "Engenheiro Aprisionado",
+  "icon": "goety_spillage:engineer_mallet",
+  "category": "goety:spillage/summons",
+  "advancement": "goety_spillage:obtain_engineer_mallet",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "O génio dos engenheiros illagers não deve ser desperdiçado, por isso decidiste aproveitá-lo para os teus próprios propósitos."
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety_spillage:thrall/summon_bound_engineer"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "O espírito vinculado do engenheiro mantém o conhecimento para criar e manter mecanismos, tal como em vida. Embora possas usar o malho para criar e reparar as tuas próprias máquinas, é conveniente delegar essa perícia tecnológica a outros através da magia negra."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:bound_engineer",
+      "scale": 0.75
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Tal como outros illagers aprisionados, os Engenheiros regressados podem pairar acima do solo e não são afetados pela gravidade. Apesar do seu aspeto espiritual, não conseguem atravessar paredes e ainda podem ser feridos com armas convencionais. A alma vinculada pode ser curada ao clicares nela com Ectoplasma."
+    }
+  ]
+}

@@ -22,7 +22,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "The hat is not only snazzy but your Iron Axe doesn't get used up when thrown, only losing durability instead. Also, if you've somehow rode a Ragno, damage inflicted on you becomes halved."
+      "text": "The hat is not only snazzy but your Iron Axe doesn't get used up when thrown, only losing durability instead. Also, if you've somehow rode a Ragno, damage inflicted on you is reduced, so long as it's not stunned."
     }
   ],
   "extra_recipe_mappings": {

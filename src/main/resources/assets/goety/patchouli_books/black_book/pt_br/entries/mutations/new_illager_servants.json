@@ -1,0 +1,33 @@
+{
+  "name": "Mais Servos Illager",
+  "icon": "goety:magic_emerald",
+  "category": "goety:spillage/mutations",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Novas variantes de Illagers foram avistadas recentemente. Talvez seus Illagers possam treinar para se tornar um deles."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Mais informações sobre Servos Illager $(l:goety:mutations/illager_servants)aqui$()."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:igniter_servant",
+      "scale": 0.75
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Estes Illagers irritadiços podem tanto carbonizar inimigos com bolas de fogo ardentes quanto extinguir chamas em aliados e mestres com bolas de neve."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:preserver_servant",
+      "scale": 0.75
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Você conseguiu treinar um Illager nesta função útil, que protege outros Illagers com uma armadura de feno... embora seja considerado bastante humilhante na sociedade Illager."
+    }
+  ]
+}

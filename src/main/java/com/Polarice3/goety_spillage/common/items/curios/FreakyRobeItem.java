@@ -355,6 +355,7 @@ public class FreakyRobeItem extends SingleStackItem {
                                 wearer.level.getScoreboard().addPlayerToTeam(treat.getStringUUID(), playerTeam);
                             }
                         }
+                        treat.distract = true;
 
                         circleTreat(treat, i, amount);
                         wearer.level.addFreshEntity(treat);

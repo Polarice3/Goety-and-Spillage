@@ -1,0 +1,43 @@
+{
+  "name": "Criações do Engenheiro",
+  "icon": "minecraft:dispenser",
+  "category": "goety:spillage/summons",
+  "advancement": "goety_spillage:obtain_engineer_mallet",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Com o Malho do Engenheiro, podes replicar os lacaios tecnológicos do Engenheiro."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Estas criaturas robóticas não podem ser movidas nem curadas sem o uso de poções, certos feitiços e do próprio malho."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:chagrin_sentry",
+      "scale": 0.5
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Um dispensador inteligente que dispara flechas rapidamente contra qualquer criatura que pretenda fazer mal ao seu criador. Após disparar cerca de 75 flechas, pode sobreaquecer e ficar incapaz de atacar durante 9-10 segundos."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:hinder",
+      "scale": 0.5
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Batizados por dificultarem os esforços dos inimigos, estas sentinelas curam qualquer criatura aliada próxima. Infelizmente, $(l)não conseguem curar mortos-vivos$() e entram num período de arrefecimento após vários segundos de cura."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:factory",
+      "scale": 0.5
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Como o nome sugere, a fábrica produz constantemente pequenos servos que podem ser explosivos, capazes de voar e disparar flechas, ou pequenos robôs semelhantes a illagers que atacam os inimigos."
+    }
+  ]
+}

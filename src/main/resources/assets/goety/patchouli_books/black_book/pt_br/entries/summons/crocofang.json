@@ -1,0 +1,24 @@
+{
+  "name": "Crocofang",
+  "icon": "goety:ominous_saddle",
+  "category": "goety:spillage/summons",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Uma mistura horripilante entre um crocodilo e uma Presa de Evocador, estas bestas morderão e investirão contra os inimigos do seu dono."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:crocofang_servant",
+      "scale": 0.25
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety_spillage:thrall/summon_crocofang"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "A besta pode ser curada alimentando-a com carne enquanto agachado."
+    }
+  ]
+}

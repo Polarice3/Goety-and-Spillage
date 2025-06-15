@@ -1,0 +1,18 @@
+{
+  "name": "Foco de Réquiem",
+  "icon": "goety_spillage:requiem_focus",
+  "category": "goety:spillage/focus",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Das almas condenadas do Nether e das almas perdidas do outro mundo, este feitiço permite-te invocar lentamente uma a uma, antes de se lançarem sobre o teu inimigo com um grito estridente."
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety_spillage:focus/requiem_focus"
+    }
+  ],
+  "extra_recipe_mappings": {
+    "goety_spillage:requiem_focus": 1
+  }
+}

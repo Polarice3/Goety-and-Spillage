@@ -1,0 +1,7 @@
+{
+  "name": "Invocações",
+  "description": "Mais servos para um Feiticeiro das Trevas.",
+  "icon": "goety_spillage:factory_package",
+  "parent": "goety:spillage",
+  "sortnum": 3
+}

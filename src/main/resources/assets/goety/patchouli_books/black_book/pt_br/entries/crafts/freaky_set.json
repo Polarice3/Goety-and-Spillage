@@ -1,0 +1,31 @@
+{
+  "name": "Conjunto Bizarro",
+  "icon": "goety_spillage:freaky_robe",
+  "category": "goety:spillage/crafts",
+  "advancement": "goety_spillage:obtain_bag_of_horrors",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "O Saco dos Horrores fez-te sentir um pouco... estranho. Por isso, como qualquer ser racional, decidiste replicar as vestes do Freakager e usá-las."
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety_spillage:freaky_robe"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety_spillage:freaky_hat"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "As vestes não só te fazem parecer bizarro, como também te permitem usar o Saco dos Horrores sem precisar de o segurar (ao pressionar a mesma tecla que abre o menu de poções da Túnica da Bruxa), e ainda te tornam proficiente no lançamento de Machados de Ferro (apenas machados de ferro, infelizmente não outros tipos). Quando estiveres com menos de metade da vida máxima e com machados em ambas as mãos, usar a habilidade da túnica dar-te-á a oportunidade de lançar uma chuva de machados à tua frente."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "O chapéu não só é elegante, como também faz com que o teu Machado de Ferro não seja consumido quando lançado, perdendo apenas durabilidade. Além disso, se por acaso montares um Ragno, o dano que sofreres será reduzido para metade."
+    }
+  ],
+  "extra_recipe_mappings": {
+    "goety_spillage:freaky_robe": 1
+  }
+}

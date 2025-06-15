@@ -1,0 +1,25 @@
+{
+  "name": "Adições à Pira Sinistra",
+  "icon": "goety:ominous_pyre",
+  "category": "goety:spillage/crafts/artifice",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Com novos Illagers surgindo, novos campos de treinamento devem ser construídos."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Mais informações sobre a Pira Sinistra $(l:goety:crafts/artifice/ominous_pyre)aqui$()."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Servos Incendiários",
+      "text": "Requisitos: $(li)Neollager $(li)32 Blocos de Magma $(li)16 Blocos de Neve $(li)1 Mesa de Trabalho $(li)2 Blocos de Ferro $(li)4 Blocos de Carvão $(li)4 Blocos de Redstone $(li)64 Pedregulhos"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Servos Preservador",
+      "text": "Requisitos: $(li)Neollager $(li)64 Blocos de Feno $(li)16 Blocos de Pistão $(li)16 Barris"
+    }
+  ]
+}

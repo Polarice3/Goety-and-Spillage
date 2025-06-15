@@ -1,0 +1,16 @@
+{
+  "name": "Bombas Anômalas",
+  "icon": "goety_spillage:skull_bomb",
+  "category": "goety:spillage/crafts",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Você descobriu como criar bombas vivas especializadas que, após um tempo, explodem de forma não-destrutiva."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety_spillage:skull_bomb",
+      "recipe2": "goety_spillage:pumpkin_bomb"
+    }
+  ]
+}

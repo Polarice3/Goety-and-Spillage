@@ -1,0 +1,20 @@
+{
+  "name": "Malho do Engenheiro",
+  "icon": "goety_spillage:engineer_mallet",
+  "category": "goety:spillage/crafts",
+  "advancement": "goety_spillage:obtain_engineer_mallet",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Você obteve o malho daqueles engenheiros irritantes porém geniais que, de alguma forma, permite criar e manter sua própria frota de máquinas. O malho é pequeno demais para funcionar como um martelo comum, mas clicar com o botão direito cria uma das três máquinas do engenheiro."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "goety_spillage:engineer_mallet",
+      "text": "Clicar esquerdo em uma dessas máquinas reparará 2 corações e meio de dano. Clicar com Shift+esquerdo (ou Shift+direito se 'ownerHitKill' estiver desativado) destrói instantaneamente qualquer uma das três máquinas que você possuir. O malho pode ser reparado numa bigorna com um lingote de ferro."
+    }
+  ],
+  "extra_recipe_mappings": {
+    "goety_spillage:engineer_mallet": 1
+  }
+}

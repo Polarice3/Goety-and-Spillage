@@ -1,0 +1,21 @@
+{
+  "name": "Pacotes de Engenharia",
+  "icon": "goety_spillage:chagrin_package",
+  "category": "goety:spillage/crafts",
+  "advancement": "goety_spillage:obtain_engineer_mallet",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Com o malho, você pode criar máquinas individuais do Engenheiro e posicioná-las onde desejar."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety_spillage:chagrin_package",
+      "recipe2": "goety_spillage:hinder_package"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety_spillage:factory_package"
+    }
+  ]
+}
