@@ -87,7 +87,7 @@ public class EngineerMalletItem extends Item implements Vanishable {
                     }
                 }
             }
-        } else if (SpellConfig.OwnerHitKill.get()) {
+        } else if (SpellConfig.OwnerHitKill.get() == 0) {
             if (entity instanceof IServant servant) {
                 if (servant instanceof IEngineerMachine && servant.getMasterOwner() == player) {
                     servant.tryKill(player);
@@ -99,7 +99,7 @@ public class EngineerMalletItem extends Item implements Vanishable {
 
     @Override
     public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity entity, InteractionHand hand) {
-        if (!SpellConfig.OwnerHitKill.get()){
+        if (SpellConfig.OwnerHitKill.get() == 1){
             if (entity instanceof IServant servant) {
                 if (servant instanceof IEngineerMachine && servant.getMasterOwner() == player) {
                     servant.tryKill(player);
