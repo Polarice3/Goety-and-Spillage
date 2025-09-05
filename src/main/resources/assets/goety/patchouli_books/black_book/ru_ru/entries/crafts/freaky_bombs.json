@@ -1,0 +1,16 @@
+{
+  "name": "Страшные бомбы",
+  "icon": "goety_spillage:skull_bomb",
+  "category": "goety:spillage/crafts",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Вы открыли способы создания особых живых бомб, которые через некоторое время взрываются без разрушительных последствий."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety_spillage:skull_bomb",
+      "recipe2": "goety_spillage:pumpkin_bomb"
+    }
+  ]
+}

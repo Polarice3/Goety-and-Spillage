@@ -5,6 +5,7 @@ import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.yellowbrossproductions.illageandspillage.client.model.animation.ICanBeAnimated;
 import com.yellowbrossproductions.illageandspillage.util.IllageAndSpillageSoundEvents;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -16,6 +17,7 @@ import net.minecraft.world.level.Level;
 
 public abstract class EngineerMachine extends Summoned implements ICanBeAnimated, IEngineerMachine {
     public static final EntityDataAccessor<Boolean> IN_MOTION = SynchedEntityData.defineId(EngineerMachine.class, EntityDataSerializers.BOOLEAN);
+    public boolean malletBorn;
 
     public EngineerMachine(EntityType<? extends Owned> type, Level worldIn) {
         super(type, worldIn);
@@ -28,6 +30,28 @@ public abstract class EngineerMachine extends Summoned implements ICanBeAnimated
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(IN_MOTION, false);
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        if (compound.contains("MalletBorn")) {
+            this.malletBorn = compound.getBoolean("MalletBorn");
+        }
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putBoolean("MalletBorn", this.malletBorn);
+    }
+
+    public void setMalletBorn(boolean born) {
+        this.malletBorn = born;
+    }
+
+    public boolean isMalletBorn() {
+        return this.malletBorn;
     }
 
     public boolean canSpawnArmor() {

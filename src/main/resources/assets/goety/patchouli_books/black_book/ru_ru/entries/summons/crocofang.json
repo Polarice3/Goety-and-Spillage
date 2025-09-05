@@ -1,0 +1,24 @@
+{
+  "name": "Крококлык",
+  "icon": "goety:ominous_saddle",
+  "category": "goety:spillage/summons",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Эти звери, представляющие собой ужасающую смесь крокодила и клыков заклинателя, готовы яростно кусаться и бросаться на врагов."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:crocofang_servant",
+      "scale": 0.25
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety_spillage:thrall/summon_crocofang"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Зверя можно исцелить мясом, присев."
+    }
+  ]
+}

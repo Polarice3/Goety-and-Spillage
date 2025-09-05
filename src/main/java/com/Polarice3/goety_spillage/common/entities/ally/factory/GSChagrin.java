@@ -2,6 +2,7 @@ package com.Polarice3.goety_spillage.common.entities.ally.factory;
 
 import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.Polarice3.Goety.common.entities.projectiles.GhostArrow;
+import com.Polarice3.goety_spillage.common.items.GSItems;
 import com.Polarice3.goety_spillage.config.GSMobsConfig;
 import com.yellowbrossproductions.illageandspillage.entities.IllagerAttack;
 import com.yellowbrossproductions.illageandspillage.util.IllageAndSpillageSoundEvents;
@@ -296,6 +297,11 @@ public class GSChagrin extends EngineerMachine implements RangedAttackMob, Illag
 
     public boolean hurt(DamageSource p_21016_, float p_21017_) {
         return p_21016_.getEntity() != this && super.hurt(p_21016_, p_21017_);
+    }
+
+    @Override
+    public ItemStack getFactoryItem() {
+        return GSItems.CHAGRIN_PACKAGE.get().getDefaultInstance();
     }
 
     class StunGoal extends Goal {

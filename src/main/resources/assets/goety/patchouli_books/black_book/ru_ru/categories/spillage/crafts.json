@@ -1,0 +1,7 @@
+{
+  "name": "Рецепты",
+  "description": "Больше злодеян? Больше рецептов!",
+  "icon": "goety_spillage:freaky_hat",
+  "parent": "goety:spillage",
+  "sortnum": 1
+}

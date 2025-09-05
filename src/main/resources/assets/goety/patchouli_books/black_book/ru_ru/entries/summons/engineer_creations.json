@@ -1,0 +1,43 @@
+{
+  "name": "Инженерные творения",
+  "icon": "minecraft:dispenser",
+  "category": "goety:spillage/summons",
+  "advancement": "goety_spillage:obtain_engineer_mallet",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "С помощью инженерного молотка вы сможете воссоздать технологических приспешников инженера."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Этих роботизированных существ нельзя переместить или исцелить без использования зелий, заклинаний или молотка."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:chagrin_sentry",
+      "scale": 0.5
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Умный раздатчик, который быстро стреляет в любого, кто навредит его создателю. После стрельбы примерно 75-ю стрелами у него есть шанс перегреться и уйти в перезарядку на 9-10 секунд."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:hinder",
+      "scale": 0.5
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Эти турели исцеляют союзников рядом с собой. К сожалению, они не могут исцелять нежить."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:factory",
+      "scale": 0.5
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Как следует из названия, фабрика постоянно производит крошечных прислужников, которые либо взрывоопасны, либо способны летать и стрелять, либо похожи на злодеяноподобных ближнебойных роботов."
+    }
+  ]
+}

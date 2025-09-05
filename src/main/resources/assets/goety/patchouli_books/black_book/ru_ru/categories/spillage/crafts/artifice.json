@@ -1,0 +1,7 @@
+{
+  "name": "Трюки",
+  "description": "Больше магических манипуляций.",
+  "icon": "goety:ominous_pyre",
+  "parent": "goety:spillage/crafts",
+  "sortnum": 3
+}

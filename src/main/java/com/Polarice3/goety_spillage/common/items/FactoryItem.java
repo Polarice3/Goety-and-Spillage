@@ -68,6 +68,9 @@ public class FactoryItem extends Item {
                             }
                         }
                         owned.finalizeSpawn(serverlevel, serverlevel.getCurrentDifficultyAt(blockpos), MobSpawnType.MOB_SUMMONED, null, null);
+                        if (itemstack.hasCustomHoverName()) {
+                            owned.setCustomName(itemstack.getHoverName());
+                        }
                         serverlevel.addFreshEntityWithPassengers(owned);
                         owned.gameEvent(GameEvent.ENTITY_PLACE, p_40510_.getPlayer());
                     } else {

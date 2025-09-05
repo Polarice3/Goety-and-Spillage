@@ -1,6 +1,7 @@
 package com.Polarice3.goety_spillage.common.items;
 
 import com.Polarice3.Goety.api.entities.ally.IServant;
+import com.Polarice3.Goety.common.entities.ally.Summoned;
 import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.Polarice3.Goety.common.network.ModNetwork;
 import com.Polarice3.Goety.common.network.server.SPlayPlayerSoundPacket;
@@ -36,6 +37,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.Vanishable;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nonnull;
@@ -87,11 +89,22 @@ public class EngineerMalletItem extends Item implements Vanishable {
                     }
                 }
             }
-        } else if (SpellConfig.OwnerHitKill.get() == 0) {
-            if (entity instanceof IServant servant) {
-                if (servant instanceof IEngineerMachine && servant.getMasterOwner() == player) {
-                    servant.tryKill(player);
+        } else if (entity instanceof Summoned servant && servant instanceof IEngineerMachine machine && servant.getMasterOwner() == player) {
+            if (!machine.isMalletBorn() && servant.getHealth() >= servant.getMaxHealth()) {
+                ItemStack itemstack = machine.getFactoryItem();
+                if (!itemstack.isEmpty()) {
+                    if (servant.hasCustomName()) {
+                        itemstack.setHoverName(servant.getCustomName());
+                    }
+
+                    Block.popResource(player.level, servant.blockPosition(), itemstack);
+                    servant.playSound(SoundEvents.ZOMBIE_ATTACK_IRON_DOOR);
+                    servant.spawnAnim();
+                    servant.discard();
+                    ItemHelper.hurtAndBreak(stack, 2, player);
                 }
+            } else if (SpellConfig.OwnerHitKill.get() == 0) {
+                servant.tryKill(player);
             }
         }
         return super.onLeftClickEntity(stack, player, entity);
@@ -125,6 +138,7 @@ public class EngineerMalletItem extends Item implements Vanishable {
                         hinder.setInMotion(true);
                         hinder.setTrueOwner(player);
                         hinder.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(player.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
+                        hinder.setMalletBorn(true);
                         if (level.addFreshEntity(hinder)){
                             flag = true;
                         }
@@ -137,6 +151,7 @@ public class EngineerMalletItem extends Item implements Vanishable {
                         sentry.setInMotion(true);
                         sentry.setTrueOwner(player);
                         sentry.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(player.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
+                        sentry.setMalletBorn(true);
                         if (level.addFreshEntity(sentry)){
                             flag = true;
                         }
@@ -150,6 +165,7 @@ public class EngineerMalletItem extends Item implements Vanishable {
                         factory.setTrueOwner(player);
                         factory.setAnimationState(1);
                         factory.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(player.blockPosition()), MobSpawnType.MOB_SUMMONED, null, null);
+                        factory.setMalletBorn(true);
                         if (level.addFreshEntity(factory)){
                             flag = true;
                         }

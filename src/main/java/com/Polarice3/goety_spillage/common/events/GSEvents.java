@@ -13,7 +13,7 @@ import com.Polarice3.goety_spillage.common.capabilities.spillage.SpillageCapHelp
 import com.Polarice3.goety_spillage.common.capabilities.spillage.SpillageProvider;
 import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
 import com.Polarice3.goety_spillage.common.entities.IAttackMyOwner;
-import com.Polarice3.goety_spillage.common.entities.ally.illager.IgniterServant;
+import com.Polarice3.goety_spillage.common.entities.ally.illager.PreserverServant;
 import com.Polarice3.goety_spillage.common.entities.ally.illager.RagnoServant;
 import com.Polarice3.goety_spillage.common.entities.ally.undead.zombie.ZombieAbsorber;
 import com.Polarice3.goety_spillage.common.entities.neutral.VillagerVictim;
@@ -32,11 +32,9 @@ import com.yellowbrossproductions.illageandspillage.util.EffectRegisterer;
 import com.yellowbrossproductions.illageandspillage.util.ItemRegisterer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
@@ -49,7 +47,6 @@ import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.Snowball;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -59,7 +56,6 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.Event;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.commons.lang3.ArrayUtils;
@@ -128,6 +124,12 @@ public class GSEvents {
                     mob.setTarget(victim.getTrueOwner());
                 } else {
                     mob.setTarget(null);
+                }
+            }
+            if (mob instanceof PreserverServant thing) {
+                if (thing.isOnFire() && thing.getRemainingFireTicks() % 5 == 1) {
+                    thing.invulnerableTime = 3;
+                    thing.hurt(thing.damageSources().onFire(), 2.0F);
                 }
             }
             if (mob instanceof Villager villager){

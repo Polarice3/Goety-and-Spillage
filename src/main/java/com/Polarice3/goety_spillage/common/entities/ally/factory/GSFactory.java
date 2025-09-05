@@ -4,6 +4,7 @@ import com.Polarice3.Goety.api.items.magic.IWand;
 import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
 import com.Polarice3.goety_spillage.common.items.EngineerMalletItem;
+import com.Polarice3.goety_spillage.common.items.GSItems;
 import com.Polarice3.goety_spillage.config.GSSpellConfig;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -234,5 +235,10 @@ public class GSFactory extends EngineerMachine {
         }
 
         return super.mobInteract(pPlayer, pHand);
+    }
+
+    @Override
+    public ItemStack getFactoryItem() {
+        return GSItems.FACTORY_PACKAGE.get().getDefaultInstance();
     }
 }

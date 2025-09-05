@@ -11,7 +11,7 @@
     {
       "type": "patchouli:spotlight",
       "item": "goety_spillage:engineer_mallet",
-      "text": "Left-clicking one of said machines with it will repair 2 and half hearts of damage. Shift-left (or shift-right if 'ownerHitKill' is set to false) clicking one of the three machines owned by you will instantly destroy it. The mallet can be repaired on an anvil with an Iron Ingot."
+      "text": "Left-clicking one of said machines with it will repair 2 and half hearts of damage. Shift-left (or shift-right if 'ownerHitKill' is set to false) clicking one of the three machines owned by you will instantly destroy it, or turn it back into their package form if they're built from one and at full health. The mallet can be repaired on an anvil with an Iron Ingot."
     }
   ],
   "extra_recipe_mappings": {

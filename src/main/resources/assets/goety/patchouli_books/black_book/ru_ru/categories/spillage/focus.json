@@ -1,0 +1,7 @@
+{
+  "name": "Фокусы",
+  "description": "Больше злодейских заклинаний!",
+  "icon": "goety_spillage:impish_focus",
+  "parent": "goety:spillage",
+  "sortnum": 2
+}

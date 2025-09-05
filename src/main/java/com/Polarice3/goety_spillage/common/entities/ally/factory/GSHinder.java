@@ -2,6 +2,7 @@ package com.Polarice3.goety_spillage.common.entities.ally.factory;
 
 import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.Polarice3.Goety.utils.MobUtil;
+import com.Polarice3.goety_spillage.common.items.GSItems;
 import com.Polarice3.goety_spillage.config.GSMobsConfig;
 import com.Polarice3.goety_spillage.util.GSMobUtil;
 import com.yellowbrossproductions.illageandspillage.entities.IllagerAttack;
@@ -21,6 +22,7 @@ import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
@@ -252,5 +254,10 @@ public class GSHinder extends EngineerMachine implements IllagerAttack {
         } else {
             super.handleEntityEvent(p_21375_);
         }
+    }
+
+    @Override
+    public ItemStack getFactoryItem() {
+        return GSItems.HINDER_PACKAGE.get().getDefaultInstance();
     }
 }

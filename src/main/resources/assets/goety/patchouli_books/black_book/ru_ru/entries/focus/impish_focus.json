@@ -1,0 +1,14 @@
+{
+  "name": "Фокус бесов",
+  "icon": "goety_spillage:impish_focus",
+  "category": "goety:spillage/focus",
+  "pages": [
+    {
+      "type": "goety:ritual",
+      "recipe": "goety_spillage:focus/impish_focus"
+    }
+  ],
+  "extra_recipe_mappings": {
+    "goety_spillage:impish_focus": 1
+  }
+}

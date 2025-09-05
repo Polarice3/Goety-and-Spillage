@@ -1,0 +1,33 @@
+{
+  "name": "Больше злодеян-прислужников",
+  "icon": "goety:magic_emerald",
+  "category": "goety:spillage/mutations",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "В последнее время обнаружено ещё несколько профессий злодеян, которыми, возможно, смогут овладеть ваши прислужники."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Больше информации о злодеянах-прислужниках ищите $(l:goety:mutations/illager_servants)здесь$()."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:igniter_servant",
+      "scale": 0.75
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Эти вспыльчивые злодеяне сжигают своих врагов дотла фаерболами и тушат своих союзников снежками."
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:preserver_servant",
+      "scale": 0.75
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Вам удалось уговорить злодеянина обучиться профессии по защите союзников бронёй из сена, очень полезной... но очень унизительной в обществе злодеян."
+    }
+  ]
+}

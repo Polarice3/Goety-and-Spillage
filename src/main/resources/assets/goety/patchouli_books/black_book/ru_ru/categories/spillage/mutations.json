@@ -1,0 +1,7 @@
+{
+  "name": "Мутации",
+  "description": "Превращение существ в нечто страшное.",
+  "icon": "goety_spillage:mutation_potion",
+  "parent": "goety:spillage",
+  "sortnum": 4
+}

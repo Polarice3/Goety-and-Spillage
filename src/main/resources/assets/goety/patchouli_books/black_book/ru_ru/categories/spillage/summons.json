@@ -1,0 +1,7 @@
+{
+  "name": "Призывы",
+  "description": "Больше прислужников для более тёмного колдуна.",
+  "icon": "goety_spillage:mutation_potion",
+  "parent": "goety:spillage",
+  "sortnum": 3
+}
