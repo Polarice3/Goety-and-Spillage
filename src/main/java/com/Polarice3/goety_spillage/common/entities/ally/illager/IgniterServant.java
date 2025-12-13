@@ -53,14 +53,10 @@ public class IgniterServant extends AbstractIllagerServant {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new ShootFireballsGoal());
-        this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, LivingEntity.class, 8.0F, 0.8D, 1.0D, (p_234199_0_) -> {
             return this.isOverheated() && this.getTarget() == p_234199_0_;
         }));
         this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.0D, false));
-        this.goalSelector.addGoal(8, new RaiderWanderGoal<>(this, 0.6D));
-        this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 15.0F, 1.0F));
-        this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 15.0F));
     }
 
     @Override

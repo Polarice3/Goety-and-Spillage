@@ -1,0 +1,16 @@
+{
+  "name": "狂気の爆弾",
+  "icon": "goety_spillage:skull_bomb",
+  "category": "goety:spillage/crafts",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "あなたは特殊な「生きた爆弾」を作る方法を発見しました。これらはしばらくすると、地形を破壊することなく爆発します。"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety_spillage:skull_bomb",
+      "recipe2": "goety_spillage:pumpkin_bomb"
+    }
+  ]
+}

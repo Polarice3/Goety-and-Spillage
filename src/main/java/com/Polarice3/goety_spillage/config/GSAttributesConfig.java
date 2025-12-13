@@ -13,6 +13,9 @@ public class GSAttributesConfig {
     public static final ForgeConfigSpec.ConfigValue<Double> IgniterServantHealth;
     public static final ForgeConfigSpec.ConfigValue<Double> IgniterServantArmor;
 
+    public static final ForgeConfigSpec.ConfigValue<Double> EngineerServantHealth;
+    public static final ForgeConfigSpec.ConfigValue<Double> EngineerServantArmor;
+
     public static final ForgeConfigSpec.ConfigValue<Double> CrocofangServantHealth;
     public static final ForgeConfigSpec.ConfigValue<Double> CrocofangServantArmor;
     public static final ForgeConfigSpec.ConfigValue<Double> CrocofangServantDamage;
@@ -46,6 +49,12 @@ public class GSAttributesConfig {
                         .defineInRange("igniterServantHealth", 24.0, 1.0, Double.MAX_VALUE);
                 IgniterServantArmor = BUILDER.comment("How much natural armor points Igniter Servants have, Default: 0.0")
                         .defineInRange("igniterServantArmor", 0.0, 0.0, Double.MAX_VALUE);
+                BUILDER.pop();
+                BUILDER.push("Engineer Servant");
+                EngineerServantHealth = BUILDER.comment("How much Max Health Engineer Servants have, Default: 30.0")
+                        .defineInRange("engineerServantHealth", 30.0, 1.0, Double.MAX_VALUE);
+                EngineerServantArmor = BUILDER.comment("How much natural armor points Engineer Servants have, Default: 0.0")
+                        .defineInRange("engineerServantArmor", 0.0, 0.0, Double.MAX_VALUE);
                 BUILDER.pop();
                 BUILDER.push("Crocofang Servant");
                 CrocofangServantHealth = BUILDER.comment("How much Max Health Crocofang Servants have, Default: 40.0")

@@ -4,10 +4,12 @@ import com.Polarice3.Goety.common.entities.ai.AvoidTargetGoal;
 import com.Polarice3.Goety.common.entities.ally.illager.AbstractIllagerServant;
 import com.Polarice3.Goety.common.entities.ally.illager.RaiderServant;
 import com.Polarice3.Goety.common.entities.neutral.Owned;
+import com.Polarice3.Goety.utils.MobUtil;
 import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
 import com.Polarice3.goety_spillage.common.entities.ally.factory.GSChagrin;
 import com.Polarice3.goety_spillage.common.entities.ally.factory.GSFactory;
 import com.Polarice3.goety_spillage.common.entities.ally.factory.GSHinder;
+import com.Polarice3.goety_spillage.config.GSAttributesConfig;
 import com.Polarice3.goety_spillage.util.GSMobUtil;
 import com.yellowbrossproductions.illageandspillage.client.model.animation.ICanBeAnimated;
 import com.yellowbrossproductions.illageandspillage.util.IllageAndSpillageSoundEvents;
@@ -20,8 +22,12 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.Path;
@@ -51,9 +57,29 @@ public class EngineerServant extends AbstractIllagerServant implements ICanBeAni
         this.goalSelector.addGoal(1, new EngineerAvoidEntityGoal<>(this, LivingEntity.class, 8.0F, 0.8, 1.0));
         this.goalSelector.addGoal(2, new ThrowMachineGoal());
         this.goalSelector.addGoal(2, new RepairGoal());
+    }
+
+    @Override
+    public void miscGoal() {
+        this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(8, new EngineerRandomStrollGoal<>(this, 0.6));
         this.goalSelector.addGoal(9, new EngineerLookAtEntityGoal(this, Player.class, 15.0F, 1.0F));
         this.goalSelector.addGoal(10, new EngineerLookAtEntityGoal(this, Mob.class, 15.0F));
+    }
+
+    public static AttributeSupplier.Builder setCustomAttributes() {
+        return Monster.createMonsterAttributes()
+                .add(Attributes.MOVEMENT_SPEED, 0.35D)
+                .add(Attributes.MAX_HEALTH, GSAttributesConfig.EngineerServantHealth.get())
+                .add(Attributes.ARMOR, GSAttributesConfig.EngineerServantArmor.get())
+                .add(Attributes.ATTACK_DAMAGE, 5.0D)
+                .add(Attributes.FOLLOW_RANGE, 64.0D);
+    }
+
+    @Override
+    public void setConfigurableAttributes() {
+        MobUtil.setBaseAttributes(this.getAttribute(Attributes.MAX_HEALTH), GSAttributesConfig.EngineerServantHealth.get());
+        MobUtil.setBaseAttributes(this.getAttribute(Attributes.ARMOR), GSAttributesConfig.EngineerServantArmor.get());
     }
 
     protected void defineSynchedData() {

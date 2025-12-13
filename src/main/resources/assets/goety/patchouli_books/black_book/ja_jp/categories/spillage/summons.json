@@ -1,6 +1,6 @@
 {
-  "name": "Summons",
-  "description": "More Servants for a Darker Wizard.",
+  "name": "召喚",
+  "description": "より深い闇の魔術師のための、さらなる従者たちです。",
   "icon": "goety_spillage:factory_package",
   "parent": "goety:spillage",
   "sortnum": 3

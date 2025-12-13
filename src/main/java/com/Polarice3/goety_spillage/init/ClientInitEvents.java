@@ -39,6 +39,7 @@ public class ClientInitEvents {
     public static void onRegisterRenders(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(GSEntityTypes.DARK_CLOUD_EFFECT.get(), NoopRenderer::new);
         event.registerEntityRenderer(GSEntityTypes.IGNITER_SERVANT.get(), IgniterServantRenderer::new);
+        event.registerEntityRenderer(GSEntityTypes.ENGINEER_SERVANT.get(), EngineerServantRenderer::new);
         event.registerEntityRenderer(GSEntityTypes.BOUND_ENGINEER.get(), BoundEngineerRenderer::new);
         event.registerEntityRenderer(GSEntityTypes.CHAGRIN.get(), GSChagrinRenderer::new);
         event.registerEntityRenderer(GSEntityTypes.HINDER.get(), GSHinderRenderer::new);

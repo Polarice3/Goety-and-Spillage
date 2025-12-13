@@ -1,0 +1,18 @@
+{
+  "name": "スピリットハンドのフォーカス",
+  "icon": "goety_spillage:spirit_hand_focus",
+  "category": "goety:spillage/focus",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "ソウルエネルギーで作られた2つの手を生成し、戦闘においてそれぞれ独立してあなたを支援させることができます。"
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety_spillage:focus/spirit_hand_focus"
+    }
+  ],
+  "extra_recipe_mappings": {
+    "goety_spillage:spirit_hand_focus": 1
+  }
+}

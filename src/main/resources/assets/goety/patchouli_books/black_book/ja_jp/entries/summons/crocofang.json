@@ -1,0 +1,24 @@
+{
+  "name": "クロコファング",
+  "icon": "goety:ominous_saddle",
+  "category": "goety:spillage/summons",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "ワニとエヴォーカーの牙が混ざり合った恐るべき怪物です。この獣は主人の敵に対して噛みつき、猛突進します。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:crocofang_servant",
+      "scale": 0.25
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety_spillage:thrall/summon_crocofang"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "しゃがみながら肉を与えることで、この獣を回復させることができます。"
+    }
+  ]
+}

@@ -3,10 +3,7 @@ package com.Polarice3.goety_spillage;
 import com.Polarice3.Goety.utils.ModPotionUtil;
 import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
 import com.Polarice3.goety_spillage.common.entities.ally.GSSpiritHand;
-import com.Polarice3.goety_spillage.common.entities.ally.illager.CrocofangServant;
-import com.Polarice3.goety_spillage.common.entities.ally.illager.IgniterServant;
-import com.Polarice3.goety_spillage.common.entities.ally.illager.PreserverServant;
-import com.Polarice3.goety_spillage.common.entities.ally.illager.RagnoServant;
+import com.Polarice3.goety_spillage.common.entities.ally.illager.*;
 import com.Polarice3.goety_spillage.common.entities.ally.undead.bound.BoundEngineer;
 import com.Polarice3.goety_spillage.common.entities.ally.undead.bound.BoundFreakager;
 import com.Polarice3.goety_spillage.common.entities.ally.undead.zombie.ZombieAbsorber;
@@ -124,6 +121,7 @@ public class GoetySpillage {
 
     private void setupEntityAttributeCreation(final EntityAttributeCreationEvent event) {
         event.put(GSEntityTypes.IGNITER_SERVANT.get(), IgniterServant.setCustomAttributes().build());
+        event.put(GSEntityTypes.ENGINEER_SERVANT.get(), EngineerServant.setCustomAttributes().build());
         event.put(GSEntityTypes.BOUND_ENGINEER.get(), BoundEngineer.setCustomAttributes().build());
         event.put(GSEntityTypes.CHAGRIN.get(), ChagrinSentryEntity.createAttributes().build());
         event.put(GSEntityTypes.HINDER.get(), HinderEntity.createAttributes().build());

@@ -2,7 +2,9 @@ package com.Polarice3.goety_spillage.common.entities.projectiles;
 
 import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.Polarice3.Goety.utils.MobUtil;
+import com.Polarice3.Goety.utils.WandUtil;
 import com.Polarice3.goety_spillage.common.entities.IAttackMyOwner;
+import com.Polarice3.goety_spillage.config.GSSpellConfig;
 import com.yellowbrossproductions.illageandspillage.entities.IllagerAttack;
 import com.yellowbrossproductions.illageandspillage.util.IllageAndSpillageSoundEvents;
 import net.minecraft.core.particles.ParticleTypes;
@@ -90,7 +92,8 @@ public class GSImp extends Owned implements IllagerAttack, IAttackMyOwner {
 
             for (Entity entity : this.level.getEntities(this, this.getBoundingBox())) {
                 if (!MobUtil.areAllies(this.getOwner(), entity) && entity instanceof LivingEntity && entity.isAlive()) {
-                    entity.hurt(this.damageSources().indirectMagic(this, this.getOwner()), 4.0F + (float) this.power);
+                    float damage = GSSpellConfig.ImpishDamage.get().floatValue() * WandUtil.damageMultiply();
+                    entity.hurt(this.damageSources().indirectMagic(this, this.getOwner()), damage + (float) this.power);
                     entity.setSecondsOnFire(8);
                 }
             }

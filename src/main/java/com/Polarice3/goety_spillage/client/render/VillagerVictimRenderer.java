@@ -1,5 +1,6 @@
 package com.Polarice3.goety_spillage.client.render;
 
+import com.Polarice3.Goety.Goety;
 import com.Polarice3.goety_spillage.GoetySpillage;
 import com.Polarice3.goety_spillage.client.render.model.VillagerVictimModel;
 import com.Polarice3.goety_spillage.common.entities.neutral.VillagerVictim;
@@ -29,6 +30,7 @@ public class VillagerVictimRenderer extends MobRenderer<VillagerVictim, Villager
         super(renderManagerIn, new VillagerVictimModel<>(renderManagerIn.bakeLayer(VillagerVictimModel.LAYER_LOCATION)), 0.5F);
         this.addLayer(new VillaFaceLayer<>(this, renderManagerIn.getModelSet()));
         this.addLayer(new VillaProfLayer<>(this, renderManagerIn.getResourceManager(), "villager"));
+        this.addLayer(new ShacklesLayer<>(this, renderManagerIn.getModelSet()));
     }
 
     @Override
@@ -77,6 +79,22 @@ public class VillagerVictimRenderer extends MobRenderer<VillagerVictim, Villager
                 }
                 VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.entityTranslucent(texture));
                 this.model1.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, LivingEntityRenderer.getOverlayCoords(entitylivingbaseIn, 0.0F), 1.0F, 1.0F, 1.0F, 1.0F);
+            }
+        }
+    }
+
+    public static class ShacklesLayer<T extends VillagerVictim, M extends VillagerVictimModel<T>> extends RenderLayer<T, M> {
+        private static final ResourceLocation SHACKLES = Goety.location("textures/entity/servants/prisoner_shackles.png");
+        private final VillagerVictimModel<T> layerModel;
+
+        public ShacklesLayer(RenderLayerParent<T, M> p_i50919_1_, EntityModelSet p_174555_) {
+            super(p_i50919_1_);
+            this.layerModel = new VillagerVictimModel<>(p_174555_.bakeLayer(VillagerVictimModel.LAYER_LOCATION));
+        }
+
+        public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+            if (!entitylivingbaseIn.isInvisible() && entitylivingbaseIn.isPrisoner()) {
+                coloredCutoutModelCopyLayerRender(this.getParentModel(), this.layerModel, SHACKLES, matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, partialTicks, 1.0F, 1.0F, 1.0F);
             }
         }
     }

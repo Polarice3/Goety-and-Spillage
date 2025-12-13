@@ -1,0 +1,29 @@
+{
+  "name": "縛られたエンジニア",
+  "icon": "goety_spillage:engineer_mallet",
+  "category": "goety:spillage/summons",
+  "advancement": "goety_spillage:obtain_engineer_mallet",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "邪悪な村人のエンジニアたちの天才的な才能を無駄にすべきではありません。あなたはそれを自身の目的のために利用することにしました。"
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety_spillage:thrall/summon_bound_engineer"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "エンジニアの縛られた魂は、生前と同様に装置の作成と維持に関する知識を保持しています。トンカチを使って自分で機械を作ったり修理したりすることもできますが、闇の魔術を使い、そのような技術的技巧を他者に任せてしまうのも良いでしょう。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:bound_engineer",
+      "scale": 0.75
+    },
+    {
+      "type": "patchouli:text",
+      "text": "他のの縛られた邪悪な村人と同様に、帰還したエンジニアは地面から浮遊し、重力の影響を受けません。その霊的な見た目にもかかわらず、壁をすり抜けることはできず、通常の武器でダメージを受けます。束縛された魂は、エクトプラズムを持って右クリックすることで回復できます。"
+    }
+  ]
+}

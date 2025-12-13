@@ -58,21 +58,21 @@ public class ImpSpell extends Spell {
         HitResult hitResult = this.rayTrace(worldIn, caster, spellStat.getRange(), spellStat.getRadius());
         int random = worldIn.random.nextInt(3) + 1;
         if (random == 1) {
-            this.createLineImps(caster, hitResult.getLocation());
+            this.createLineImps(caster, hitResult.getLocation(), spellStat);
         }
 
         if (random == 2) {
-            this.createRandomImps(caster, hitResult.getLocation());
+            this.createRandomImps(caster, hitResult.getLocation(), spellStat);
         }
 
         if (random == 3) {
-            this.createRingImps(caster, hitResult.getLocation());
+            this.createRingImps(caster, hitResult.getLocation(), spellStat);
         }
 
         this.playSound(worldIn, caster, IllageAndSpillageSoundEvents.ENTITY_SPIRITCALLER_CLAP.get(), 2.0F, 1.0F);
     }
 
-    protected void createLineImps(LivingEntity livingEntity, Vec3 vec3) {
+    protected void createLineImps(LivingEntity livingEntity, Vec3 vec3, SpellStat spellStat) {
         LivingEntity target = this.getTarget(livingEntity);
         if (target != null) {
             vec3 = target.position();
@@ -83,11 +83,11 @@ public class ImpSpell extends Spell {
 
         for(int l = 0; l < 16; ++l) {
             double d2 = 1.25 * (double)(l + 1);
-            this.createSpellEntity(livingEntity, livingEntity.getX() + (double)Mth.cos(f) * d2, livingEntity.getZ() + (double)Mth.sin(f) * d2, d0, d1, f, l, l);
+            this.createSpellEntity(livingEntity, livingEntity.getX() + (double)Mth.cos(f) * d2, livingEntity.getZ() + (double)Mth.sin(f) * d2, d0, d1, l, spellStat);
         }
     }
 
-    protected void createRandomImps(LivingEntity livingEntity, Vec3 vec3) {
+    protected void createRandomImps(LivingEntity livingEntity, Vec3 vec3, SpellStat spellStat) {
         LivingEntity target = this.getTarget(livingEntity);
         if (target != null) {
             vec3 = target.position();
@@ -97,37 +97,35 @@ public class ImpSpell extends Spell {
         float f = (float)Mth.atan2(vec3.z() - livingEntity.getZ(), vec3.x() - livingEntity.getX());
 
         for(int l = 0; l < 30; ++l) {
-            this.createSpellEntity(livingEntity, livingEntity.getX() + (double)(-15 + livingEntity.getRandom().nextInt(30)), livingEntity.getZ() + (double)(-15 + livingEntity.getRandom().nextInt(30)), d0, d1, f, l, l);
+            this.createSpellEntity(livingEntity, livingEntity.getX() + (double)(-15 + livingEntity.getRandom().nextInt(30)), livingEntity.getZ() + (double)(-15 + livingEntity.getRandom().nextInt(30)), d0, d1, l, spellStat);
         }
 
     }
 
-    protected void createRingImps(LivingEntity livingEntity, Vec3 vec3) {
+    protected void createRingImps(LivingEntity livingEntity, Vec3 vec3, SpellStat spellStat) {
         LivingEntity target = this.getTarget(livingEntity);
         if (target != null) {
             vec3 = target.position();
         }
         double d0 = Math.min(vec3.y(), livingEntity.getY() - 5.0);
         double d1 = Math.max(vec3.y(), livingEntity.getY() - 5.0) + 1.0;
-        float f = (float)Mth.atan2(vec3.z() - livingEntity.getZ(), vec3.x() - livingEntity.getX());
-        int j = 1;
-        this.createSpellEntity(livingEntity, vec3.x() - 3.0, vec3.z() - 0.0, d0, d1, f, j, 0);
-        this.createSpellEntity(livingEntity, vec3.x() - 2.0, vec3.z() - -1.0, d0, d1, f, j, 1);
-        this.createSpellEntity(livingEntity, vec3.x() - 1.0, vec3.z() - -2.0, d0, d1, f, j, 2);
-        this.createSpellEntity(livingEntity, vec3.x() - 0.0, vec3.z() - -3.0, d0, d1, f, j, 3);
-        this.createSpellEntity(livingEntity, vec3.x() - -1.0, vec3.z() - -2.0, d0, d1, f, j, 4);
-        this.createSpellEntity(livingEntity, vec3.x() - -2.0, vec3.z() - -1.0, d0, d1, f, j, 5);
-        this.createSpellEntity(livingEntity, vec3.x() - -3.0, vec3.z() - 0.0, d0, d1, f, j, 6);
-        this.createSpellEntity(livingEntity, vec3.x() - -2.0, vec3.z() - 1.0, d0, d1, f, j, 7);
-        this.createSpellEntity(livingEntity, vec3.x() - -1.0, vec3.z() - 2.0, d0, d1, f, j, 8);
-        this.createSpellEntity(livingEntity, vec3.x() - 0.0, vec3.z() - 3.0, d0, d1, f, j, 9);
-        this.createSpellEntity(livingEntity, vec3.x() - 1.0, vec3.z() - 2.0, d0, d1, f, j, 10);
-        this.createSpellEntity(livingEntity, vec3.x() - 2.0, vec3.z() - 1.0, d0, d1, f, j, 11);
-        this.createSpellEntity(livingEntity, vec3.x() - 0.0, vec3.z() - 0.0, d0, d1, f, j, 12);
+        this.createSpellEntity(livingEntity, vec3.x() - 3.0, vec3.z() - 0.0, d0, d1, 0, spellStat);
+        this.createSpellEntity(livingEntity, vec3.x() - 2.0, vec3.z() - -1.0, d0, d1, 1, spellStat);
+        this.createSpellEntity(livingEntity, vec3.x() - 1.0, vec3.z() - -2.0, d0, d1, 2, spellStat);
+        this.createSpellEntity(livingEntity, vec3.x() - 0.0, vec3.z() - -3.0, d0, d1, 3, spellStat);
+        this.createSpellEntity(livingEntity, vec3.x() - -1.0, vec3.z() - -2.0, d0, d1, 4, spellStat);
+        this.createSpellEntity(livingEntity, vec3.x() - -2.0, vec3.z() - -1.0, d0, d1, 5, spellStat);
+        this.createSpellEntity(livingEntity, vec3.x() - -3.0, vec3.z() - 0.0, d0, d1, 6, spellStat);
+        this.createSpellEntity(livingEntity, vec3.x() - -2.0, vec3.z() - 1.0, d0, d1, 7, spellStat);
+        this.createSpellEntity(livingEntity, vec3.x() - -1.0, vec3.z() - 2.0, d0, d1, 8, spellStat);
+        this.createSpellEntity(livingEntity, vec3.x() - 0.0, vec3.z() - 3.0, d0, d1, 9, spellStat);
+        this.createSpellEntity(livingEntity, vec3.x() - 1.0, vec3.z() - 2.0, d0, d1, 10, spellStat);
+        this.createSpellEntity(livingEntity, vec3.x() - 2.0, vec3.z() - 1.0, d0, d1, 11, spellStat);
+        this.createSpellEntity(livingEntity, vec3.x() - 0.0, vec3.z() - 0.0, d0, d1, 12, spellStat);
 
     }
 
-    private void createSpellEntity(LivingEntity livingEntity, double p_190876_1_, double p_190876_3_, double p_190876_5_, double p_190876_7_, float p_190876_9_, int p_190876_10_, int time) {
+    private void createSpellEntity(LivingEntity livingEntity, double p_190876_1_, double p_190876_3_, double p_190876_5_, double p_190876_7_, int time, SpellStat spellStat) {
         BlockPos blockpos = BlockPos.containing(p_190876_1_, p_190876_7_, p_190876_3_);
         boolean flag = false;
         double d0 = 0.0;
@@ -152,9 +150,9 @@ public class ImpSpell extends Spell {
         } while(blockpos.getY() >= Mth.floor(p_190876_5_) - 1);
 
         if (flag) {
-            int potency = 0;
+            int potency = spellStat.getPotency();
             if (WandUtil.enchantedFocus(livingEntity)){
-                potency += WandUtil.getLevels(ModEnchantments.POTENCY.get(), livingEntity);
+                potency += WandUtil.getPotencyLevel(livingEntity);
             }
 
             GSImp imp = GSEntityTypes.IMP.get().create(livingEntity.level);

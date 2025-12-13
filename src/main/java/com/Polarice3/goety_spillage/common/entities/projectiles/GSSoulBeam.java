@@ -1,6 +1,8 @@
 package com.Polarice3.goety_spillage.common.entities.projectiles;
 
+import com.Polarice3.Goety.api.entities.ISpellEntity;
 import com.Polarice3.Goety.utils.MobUtil;
+import com.Polarice3.Goety.utils.WandUtil;
 import com.Polarice3.goety_spillage.config.GSSpellConfig;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -26,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class GSSoulBeam extends Entity {
+public class GSSoulBeam extends Entity implements ISpellEntity {
     private static final EntityDataAccessor<Integer> DURATION = SynchedEntityData.defineId(GSSoulBeam.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> CASTER = SynchedEntityData.defineId(GSSoulBeam.class, EntityDataSerializers.INT);
     public LivingEntity caster;
@@ -213,7 +215,8 @@ public class GSSoulBeam extends Entity {
         List<LivingEntity> hit = this.raytraceEntities(this.level, new Vec3(this.getX(), this.getY(), this.getZ()), new Vec3(this.endPosX, this.endPosY, this.endPosZ), true).getEntities();
         if (!this.level.isClientSide) {
             for (LivingEntity target : hit) {
-                target.hurt(this.damageSources().indirectMagic(this, this.caster), GSSpellConfig.SoulBeamDamage.get().floatValue() + (float) this.power);
+                float damage = GSSpellConfig.SoulBeamDamage.get().floatValue() * WandUtil.damageMultiply();
+                target.hurt(this.damageSources().indirectMagic(this, this.caster), damage + (float) this.power);
                 target.hurtMarked = true;
                 target.setDeltaMovement(0.0D, 0.0D, 0.0D);
                 target.lerpMotion(0.0D, 0.0D, 0.0D);

@@ -1,0 +1,20 @@
+{
+  "name": "エンジニアのトンカチ",
+  "icon": "goety_spillage:engineer_mallet",
+  "category": "goety:spillage/crafts",
+  "advancement": "goety_spillage:obtain_engineer_mallet",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "あの厄介ながらも独創的なエンジニアたちのトンカチを手に入れました。どういうわけか、これを使えば自分だけの機械部隊を作成し、維持することができるようになります。このトンカチは小さすぎてハンマーと同じようには機能しませんが、これを持って右クリックすることで、3種類のエンジニアの機械のうち1つを作成できます。"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "goety_spillage:engineer_mallet",
+      "text": "それらの機械を左クリックすると、ハート2.5個分のダメージを修復します。自分が所有する機械をシフト左クリック（'ownerHitKill'の設定がfalseの場合はシフト右クリック）すると、即座に破壊するか、もしそれがパッケージから作られていて体力が満タンであれば、パッケージ形態に戻します。このトンカチは、金床で鉄インゴットを使って修理できます。"
+    }
+  ],
+  "extra_recipe_mappings": {
+    "goety_spillage:engineer_mallet": 1
+  }
+}

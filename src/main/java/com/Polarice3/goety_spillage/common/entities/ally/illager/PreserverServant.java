@@ -55,10 +55,6 @@ public class PreserverServant extends AbstractIllagerServant {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new TryToProtectGoal());
-        this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(8, new RaiderWanderGoal<>(this, 1.0));
-        this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 15.0F, 1.0F));
-        this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 15.0F));
     }
 
     public static AttributeSupplier.Builder setCustomAttributes() {

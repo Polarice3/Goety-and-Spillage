@@ -38,8 +38,7 @@ public class RequiemSpell extends Spell {
         return GSSpellConfig.RequiemDuration.get();
     }
 
-    @Override
-    public int castDuration(LivingEntity entityLiving) {
+    public int castDuration(LivingEntity caster, ItemStack staff) {
         return GSSpellConfig.RequiemDuration.get();
     }
 
@@ -54,10 +53,9 @@ public class RequiemSpell extends Spell {
         return GSSpellConfig.RequiemCoolDown.get();
     }
 
-    @Override
-    public void stopSpell(ServerLevel worldIn, LivingEntity entityLiving, ItemStack staff, int useTimeRemaining) {
-        if (useTimeRemaining > 10){
-            if (entityLiving instanceof Player player) {
+    public void stopSpell(ServerLevel worldIn, LivingEntity caster, ItemStack staff, ItemStack focus, int castTime, SpellStat spellStat) {
+        if (castTime > 10){
+            if (caster instanceof Player player) {
                 SEHelper.addCooldown(player, GSItems.REQUIEM_FOCUS.get(), this.spellCooldown());
                 SEHelper.sendSEUpdatePacket(player);
             }
@@ -76,7 +74,7 @@ public class RequiemSpell extends Spell {
         int soulPower = spellStat.getPotency();
 
         if (WandUtil.enchantedFocus(caster)){
-            soulPower += WandUtil.getLevels(ModEnchantments.POTENCY.get(), caster) * 2;
+            soulPower += WandUtil.getPotencyLevel(caster) * 2;
         }
 
         soulPower = Math.min(soulPower, 8);

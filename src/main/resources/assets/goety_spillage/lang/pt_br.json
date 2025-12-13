@@ -18,7 +18,6 @@
   "advancements.goety_spillage.summon_bound_engineer.title": "Estar Morto Só Me Deixou Bravo!",
   "advancements.goety_spillage.summon_bound_engineer.description": "Invoque um Engenheiro Aprisionado.",
   "advancements.goety_spillage.summon_bound_freakager.title": "Sob Nova Gerência",
-  "advancements.goety_spillage.summon_bound_freakager.description": "Invoque um Freakager Aprisionado.",
   "advancements.goety_spillage.summon_zombie_absorber.title": "Muralha de Carne",
   "advancements.goety_spillage.summon_zombie_absorber.description": "Invoque um Absorvedor Zumbi.",
 
@@ -41,7 +40,6 @@
   "entity.goety_spillage.zombie_absorber": "Absorvedor Zumbi",
   "entity.goety_spillage.preserver_servant": "Servo Preservador",
   "entity.goety_spillage.villager_victim": "Aldeão",
-  "entity.goety_spillage.bound_freakager": "Freakager Aprisionado",
   "entity.goety_spillage.ragno_servant": "Ragno",
   "entity.goety_spillage.trick_or_treat": "Truque ou Guloseima",
   "entity.goety_spillage.eyesore": "Olho Ferido",
@@ -58,7 +56,6 @@
   "item.goety_spillage.zombie_absorber_spawn_egg": "Ovo de Absorvedor Zumbi",
   "item.goety_spillage.ragno_servant_spawn_egg": "Ovo de Servo Ragno",
   "item.goety_spillage.bound_engineer_spawn_egg": "Ovo de Engenheiro Aprisionado",
-  "item.goety_spillage.bound_freakager_spawn_egg": "Ovo de Freakager Aprisionado",
   "item.goety_spillage.igniter_servant_spawn_egg": "Ovo de Servo Incendiário",
   "item.goety_spillage.preserver_servant_spawn_egg": "Ovo de Servo Preservador",
 
@@ -96,5 +93,9 @@
   "info.goety_spillage.freaky_simp": "<%s> EI GALERA %s É UM SIMP",
 
   "death.attack.goety_spillage.frickYou": "'vai se danar' - %2$s",
-  "death.attack.goety_spillage.frickYou.player": "'vai se danar' - %2$s"
+  "death.attack.goety_spillage.frickYou.player": "'vai se danar' - %2$s",
+
+  "item.goety_spillage.bound_freakager_spawn_egg": "Ovo de Bruxo Assustador Aprisionado",
+  "entity.goety_spillage.bound_freakager": "Bruxo Assustador Aprisionado",
+  "advancements.goety_spillage.summon_bound_freakager.description": "Invoque um Bruxo Assustador Aprisionado."
 }

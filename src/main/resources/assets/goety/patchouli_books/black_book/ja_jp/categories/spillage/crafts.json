@@ -1,7 +1,6 @@
 {
-  "name": "Crafts",
-  "description": "More illagers? More crafting!",
+  "name": "クラフト",
+  "description": "邪悪な村人が増えたなら、クラフトも増えるのです！",
   "icon": "goety_spillage:engineer_mallet",
-  "parent": "goety:spillage",
-  "sortnum": 1
+  "parent": "goety:spillage"
 }

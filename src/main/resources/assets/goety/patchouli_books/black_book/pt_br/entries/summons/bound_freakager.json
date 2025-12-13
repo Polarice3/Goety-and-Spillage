@@ -1,12 +1,12 @@
 {
-  "name": "Freakager Aprisionado",
+  "name": "Bruxo Assustador Aprisionado",
   "icon": "illageandspillage:bag_of_horrors",
   "category": "goety:spillage/summons",
   "advancement": "goety_spillage:obtain_bag_of_horrors",
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "O saco deixado por aquele illager diabólico revelou-se também conter a sua alma, alimentando a magia do saco para lançar quantidades infinitas de bombas, doces e outros artefactos assustadores, com algum tempo de recarga."
+      "text": "O saco deixado por aquele Bruxo diabólico revelou-se também conter a sua alma, alimentando a magia do saco para lançar quantidades infinitas de bombas, doces e outros artefactos assustadores, com algum tempo de recarga."
     },
     {
       "type": "goety:ritual",
@@ -23,7 +23,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Tal como outros illagers aprisionados, o Freakager regressado pode pairar acima do solo e não é afetado pela gravidade. Apesar do seu aspeto espiritual, não consegue atravessar paredes e ainda pode ser ferido com armamento convencional. A alma vinculada pode ser curada ao clicar nela com Ectoplasma."
+      "text": "Tal como outros illagers aprisionados, o Bruxo Assustador regressado pode pairar acima do solo e não é afetado pela gravidade. Apesar do seu aspeto espiritual, não consegue atravessar paredes e ainda pode ser ferido com armamento convencional. A alma vinculada pode ser curada ao clicar nela com Ectoplasma."
     }
   ]
 }

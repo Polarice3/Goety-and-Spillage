@@ -59,6 +59,8 @@ public class GSItems {
     //Spawn Eggs
     public static final RegistryObject<ServantSpawnEggItem> ZOMBIE_ABSORBER_SPAWN_EGG = ITEMS.register("zombie_absorber_spawn_egg",
             () -> new ServantSpawnEggItem(GSEntityTypes.ZOMBIE_ABSORBER, 0x523c37, 0x384d23, ServantSpawnEggs.egg()));
+    public static final RegistryObject<ServantSpawnEggItem> CROCOFANG_SERVANT_SPAWN_EGG = ITEMS.register("crocofang_servant_spawn_egg",
+            () -> new ServantSpawnEggItem(GSEntityTypes.CROCOFANG_SERVANT, 0xdbd6c0, 0x373734, ServantSpawnEggs.egg()));
     public static final RegistryObject<ServantSpawnEggItem> RAGNO_SERVANT_SPAWN_EGG = ITEMS.register("ragno_servant_spawn_egg",
             () -> new ServantSpawnEggItem(GSEntityTypes.RAGNO_SERVANT, 0x1a1c20, 0x525a68, ServantSpawnEggs.egg()));
     public static final RegistryObject<ServantSpawnEggItem> BOUND_ENGINEER_SPAWN_EGG = ITEMS.register("bound_engineer_spawn_egg",
@@ -69,4 +71,6 @@ public class GSItems {
             () -> new ServantSpawnEggItem(GSEntityTypes.IGNITER_SERVANT, 0x1f1f1f, 0x9e6500, ServantSpawnEggs.egg()));
     public static final RegistryObject<ServantSpawnEggItem> PRESERVER_SERVANT_SPAWN_EGG = ITEMS.register("preserver_servant_spawn_egg",
             () -> new ServantSpawnEggItem(GSEntityTypes.PRESERVER_SERVANT, 0xac8d08, 0xa4512b, ServantSpawnEggs.egg()));
+    /*public static final RegistryObject<ServantSpawnEggItem> ENGINEER_SERVANT_SPAWN_EGG = ITEMS.register("engineer_servant_spawn_egg",
+            () -> new ServantSpawnEggItem(GSEntityTypes.ENGINEER_SERVANT, 0xffe472, 0x321111, ServantSpawnEggs.egg()));*/
 }

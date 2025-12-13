@@ -1,15 +1,21 @@
 package com.Polarice3.goety_spillage.common.entities.neutral;
 
+import com.Polarice3.Goety.common.entities.ModEntityType;
 import com.Polarice3.Goety.common.entities.ally.Summoned;
 import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.Polarice3.Goety.utils.ExplosionUtil;
 import com.Polarice3.Goety.utils.LootingExplosion;
 import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
 import com.Polarice3.goety_spillage.common.entities.ally.illager.RagnoServant;
+import com.mojang.logging.LogUtils;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.Dynamic;
 import com.yellowbrossproductions.illageandspillage.entities.CameraShakeEntity;
 import com.yellowbrossproductions.illageandspillage.util.IllageAndSpillageSoundEvents;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -34,12 +40,15 @@ import net.minecraft.world.entity.npc.VillagerType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
+import org.slf4j.Logger;
 
 import java.util.EnumSet;
 
 public class VillagerVictim extends Summoned implements VillagerDataHolder {
+    private static final Logger LOGGER = LogUtils.getLogger();
     private static final EntityDataAccessor<Integer> VILLAGER_FACE = SynchedEntityData.defineId(VillagerVictim.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> IS_TRADER = SynchedEntityData.defineId(VillagerVictim.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> IS_PRISONER = SynchedEntityData.defineId(VillagerVictim.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<VillagerData> DATA_VILLAGER_DATA = SynchedEntityData.defineId(VillagerVictim.class, EntityDataSerializers.VILLAGER_DATA);
     private int introTicks;
     public AnimationState transformAnimationState = new AnimationState();
@@ -65,11 +74,39 @@ public class VillagerVictim extends Summoned implements VillagerDataHolder {
         super.defineSynchedData();
         this.entityData.define(VILLAGER_FACE, 0);
         this.entityData.define(IS_TRADER, false);
+        this.entityData.define(IS_PRISONER, false);
         this.entityData.define(DATA_VILLAGER_DATA, new VillagerData(VillagerType.PLAINS, VillagerProfession.NONE, 1));
     }
 
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        VillagerData.CODEC.encodeStart(NbtOps.INSTANCE, this.getVillagerData()).resultOrPartial(LOGGER::error).ifPresent((p_204072_) -> {
+            compound.put("VillagerData", p_204072_);
+        });
+        compound.putBoolean("Trader", this.isTrader());
+        compound.putBoolean("Prisoner", this.isPrisoner());
+    }
+
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        if (compound.contains("VillagerData", 10)) {
+            DataResult<VillagerData> dataresult = VillagerData.CODEC.parse(new Dynamic<>(NbtOps.INSTANCE, compound.get("VillagerData")));
+            dataresult.resultOrPartial(LOGGER::error).ifPresent(this::setVillagerData);
+        }
+
+        if (compound.contains("Trader")) {
+            this.setIsTrader(compound.getBoolean("Trader"));
+        }
+
+        if (compound.contains("Prisoner")) {
+            this.setIsPrisoner(compound.getBoolean("Prisoner"));
+        }
+    }
+
     protected Component getTypeName() {
-        if (this.isTrader()) {
+        if (this.isPrisoner()) {
+            return ModEntityType.PRISONER.get().getDescription();
+        } else if (this.isTrader()) {
             return EntityType.WANDERING_TRADER.getDescription();
         } else {
             return super.getTypeName();
@@ -230,6 +267,14 @@ public class VillagerVictim extends Summoned implements VillagerDataHolder {
 
     public void setIsTrader(boolean isTrader){
         this.entityData.set(IS_TRADER, isTrader);
+    }
+
+    public boolean isPrisoner(){
+        return this.entityData.get(IS_PRISONER);
+    }
+
+    public void setIsPrisoner(boolean prisoner){
+        this.entityData.set(IS_PRISONER, prisoner);
     }
 
     @Override

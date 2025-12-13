@@ -5,10 +5,7 @@ import com.Polarice3.goety_spillage.common.entities.ally.GSEyesore;
 import com.Polarice3.goety_spillage.common.entities.ally.GSSpiritHand;
 import com.Polarice3.goety_spillage.common.entities.ally.GSTot;
 import com.Polarice3.goety_spillage.common.entities.ally.factory.*;
-import com.Polarice3.goety_spillage.common.entities.ally.illager.CrocofangServant;
-import com.Polarice3.goety_spillage.common.entities.ally.illager.IgniterServant;
-import com.Polarice3.goety_spillage.common.entities.ally.illager.PreserverServant;
-import com.Polarice3.goety_spillage.common.entities.ally.illager.RagnoServant;
+import com.Polarice3.goety_spillage.common.entities.ally.illager.*;
 import com.Polarice3.goety_spillage.common.entities.ally.undead.GSFunnybone;
 import com.Polarice3.goety_spillage.common.entities.ally.undead.bound.BoundEngineer;
 import com.Polarice3.goety_spillage.common.entities.ally.undead.bound.BoundFreakager;
@@ -35,6 +32,11 @@ public class GSEntityTypes {
 
     public static final RegistryObject<EntityType<IgniterServant>> IGNITER_SERVANT = register("igniter_servant",
             EntityType.Builder.of(IgniterServant::new, MobCategory.MONSTER)
+                    .sized(0.6F, 1.95F));
+
+    public static final RegistryObject<EntityType<EngineerServant>> ENGINEER_SERVANT = register("engineer_servant",
+            EntityType.Builder.of(EngineerServant::new, MobCategory.MONSTER)
+                    .noSummon() //TEMP
                     .sized(0.6F, 1.95F));
 
     public static final RegistryObject<EntityType<BoundEngineer>> BOUND_ENGINEER = register("bound_engineer",

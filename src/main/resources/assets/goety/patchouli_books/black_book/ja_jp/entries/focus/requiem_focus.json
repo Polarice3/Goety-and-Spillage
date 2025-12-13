@@ -1,0 +1,18 @@
+{
+  "name": "レクイエムのフォーカス",
+  "icon": "goety_spillage:requiem_focus",
+  "category": "goety:spillage/focus",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "ネザーの呪われた魂や、来世の迷える魂を用いて、この呪文はそれらを一つずつゆっくりと召喚し、甲高い叫び声を上げながら敵に向かって突撃させます。"
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety_spillage:focus/requiem_focus"
+    }
+  ],
+  "extra_recipe_mappings": {
+    "goety_spillage:requiem_focus": 1
+  }
+}

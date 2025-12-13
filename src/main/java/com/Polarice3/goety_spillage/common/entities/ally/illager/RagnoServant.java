@@ -15,6 +15,7 @@ import com.Polarice3.Goety.utils.ModDamageSource;
 import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
 import com.Polarice3.goety_spillage.common.entities.ally.GSTot;
 import com.Polarice3.goety_spillage.common.entities.ally.undead.GSFunnybone;
+import com.Polarice3.goety_spillage.common.entities.ally.undead.bound.BoundFreakager;
 import com.Polarice3.goety_spillage.common.entities.projectiles.GSPumpkinBomb;
 import com.Polarice3.goety_spillage.common.entities.projectiles.GSWebNet;
 import com.Polarice3.goety_spillage.common.entities.projectiles.WebProjectile;
@@ -88,7 +89,7 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Predicate;
 
-public class RagnoServant extends RaiderServant implements PlayerRideableJumping, IAutoRideable, ICanBeAnimated {
+public class RagnoServant extends RaiderServant implements PlayerRideableJumping, RiderShieldingMount, IAutoRideable, ICanBeAnimated {
     private static final UUID SPEED_PENALTY_UUID = UUID.fromString("5CD17A52-AB9A-42D3-A629-90FDE04B281E");
     private static final AttributeModifier SPEED_PENALTY = new AttributeModifier(SPEED_PENALTY_UUID, "STOP MOVING AROUND STUPID", -0.35, AttributeModifier.Operation.ADDITION);
     private static final EntityDataAccessor<Byte> DATA_FLAGS_ID = SynchedEntityData.defineId(RagnoServant.class, EntityDataSerializers.BYTE);
@@ -1058,7 +1059,10 @@ public class RagnoServant extends RaiderServant implements PlayerRideableJumping
                 }
             }
 
-            if ((!this.isCrazy() && this.getFirstPassenger() instanceof LivingEntity livingEntity && MobUtil.healthIsHalved(livingEntity) || this.isCrazy() && this.halfHealth()) && (this.doesAttackMeetNormalRequirements() && this.getRandom().nextInt(16) == 0 && this.jumpCooldown < 1 || this.getAttackType() == JUMP_ATTACK)) {
+            boolean canJump = !this.isCrazy() ? this.getFirstPassenger() instanceof LivingEntity livingEntity && MobUtil.healthIsHalved(livingEntity) : this.halfHealth();
+            boolean finalJump = canJump && this.doesAttackMeetNormalRequirements() && this.getRandom().nextInt(16) == 0 && this.jumpCooldown < 1;
+
+            if (finalJump || this.getAttackType() == JUMP_ATTACK) {
                 if (this.getAttackTicks() == 0) {
                     this.setAttackType(JUMP_ATTACK);
                     this.setAnimationState(14);
@@ -1561,7 +1565,7 @@ public class RagnoServant extends RaiderServant implements PlayerRideableJumping
     }
 
     public boolean shouldRiderSit() {
-        return !this.isCrazy();
+        return !this.isCrazy() && !(this.getFirstPassenger() instanceof BoundFreakager);
     }
 
     private Vec3 getBurrowPosition(double p_32673_, double p_32674_, double p_32675_, double p_32676_) {
@@ -1872,10 +1876,20 @@ public class RagnoServant extends RaiderServant implements PlayerRideableJumping
     }
 
     public double getPassengersRidingOffset() {
+        float f0 = 3.75F;
+        float f1 = 2.5F;
+        float f2 = 2.3F;
+        float f3 = 2.5F;
+        if (this.shouldRiderSit()) {
+            f0 = 3.15F;
+            f1 = 1.9F;
+            f2 = 1.7F;
+            f3 = 1.9F;
+        }
         if (this.getAttackType() == JUMP_ATTACK) {
-            return this.getAttackTicks() >= 7 ? 3.15 : 1.9;
+            return this.getAttackTicks() >= 7 ? f0 : f1;
         } else {
-            return this.stunTick > 6 && this.stunTick < 115 ? 1.7 : 1.9;
+            return this.stunTick > 6 && this.stunTick < 115 ? f2 : f3;
         }
     }
 
@@ -2131,6 +2145,29 @@ public class RagnoServant extends RaiderServant implements PlayerRideableJumping
 
     public boolean isPlayingIntro(){
         return this.isPlayingIntro;
+    }
+
+    public double getRiderShieldingHeight() {
+        return 0.5;
+    }
+
+    protected float getRiddenSpeed(Player p_278241_) {
+        float f = p_278241_.isSprinting() ? 0.1F : 0.0F;
+        return (float)this.getAttributeValue(Attributes.MOVEMENT_SPEED) + f;
+    }
+
+    protected Vec3 getRiddenInput(Player p_278278_, Vec3 p_275506_) {
+        if (this.onGround() && this.playerJumpPendingScale == 0.0F) {
+            return Vec3.ZERO;
+        } else {
+            float f = p_278278_.xxa;
+            float f1 = p_278278_.zza;
+            if (f1 <= 0.0F) {
+                f1 *= 0.25F;
+            }
+
+            return new Vec3((double)f, 0.0, (double)f1);
+        }
     }
 
     public void travel(@NotNull Vec3 pTravelVector) {

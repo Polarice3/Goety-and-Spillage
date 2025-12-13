@@ -1,9 +1,11 @@
 package com.Polarice3.goety_spillage.common.events;
 
 import com.Polarice3.Goety.api.entities.ally.illager.IllagerType;
+import com.Polarice3.Goety.common.entities.ally.illager.Prisoner;
 import com.Polarice3.Goety.common.entities.neutral.AbstractHauntedArmor;
 import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.Polarice3.Goety.common.events.TimedEvents;
+import com.Polarice3.Goety.init.ModTags;
 import com.Polarice3.Goety.utils.CuriosFinder;
 import com.Polarice3.Goety.utils.ItemHelper;
 import com.Polarice3.Goety.utils.MobUtil;
@@ -229,7 +231,7 @@ public class GSEvents {
     public static void OnInteractEvents(PlayerInteractEvent.EntityInteractSpecific event) {
         Player player = event.getEntity();
         if (!event.getLevel().isClientSide) {
-            if (event.getTarget() instanceof AbstractVillager villager){
+            if ((event.getTarget() instanceof AbstractVillager || event.getTarget() instanceof Prisoner) && event.getTarget() instanceof Mob villager){
                 if (event.getItemStack().getItem() instanceof MutationPotion){
                     if (MutationPotion.canSummon(player.level, player)) {
                         event.getItemStack().shrink(1);
@@ -252,6 +254,13 @@ public class GSEvents {
                                 victim.setVillagerData(villager1.getVillagerData());
                             } else if (villager instanceof WanderingTrader){
                                 victim.setIsTrader(true);
+                            } else if (villager instanceof Prisoner prisoner){
+                                victim.setIsPrisoner(true);
+                                if (prisoner.isTrader()) {
+                                    victim.setIsTrader(true);
+                                } else {
+                                    victim.setVillagerData(prisoner.getVillagerData());
+                                }
                             }
                         }
                         event.getLevel().addFreshEntity(victim);

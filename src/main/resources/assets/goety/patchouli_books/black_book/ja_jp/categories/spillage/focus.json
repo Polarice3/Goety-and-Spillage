@@ -1,6 +1,6 @@
 {
-  "name": "Focus",
-  "description": "More spells to spill!",
+  "name": "フォーカス",
+  "description": "ぶちまけるべき呪文が、さらに増えました！",
   "icon": "goety_spillage:impish_focus",
   "parent": "goety:spillage",
   "sortnum": 2

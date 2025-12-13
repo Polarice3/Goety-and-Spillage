@@ -85,10 +85,14 @@ public class CrocofangServant extends RaiderServant implements PlayerRideable, I
         this.goalSelector.addGoal(0, new StunGoal());
         this.goalSelector.addGoal(0, new ChargeGoal());
         this.goalSelector.addGoal(0, new AttackGoal());
-        this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.0, false));
-        this.goalSelector.addGoal(5, new RaiderWanderGoal<>(this, 0.4));
-        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 6.0F));
+    }
+
+    @Override
+    public void miscGoal() {
+        this.goalSelector.addGoal(1, new FloatGoal(this));
+        this.goalSelector.addGoal(8, new RaiderWanderGoal<>(this, 0.4));
+        this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 6.0F));
         this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 8.0F));
     }
 
@@ -318,10 +322,7 @@ public class CrocofangServant extends RaiderServant implements PlayerRideable, I
             if (this.happyCool > 0) {
                 --this.happyCool;
             }
-            DamageSource damageSource = this.damageSources().mobAttack(this);
-            if (this.getTrueOwner() != null){
-                damageSource = ModDamageSource.summonAttack(this, this.getTrueOwner());
-            }
+            DamageSource damageSource = this.getServantAttack();
             if (this.biteTime > 0) {
                 --this.biteTime;
                 if (this.biteTime == 11) {

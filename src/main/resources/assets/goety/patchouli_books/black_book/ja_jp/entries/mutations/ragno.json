@@ -1,0 +1,40 @@
+{
+  "name": "ラグノ",
+  "icon": "goety_spillage:mutation_potion",
+  "category": "goety:spillage/mutations",
+  "advancement": "goety_spillage:obtain_bag_of_horrors",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "邪悪な村人によって生み出された最も恐ろしい創造物であるこの苦痛に満ちた生物は、あなたが発見に成功した変異ポーションを、村人に与えることで生まれます。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:ragno_servant",
+      "scale": 0.5
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety_spillage:mutation_potion"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "この忌まわしい調合物を手に入れたら、村人の喉に流し込み（対象に右クリックし）、そのショーを見届けてください。"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "ラグノは3種類の攻撃を持ちますが、騎乗時は2種類になります。1つは足を鳴らしてからターゲットに飛びかかる攻撃、もう1つは複数のクモの巣を発射する攻撃です。騎乗していない時は、素早く地面に潜り、ターゲットに向かって掘り進み、姿を現すと同時に近くの味方以外の生物にダメージを与えます。"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "ラグノに「恐怖のバック」を与えるか、この獣に騎乗中に死亡してバックを落とすと、ラグノはそれを貪り食い、あらゆる種類の新しい能力を獲得します。袋を使ってカボチャ爆弾やお菓子を生成できるだけでなく、敵に向かって突進し、進路上の味方以外の生物を吹き飛ばすこともできます。残念ながら、この状態の獣には騎乗できません。"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "その怪物から袋を取り戻すには、攻撃していない時にしゃがみながら右クリックするだけです。ラグノは肉を与えることで体力を回復できます。"
+    }
+  ],
+  "extra_recipe_mappings": {
+    "goety_spillage:mutation_potion": 3
+  }
+}

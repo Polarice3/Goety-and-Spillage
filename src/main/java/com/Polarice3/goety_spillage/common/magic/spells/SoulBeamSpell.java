@@ -33,7 +33,7 @@ public class SoulBeamSpell extends Spell {
     }
 
     @Override
-    public int castDuration(LivingEntity entityLiving) {
+    public int castDuration(LivingEntity entityLiving, ItemStack staff) {
         return GSSpellConfig.SoulBeamDuration.get();
     }
 
@@ -70,7 +70,7 @@ public class SoulBeamSpell extends Spell {
         int potency = spellStat.getPotency();
         int duration = spellStat.getDuration();
         if (WandUtil.enchantedFocus(caster)){
-            potency += WandUtil.getLevels(ModEnchantments.POTENCY.get(), caster);
+            potency += WandUtil.getPotencyLevel(caster);
             duration += WandUtil.getLevels(ModEnchantments.DURATION.get(), caster);
         }
 

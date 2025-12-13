@@ -9,7 +9,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "イリジャーの従者の詳細については$(l:goety:mutations/illager_servants)ことら$()。"
+      "text": "イリジャーの従者の詳細については$(l:goety:mutations/illager_servants)こちら$()。"
     },
     {
       "type": "patchouli:entity",

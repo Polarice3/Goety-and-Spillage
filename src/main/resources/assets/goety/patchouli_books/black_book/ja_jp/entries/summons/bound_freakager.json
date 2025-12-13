@@ -1,0 +1,29 @@
+{
+  "name": "縛られたフリーケイジャー",
+  "icon": "illageandspillage:bag_of_horrors",
+  "category": "goety:spillage/summons",
+  "advancement": "goety_spillage:obtain_bag_of_horrors",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "あの凶悪な邪悪な村人が落とした袋には、実は彼らの魂も囚われていることが判明しました。その魂が袋の魔力の源となり、爆弾やお菓子、その他不気味な道具を、少しのクールダウンを挟みながら無限に投げつけることを可能にしています。"
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety_spillage:thrall/summon_bound_freakager"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "さて、そのような魂を無駄にしたくないあなたは、この哀れな生物学者を死から蘇らせることで助けてあげることにしました……いくつかの「束縛」付きで、ですがね。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:bound_freakager",
+      "scale": 0.75
+    },
+    {
+      "type": "patchouli:text",
+      "text": "他の束縛された邪悪な村人と同様に、帰還したフリーケイジャーは地面から浮遊し、重力の影響を受けません。その霊的な見た目にもかかわらず、壁をすり抜けることはできず、通常の武器でダメージを受けます。縛られた魂は、エクトプラズムを持って右クリックすることで回復できます。"
+    }
+  ]
+}

@@ -13,6 +13,7 @@ public class GSSpellConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> ImpishCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> ImpishDuration;
     public static final ForgeConfigSpec.ConfigValue<Integer> ImpishCoolDown;
+    public static final ForgeConfigSpec.ConfigValue<Double> ImpishDamage;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> SpiritHandCost;
     public static final ForgeConfigSpec.ConfigValue<Integer> SpiritHandDuration;
@@ -41,6 +42,8 @@ public class GSSpellConfig {
                     .defineInRange("impishTime", 40, 0, 72000);
             ImpishCoolDown = BUILDER.comment("Impish Spell Cooldown, Default: 100")
                     .defineInRange("impishCoolDown", 100, 0, Integer.MAX_VALUE);
+            ImpishDamage = BUILDER.comment("How much base damage Imps deals, Default: 4.0")
+                    .defineInRange("impishDamage", 4.0, 1.0, Double.MAX_VALUE);
             BUILDER.pop();
             BUILDER.push("Spirit Hand Spell");
             SpiritHandCost = BUILDER.comment("Spirit Hand Spell Cost, Default: 64")

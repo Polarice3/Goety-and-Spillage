@@ -1,0 +1,31 @@
+{
+  "name": "気まぐれなセット",
+  "icon": "goety_spillage:freaky_robe",
+  "category": "goety:spillage/crafts",
+  "advancement": "goety_spillage:obtain_bag_of_horrors",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "「恐怖のバッグ」は、あなたを少しばかり……気まぐれな気分にさせました。そこで、理性ある存在なら誰でもそうするように、あなたはフリーケイジャーの衣服を複製し、身に着けることにしました。"
+    },
+    {
+      "type": "goety:ritual",
+      "recipe": "goety_spillage:freaky_robe"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "goety_spillage:freaky_hat"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "このローブは単に見た目を気まぐれにするだけではありません。「恐怖の袋」を手に持たずに使用できるようになり（魔女のローブの醸造メニューを開くのと同じキーを押すことで）、さらに鉄の斧の投擲に熟達するようになります（残念ながら、対象は鉄の斧のみで、他の種類は使えません）。最大体力が半分以下で、両手に斧を持っている場合、ローブの能力を使用すると、前方に斧の弾幕を投擲できることがあります。"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "この帽子は粋なだけでなく、装備していると鉄の斧を投げても消費されず、代わりに耐久値のみが減少するようになります。また、どういうわけかラグノに騎乗している場合、それがスタンしていない限り、あなたが受けるダメージが軽減されます。"
+    }
+  ],
+  "extra_recipe_mappings": {
+    "goety_spillage:freaky_robe": 1
+  }
+}

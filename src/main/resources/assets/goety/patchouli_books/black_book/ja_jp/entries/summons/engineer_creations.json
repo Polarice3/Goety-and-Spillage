@@ -1,0 +1,43 @@
+{
+  "name": "エンジニアの創造物",
+  "icon": "minecraft:dispenser",
+  "category": "goety:spillage/summons",
+  "advancement": "goety_spillage:obtain_engineer_mallet",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "エンジニアのマレットがあれば、エンジニアの技術的な手下たちを複製することができます。"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "これらのロボット生物は移動することができず、ポーションや特定の呪文、そしてマレットそのものを使用しなければ修理（回復）することもできません。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:chagrin_sentry",
+      "scale": 0.5
+    },
+    {
+      "type": "patchouli:text",
+      "text": "創造主に害をなそうとするあらゆる生物に対し、矢を速射する知的なターゲット機能付きディスペンサーです。約75発の矢を速射した後、一定確率でオーバーヒートし、約9～10秒間攻撃不能になります。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:hinder",
+      "scale": 0.5
+    },
+    {
+      "type": "patchouli:text",
+      "text": "敵の努力を「妨害（Hinder）」するという名の通り、このセントリーは近くにいる味方の生物を治療します。残念ながら、$(l)アンデッドを治療することはできず$()、数秒間の治療の後にクールダウンに入ります。"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "goety_spillage:factory",
+      "scale": 0.5
+    },
+    {
+      "type": "patchouli:text",
+      "text": "その名の通り、このファクトリーは小さな手下たちを次々と生産します。自爆するもの、空を飛び矢を放つもの、あるいは敵を突っつく邪悪な村人に似た小さなロボットなどです。"
+    }
+  ]
+}

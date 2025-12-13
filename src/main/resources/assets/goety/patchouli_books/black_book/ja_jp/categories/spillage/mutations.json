@@ -1,6 +1,6 @@
 {
-  "name": "Mutations",
-  "description": "Transforming one creature into something freaky.",
+  "name": "変異",
+  "description": "ある生物を、何か奇怪なものへと変貌させます。",
   "icon": "goety_spillage:mutation_potion",
   "parent": "goety:spillage",
   "sortnum": 4
