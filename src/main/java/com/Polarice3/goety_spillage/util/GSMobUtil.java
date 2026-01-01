@@ -10,11 +10,14 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.OwnableEntity;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -45,6 +48,36 @@ public class GSMobUtil {
             }
         }
         return owned.getTrueOwner() == owner;
+    }
+
+    public static HitResult rayTrace(Level worldIn, LivingEntity caster, int range, double radius) {
+        if (entityResult(worldIn, caster, range, radius) == null){
+            return blockResult(worldIn, caster, range);
+        } else {
+            return entityResult(worldIn, caster, range, radius);
+        }
+    }
+
+    public static BlockHitResult blockResult(Level worldIn, LivingEntity caster, double range) {
+        float f = caster.getXRot();
+        float f1 = caster.getYRot();
+        Vec3 vector3d = caster.getEyePosition(1.0F);
+        float f2 = Mth.cos(-f1 * ((float)Math.PI / 180F) - (float)Math.PI);
+        float f3 = Mth.sin(-f1 * ((float)Math.PI / 180F) - (float)Math.PI);
+        float f4 = -Mth.cos(-f * ((float)Math.PI / 180F));
+        float f5 = Mth.sin(-f * ((float)Math.PI / 180F));
+        float f6 = f3 * f4;
+        float f7 = f2 * f4;
+        Vec3 vector3d1 = vector3d.add((double)f6 * range, (double)f5 * range, (double)f7 * range);
+        return worldIn.clip(new ClipContext(vector3d, vector3d1, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, caster));
+    }
+
+    public static EntityHitResult entityResult(Level worldIn, LivingEntity caster, int range, double radius){
+        Vec3 srcVec = caster.getEyePosition(1.0F);
+        Vec3 lookVec = caster.getViewVector(1.0F);
+        Vec3 destVec = srcVec.add(lookVec.x * range, lookVec.y * range, lookVec.z * range);
+        AABB axisalignedbb = caster.getBoundingBox().expandTowards(lookVec.scale(range)).inflate(radius, radius, radius);
+        return ProjectileUtil.getEntityHitResult(worldIn, caster, srcVec, destVec, axisalignedbb, entity -> entity instanceof LivingEntity && !entity.isSpectator() && entity.isPickable());
     }
 
     public static class FreakagerExplodeTask implements EventTask {

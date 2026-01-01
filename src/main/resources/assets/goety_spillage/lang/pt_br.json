@@ -4,7 +4,6 @@
   "advancements.goety_spillage.craft_spirit_hand_focus.title": "Mostrando Essas Mãos",
   "advancements.goety_spillage.craft_spirit_hand_focus.description": "Crie um Foco de Mão Espiritual",
   "advancements.goety_spillage.craft_freaky_robe.title": "Hora de Ficar \uD835\uDCD5\uD835\uDCFB\uD835\uDCEE\uD835\uDCEA\uD835\uDCF4\uD835\uDD02",
-  "advancements.goety_spillage.craft_freaky_robe.description": "Crie uma Túnica Assustadora, que permite ao usuário realizar vários ataques do Freakager.",
   "advancements.goety_spillage.obtain_mutated_flesh.title": "Suas Fantasias Nunca Serão Saciadas!",
   "advancements.goety_spillage.obtain_mutated_flesh.description": "Obtenha uma Carne Mutada, dropada pelo Ragno.",
   "advancements.goety_spillage.obtain_dark_potion.title": "Seus Malucos Assustadores!",
@@ -25,7 +24,6 @@
   "effect.illageandspillage.preserved": "Preservado",
 
   "entity.goety_spillage.dark_cloud_effect": "Efeito de Nuvem Negra",
-  "entity.goety_spillage.igniter_servant": "Servo Incendiário",
   "entity.goety_spillage.bound_engineer": "Engenheiro Aprisionado",
   "entity.goety_spillage.chagrin_sentry": "Sentinela do Desgosto",
   "entity.goety_spillage.hinder": "Obstáculo",
@@ -56,7 +54,6 @@
   "item.goety_spillage.zombie_absorber_spawn_egg": "Ovo de Absorvedor Zumbi",
   "item.goety_spillage.ragno_servant_spawn_egg": "Ovo de Servo Ragno",
   "item.goety_spillage.bound_engineer_spawn_egg": "Ovo de Engenheiro Aprisionado",
-  "item.goety_spillage.igniter_servant_spawn_egg": "Ovo de Servo Incendiário",
   "item.goety_spillage.preserver_servant_spawn_egg": "Ovo de Servo Preservador",
 
   "item.goety_spillage.freaky_hat": "Chapéu Assustador",
@@ -97,5 +94,10 @@
 
   "item.goety_spillage.bound_freakager_spawn_egg": "Ovo de Bruxo Assustador Aprisionado",
   "entity.goety_spillage.bound_freakager": "Bruxo Assustador Aprisionado",
-  "advancements.goety_spillage.summon_bound_freakager.description": "Invoque um Bruxo Assustador Aprisionado."
+  "advancements.goety_spillage.summon_bound_freakager.description": "Invoque um Bruxo Assustador Aprisionado.",
+  "item.goety_spillage.crocofang_servant_spawn_egg": "Ovo de Crocofang",
+  "advancements.goety_spillage.craft_freaky_robe.description": "Crie uma Túnica Assustadora, que permite ao usuário realizar vários ataques do Bruxo Assustador.",
+  "item.goety_spillage.misconducted_soul": "Alma Malconduzida",
+  "item.goety_spillage.igniter_servant_spawn_egg": "Ovo de Servo Acendedor",
+  "entity.goety_spillage.igniter_servant": "Servo Acendedor"
 }

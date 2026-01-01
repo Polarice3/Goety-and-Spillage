@@ -10,6 +10,7 @@ import com.Polarice3.goety_spillage.common.entities.projectiles.ThrownAxe;
 import com.Polarice3.goety_spillage.common.items.curios.FreakyHatItem;
 import com.Polarice3.goety_spillage.common.items.curios.FreakyRobeItem;
 import com.Polarice3.goety_spillage.config.GSAttributesConfig;
+import com.Polarice3.goety_spillage.util.GSMobUtil;
 import com.yellowbrossproductions.illageandspillage.util.IllageAndSpillageSoundEvents;
 import com.yellowbrossproductions.illageandspillage.util.ItemRegisterer;
 import net.minecraft.world.InteractionHand;
@@ -21,6 +22,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -78,6 +81,17 @@ public abstract class ItemMixin {
                     Vec3 vector3d = entityLiving.getViewVector(1.0F);
                     float power = 3.5F;
                     Vec3 vec3 = vector3d.multiply(power, power, power);
+                    HitResult hitResult = GSMobUtil.rayTrace(worldIn, entityLiving, 64, 3);
+                    if (hitResult.getType() != HitResult.Type.MISS) {
+                        Vec3 vec31 = hitResult.getLocation();
+                        double x = entityLiving.getX() - vec31.x();
+                        double y = entityLiving.getY() - vec31.y();
+                        if (hitResult instanceof EntityHitResult result) {
+                            y = entityLiving.getY() + 1.0D - (result.getEntity().getY() + (double)(result.getEntity().getEyeHeight() / 2.0F));
+                        }
+                        double z = entityLiving.getZ() - vec31.z();
+                        vec3 = new Vec3(-x, -y, -z);
+                    }
                     ThrownAxe projectile = new ThrownAxe(entityLiving.getX() + vector3d.x / 2, entityLiving.getY() + 1.0D, entityLiving.getZ() + vector3d.z / 2, vec3.x, vec3.y, vec3.z, worldIn);
                     projectile.setRot(entityLiving);
                     projectile.setOwner(entityLiving);
@@ -91,7 +105,7 @@ public abstract class ItemMixin {
                             stack.setCount(0);
                         }
                         if (entityLiving instanceof Player player){
-                            player.getCooldowns().addCooldown(Items.IRON_AXE, 20);
+                            player.getCooldowns().addCooldown(Items.IRON_AXE, 12);
                         }
                         cir.setReturnValue(stack);
                     }

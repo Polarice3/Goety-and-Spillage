@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "__comment": "ownable entities that takes up 4 spaces in Esoteric Tesseracts",
+  "values": [
+    "goety_spillage:ragno_servant",
+    "goety_spillage:bound_freakager"
+  ]
+}

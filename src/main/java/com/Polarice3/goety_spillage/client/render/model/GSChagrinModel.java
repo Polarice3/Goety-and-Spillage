@@ -31,17 +31,13 @@ public class GSChagrinModel<T extends Entity> extends ChagrinSentryModel<T> {
         this.root().getAllParts().forEach(ModelPart::resetPose);
         if (entity instanceof GSChagrin sentry) {
             Calendar calendar = Calendar.getInstance();
-            this.head.getChild("birthday").visible = calendar.get(2) == 1 && calendar.get(5) < 8;
+            this.head.getChild("birthday").visible = calendar.get(Calendar.MONTH) == Calendar.FEBRUARY && calendar.get(Calendar.DAY_OF_MONTH) < 8;
 
-            float deltaYaw;
-            for(deltaYaw = sentry.yBodyRot - sentry.yBodyRotO; deltaYaw < -180.0F; deltaYaw += 360.0F) {
-            }
+            float deltaYaw = sentry.yBodyRot - sentry.yBodyRotO;
+            while (deltaYaw < -180.0F) deltaYaw += 360.0F;
+            while (deltaYaw >= 180.0F) deltaYaw -= 360.0F;
 
-            while(deltaYaw >= 180.0F) {
-                deltaYaw -= 360.0F;
-            }
-
-            this.upperBody.yRot = (sentry.yBodyRotO + deltaYaw * sentry.getPartialTicks()) * 0.017453292F;
+            this.upperBody.yRot = (sentry.yBodyRotO + deltaYaw * sentry.getPartialTicks()) * ((float) Math.PI / 180F);
             this.head.xRot = headPitch * 0.017453292F;
             this.arm1.xRot = headPitch * 0.017453292F;
             this.arm2.xRot = headPitch * 0.017453292F;

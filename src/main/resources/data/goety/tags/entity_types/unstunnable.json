@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "__comment": "entities that cannot get Goety's Stunned effect.",
+  "values": [
+    "#illageandspillage:illager_bosses"
+  ]
+}

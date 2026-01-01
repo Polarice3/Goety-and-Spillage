@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "__comment": "entities that cannot be Tangled.",
+  "values": [
+    "#illageandspillage:illager_bosses"
+  ]
+}

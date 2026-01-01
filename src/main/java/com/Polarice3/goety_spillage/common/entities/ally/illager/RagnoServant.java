@@ -179,6 +179,10 @@ public class RagnoServant extends RaiderServant implements PlayerRideableJumping
         this.goalSelector.addGoal(0, new BurrowGoal());
         this.goalSelector.addGoal(0, new ChargeGoal());
         this.goalSelector.addGoal(0, new CoughGoal());
+    }
+
+    @Override
+    public void miscGoal() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(8, new RaiderWanderGoal<>(this, 0.6));
         this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 15.0F));
@@ -186,6 +190,10 @@ public class RagnoServant extends RaiderServant implements PlayerRideableJumping
     }
 
     public boolean doHurtTarget(Entity p_21372_) {
+        return false;
+    }
+
+    public boolean canBeLeader() {
         return false;
     }
 
@@ -610,6 +618,11 @@ public class RagnoServant extends RaiderServant implements PlayerRideableJumping
 
         if (!this.level.isClientSide) {
             this.setFrame(this.getFrame() + 1);
+        }
+
+        if (this.getControllingPassenger() instanceof IServant summoned
+                && summoned instanceof Mob mob) {
+            this.setTarget(mob.getTarget());
         }
 
         AttributeInstance instance = this.getAttribute(Attributes.MOVEMENT_SPEED);
@@ -1608,6 +1621,10 @@ public class RagnoServant extends RaiderServant implements PlayerRideableJumping
             }
         }
 
+        if (this.item != null) {
+            this.item.discard();
+        }
+
         this.stopAttacking();
         this.setBurrowing(false);
         this.setGrabbing(false);
@@ -2175,8 +2192,7 @@ public class RagnoServant extends RaiderServant implements PlayerRideableJumping
             LivingEntity rider = this.getControllingPassenger();
             if (this.hasPassenger()
                     && !this.isCrazy()
-                    && ((rider instanceof Player && !this.isAutonomous())
-                    || (rider instanceof IServant servant && (servant.isStaying() || servant.isCommanded() || servant.isGuardingArea())))
+                    && (rider instanceof Player player && !this.isAutonomous())
                     && this.notClientAttacking() && !this.isPlayingIntro()) {
                 this.setYRot(rider.getYRot());
                 this.yRotO = this.getYRot();
@@ -2184,7 +2200,7 @@ public class RagnoServant extends RaiderServant implements PlayerRideableJumping
                 this.setRot(this.getYRot(), this.getXRot());
                 this.yBodyRot = this.getYRot();
                 this.yHeadRot = this.yBodyRot;
-                float speed = this.getSpeed();
+                float speed = this.getRiddenSpeed(player);
                 float f = rider.xxa * speed;
                 float f1 = rider.zza * speed;
                 if (f1 <= 0.0F) {
@@ -2202,7 +2218,7 @@ public class RagnoServant extends RaiderServant implements PlayerRideableJumping
                     }
                 }
 
-                this.setSpeed((float) this.getAttributeValue(Attributes.MOVEMENT_SPEED));
+                this.setSpeed(this.getRiddenSpeed(player));
                 super.travel(new Vec3(f, pTravelVector.y, f1));
                 this.lerpSteps = 0;
 
@@ -2658,6 +2674,11 @@ public class RagnoServant extends RaiderServant implements PlayerRideableJumping
             RagnoServant.this.attackCooldown = 20;
             RagnoServant.this.setInvisible(false);
             RagnoServant.this.setBurrowing(false);
+        }
+
+        @Override
+        public boolean isInterruptable() {
+            return false;
         }
     }
 
