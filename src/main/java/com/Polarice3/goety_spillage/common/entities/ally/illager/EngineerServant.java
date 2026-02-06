@@ -2,7 +2,7 @@ package com.Polarice3.goety_spillage.common.entities.ally.illager;
 
 import com.Polarice3.Goety.common.entities.ai.AvoidTargetGoal;
 import com.Polarice3.Goety.common.entities.ally.illager.AbstractIllagerServant;
-import com.Polarice3.Goety.common.entities.ally.illager.RaiderServant;
+import com.Polarice3.Goety.common.entities.ally.illager.raider.RaiderServant;
 import com.Polarice3.Goety.common.entities.neutral.Owned;
 import com.Polarice3.Goety.utils.MobUtil;
 import com.Polarice3.goety_spillage.common.entities.GSEntityTypes;
