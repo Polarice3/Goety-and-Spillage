@@ -220,6 +220,14 @@ public class PreserverServant extends AbstractIllagerServant {
         return this.isTryingToProtect() ? 1.125F : 1.75F;
     }
 
+    public boolean canWearArmor() {
+        return false;
+    }
+
+    public boolean canHaveWeapon() {
+        return false;
+    }
+
     class TryToProtectGoal extends Goal {
 
         public boolean canUse() {

@@ -300,6 +300,14 @@ public class IgniterServant extends AbstractIllagerServant {
         return super.killedEntity(level, entity);
     }
 
+    public boolean canWearArmor() {
+        return false;
+    }
+
+    public boolean canHaveWeapon() {
+        return false;
+    }
+
     class ShootFireballsGoal extends Goal {
         public ShootFireballsGoal() {
             this.setFlags(EnumSet.of(Flag.JUMP, Flag.LOOK, Flag.MOVE));

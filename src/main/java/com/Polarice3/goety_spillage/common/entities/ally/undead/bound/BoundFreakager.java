@@ -889,6 +889,10 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
         return this.isNotAttacking() && this.getTarget() != null && this.hasLineOfSight(this.getTarget()) && this.attackCooldown < 1;
     }
 
+    public boolean canWearArmor() {
+        return false;
+    }
+
     @Override
     public void tryKill(Player player) {
         if (this.killChance <= 0){

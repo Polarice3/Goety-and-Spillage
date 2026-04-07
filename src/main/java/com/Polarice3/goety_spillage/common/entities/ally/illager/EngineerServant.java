@@ -232,6 +232,10 @@ public class EngineerServant extends AbstractIllagerServant implements ICanBeAni
 
     }
 
+    public boolean canHaveWeapon() {
+        return false;
+    }
+
     class EngineerAvoidEntityGoal<T extends LivingEntity> extends AvoidTargetGoal<T> {
         public EngineerAvoidEntityGoal(PathfinderMob p_25027_, Class<T> p_25028_, float p_25029_, double p_25030_, double p_25031_) {
             super(p_25027_, p_25028_, p_25029_, p_25030_, p_25031_);
