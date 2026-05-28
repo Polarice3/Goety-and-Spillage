@@ -29,6 +29,7 @@ import com.Polarice3.goety_spillage.init.GSLootTables;
 import com.Polarice3.goety_spillage.util.GSMobUtil;
 import com.yellowbrossproductions.illageandspillage.entities.*;
 import com.yellowbrossproductions.illageandspillage.entities.projectile.AxeEntity;
+import com.yellowbrossproductions.illageandspillage.entities.projectile.BoneEntity;
 import com.yellowbrossproductions.illageandspillage.util.EffectRegisterer;
 import com.yellowbrossproductions.illageandspillage.util.ItemRegisterer;
 import net.minecraft.server.level.ServerLevel;
@@ -162,6 +163,11 @@ public class GSEvents {
         if (direct instanceof ThrownAxe || direct instanceof AxeEntity){
             if (victim instanceof AbstractHauntedArmor armor){
                 armor.disableShield(true);
+            }
+        }
+        if (direct instanceof BoneEntity boneEntity) {
+            if (MobUtil.areAllies(boneEntity.getOwner(), victim)) {
+                event.setCanceled(true);
             }
         }
     }

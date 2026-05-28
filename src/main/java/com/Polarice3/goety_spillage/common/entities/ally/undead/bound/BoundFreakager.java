@@ -686,7 +686,8 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
         }
     }
 
-    public void die(DamageSource p_37847_) {
+    public void die(DamageSource pSource) {
+        if (net.minecraftforge.common.ForgeHooks.onLivingDeath(this, pSource)) return;
         if (!this.treats.isEmpty()) {
             for (GSTot treat : this.treats) {
                 treat.kill();
@@ -711,7 +712,7 @@ public class BoundFreakager extends AbstractBoundIllager implements ICanBeAnimat
             }
         }
 
-        super.die(p_37847_);
+        super.die(pSource);
     }
 
     public int getFreakagerFace() {

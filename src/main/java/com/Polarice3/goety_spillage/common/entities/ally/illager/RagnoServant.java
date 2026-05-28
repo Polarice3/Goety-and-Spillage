@@ -1612,6 +1612,7 @@ public class RagnoServant extends RaiderServant implements PlayerRideableJumping
     }
 
     public void die(DamageSource pSource) {
+        if (net.minecraftforge.common.ForgeHooks.onLivingDeath(this, pSource)) return;
         List<GSTot> treats = this.level.getEntitiesOfClass(GSTot.class, this.getBoundingBox().inflate(40.0));
         if (!treats.isEmpty()) {
             for (GSTot treat : treats) {
